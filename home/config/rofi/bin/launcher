@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+DIR="$HOME/.config/rofi"
+
+rofi \
+	-show drun \
+	-display-drun "" \
+	-no-lazy-grab \
+	-scroll-method 1 \
+	-drun-match-fields all \
+	-drun-display-format "{name}" \
+	-no-drun-show-actions \
+	-terminal alacritty \
+	-kb-cancel Escape \
+    -theme "$DIR"/themes/launcher.rasi \

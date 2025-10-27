@@ -1,0 +1,115 @@
+configuration {
+    location: 				0;
+    fixed-num-lines:		        false;
+    show-icons: 			true;
+    scroll-method:			1;
+    window-format: 			"[{w}] ··· {c} ···   {t}";
+    click-to-exit: 			true;
+}
+
+@import "colors.rasi"
+
+* {
+    font:                               "DejaVu Sans Mono Bold 14";
+    background-color:             	@background;
+}
+
+window {
+    location:				north;
+    border: 	        		2px;
+    border-color: 			@selected;
+    border-radius: 			0px;
+    width: 				800px;
+    height: 				0px;
+}
+prompt {
+    spacing:                            0;
+    horizontal-align:                   0;
+    vertical-align:                     0;
+    text-color: 		        @foreground;
+    placeholder:                        "search: ";
+    padding:    		        6px 2px 6px 2px;
+    border:                             0px 0px 1px 0px;
+    border-color: 		        @selected;
+    border-radius: 		        0px;
+}
+
+
+entry {
+    spacing:                            0;
+    horizontal-align:                   0;
+    vertical-align:                     0;
+    text-color: 		        @dimmed-foreground;
+    placeholder:                        "hostname or IP";
+    padding:    		        6px 2px 6px 2px;
+    border:                             0px 0px 1px 0px;
+    border-color: 		        @selected;
+    border-radius: 		        0px;
+}
+
+mainbox {
+    border: 				0px;
+    border-color: 			@selected;
+    spacing: 				6px;
+    padding: 				10px;
+}
+
+listview {
+    lines:				15;
+    columns:				1;
+    fixed-height: 			0;
+    border: 				0px;
+    border-color: 			@foreground;
+    spacing: 				2px;
+    scrollbar: 				false;
+    padding: 				6px 0px 0px;
+}
+
+element-text, element-icon {
+    background-color:                   inherit;
+    text-color:                         inherit;
+}
+
+element {
+    border: 				0px;
+    padding: 				4px;
+}
+element normal.normal {
+    background-color: 			@background;
+    text-color:       			@foreground;
+}
+element normal.urgent {
+    background-color: 			@background;
+    text-color:       			@off;
+}
+element normal.active {
+    background-color: 			@background;
+    text-color:       			@on;
+}
+element selected.normal {
+    background-color: 			@selected;
+    text-color:       			@background;
+    border: 				0px;
+    border-color: 			@selected;
+}
+element selected.urgent {
+    background-color: 			@background;
+    text-color:       			@off;
+}
+element selected.active {
+    background-color: 			@background;
+    text-color:       			@selected;
+}
+element alternate.normal {
+    background-color: 			@background;
+    text-color:       			@foreground;
+}
+element alternate.urgent {
+    background-color: 			@background;
+    text-color:       			@foreground;
+}
+element alternate.active {
+    background-color: 			@background;
+    text-color:       			@foreground;
+}
+

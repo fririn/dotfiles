@@ -1,0 +1,44 @@
+## Configuration for Alacritty, the GPU enhanced terminal emulator.
+## It's a very basic and simple config file, for full configuration...
+## See, /usr/share/doc/alacritty/example/alacritty.yml
+
+## Import files (Colors, Fonts, Etc)
+import:
+  - ~/.config/alacritty/fonts.yml
+
+## Set environment variables
+env:
+  TERM: alacritty
+  WINIT_X11_SCALE_FACTOR: '1.0'
+
+## Terminal window settings
+window:
+  dimensions:
+    columns: 130
+    lines: 40
+
+  padding:
+    x: 7
+    y: 7
+
+  decorations: full
+  startup_mode: Windowed
+  dynamic_title: true
+
+## scrolling
+  history: 10000
+  multiplier: 3
+colors:
+  primary:
+    background: '#000000'
+## Cursor
+cursor:
+  style:
+    shape: Block
+    blinking: On
+
+  unfocused_hollow: false
+    #font:
+    #size: 16
+## Live config reload
+live_config_reload: true

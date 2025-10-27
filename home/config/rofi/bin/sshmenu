@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+
+ROFI_DIR="~/.config/rofi"
+
+# command for launching rofi
+rofi_command="rofi -theme $ROFI_DIR/themes/launcher.rasi -terminal alacritty -scroll-method 1 -no-lazy-grab -p ssh"
+
+# array with host names
+hosts=( $(awk -F ':' '{print $1}' ~/.config/bspwm/rofi/hosts.txt) )
+
+# execute rofi and get selected host
+chosen=$(printf "%s\n" "${hosts[@]}" | $rofi_command -dmenu )
+
+# do nothing if rofi window canceled
+if [[ $chosen == "" ]]; then exit; fi
+
+# get index of chosen host (will also be the index of command to execute from commands array
+chosen_command_index=1
+for i in "${!hosts[@]}"; do
+    if [[ "${hosts[$i]}" == "$chosen" ]]; then
+        chosen_command_index=$i
+        break
+    fi
+done
+
+# array with ssh commands, correlates with array of host names
+mapfile -t commands < <(awk -F ':' '{print $2}' ~/.config/bspwm/rofi/hosts.txt)
+
+# execute command with preferred terminal. 
+alacritty --class 'Floating' -e ${commands[$chosen_command_index]}

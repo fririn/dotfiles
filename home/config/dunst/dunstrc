@@ -1,0 +1,41 @@
+[global]
+    font = JetBrainsMono Nerd Font Bold 12
+    frame_width = 1
+    frame_color = #dddddd
+    separator_color = frame
+    transparency = 50  # 0-100 transparency (%), 50% matches your rgba(0,0,0,0.5)
+    corner_radius = 10
+    padding = 10
+    horizontal_padding = 10
+    separator_height = 2
+    offset = 10x10
+    max_width = 600
+    alignment = left
+    shrink = false
+    monitor = 0
+    follow = mouse
+    origin = top-center
+    idle_threshold = 120
+    indicate_hidden = yes
+    hide_duplicate_count = yes
+    show_age_threshold = 60
+    word_wrap = true
+
+[urgency_low]
+    background = "#000000"
+    foreground = "#bbbbbb"
+    frame_color = "#bbbbbb"
+    timeout = 6
+
+[urgency_normal]
+    background = "#000000"
+    foreground = "#dddddd"
+    frame_color = "#dddddd"
+    timeout = 8
+
+[urgency_critical]
+    background = "#000000"
+    foreground = "#f38ba8"
+    frame_color = "#f38ba8"
+    timeout = 0
+

@@ -1,0 +1,115 @@
+##---------- General keybingdigs  ----------##
+
+# Terminal (tilix,default/floating/fullscreen)
+super + {_,ctrl,shift} + Return
+    alacritty --class {'tilix','floating','fullscreen'}
+
+# File explorer
+super + {_,shift} + e
+    {_,bspc rule -a floating -o state=floating sticky=on focus=on follow=on;} alacritty --class 'floating' -e ranger
+
+super + shift + m
+    alacritty --class 'floating' -e bash -c "cava"
+
+# Web browser 
+super + b
+    firefox
+
+# Xprop
+super + p
+    alacritty --class 'floating' -e bash -c "while true; do xprop WM_CLASS; done"
+
+# Lockscreen
+super + Escape
+    slock
+
+##---------- Rofi Launcher & Menus ----------##
+
+# Rofi App Launcher
+super + d
+    sh ~/.config/rofi/bin/launcher
+
+# Rofi powermenu
+super + shift + x
+    sh ~/.config/rofi/bin/powermenu
+
+# Rofi config menu 
+super + o
+    sh ~/.config/rofi/bin/configs
+    
+# Rofi ssh menu 
+super + s
+    ~/.config/rofi/bin/ssh_menu
+
+##---------- System Keys ----------##
+
+#Take screenshot of area with Flameshot
+Print
+    flameshot gui
+
+# Take fullscreen and save to ~/Pictures
+alt + Print 
+    flameshot full -p ~/Pictures/Screenshots
+	
+# Volume control
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+    amixer set Master { 1%+, 1%-, toggle}
+
+# Media control
+XF86Audio{Next,Prev,Play,Stop}
+    playerctl -i firefox {next,previous,play-pause,stop}
+
+##---------- Bspwm ----------##
+
+# Close App
+super + {_,shift + }c
+    bspc node -{c,k}
+
+# Reload Keybindings
+super + r
+    pkill -USR1 -x sxhkd
+
+# Quit/Restart bspwm
+super + shift + {q,r}
+    bspc {quit,wm -r}
+
+# Toggle fullscreen
+super + m
+    bspc node -t "~"fullscreen
+
+# Toggle beetwen floating & tiled
+super + f
+    bspc node -t "~"{floating,tiled}
+
+# Send the window to another edge of the screen
+super + {_,shift} + {h,j,k,l}
+    bspc node -{f,s} {west,south,north,east}
+
+# Workspaces control
+super + {_,shift} + {1-9,0}
+    bspc {desktop -f,node -d} '^{1-9,10}'
+super + {_,shift} + {F13,F14}
+    bspc {desktop -f,node -d} '^{11-12}'
+# Special workspace, switching to it and back to last workspace
+F12
+    bspc desktop {-f 'term', last.local -f}
+
+# Hide/Unhide Window
+super + i
+    barmask
+
+# Hide/Unhide Polybar
+super + shift + i
+    winmask	
+
+# Cycle through occupied desktops (forward)
+super + Tab 
+    bspc desktop -f next.local.occupied
+    
+# Cycle through occupied desktops (backward)
+super + shift + Tab 
+    bspc desktop -f prev.local.occupied
+
+# Resize windows
+super + alt + {h,j,k,l}
+    /bin/sh $HOME/.config/bspwm/resize/{expandx.sh,expandy.sh,shrinky.sh,shrinkx.sh}

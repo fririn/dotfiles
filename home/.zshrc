@@ -1,41 +1,47 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-export ZSH="$HOME/.oh-my-zsh"
-
-ZSH_THEME="agnosterzak"
-
+ZSH_THEME="crunch"
+CASE_SENSITIVE="true"
 plugins=(
-    git
-    archlinux
-    zsh-autosuggestions
-    zsh-syntax-highlighting
+  git
+  archlinux
+	colored-man-pages
+	zsh-autosuggestions
+	zsh-syntax-highlighting
 )
-
 source $ZSH/oh-my-zsh.sh
+source ~/.shell_aliases
+#source ~/.config/rofi/bashrc_functions
 
-# Check archlinux plugin commands here
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/archlinux
 
-# Display Pokemon-colorscripts
-# Project page: https://gitlab.com/phoneybadger/pokemon-colorscripts#on-other-distros-and-macos
-#pokemon-colorscripts --no-title -s -r #without fastfetch
-#pokemon-colorscripts --no-title -s -r | fastfetch -c $HOME/.config/fastfetch/config-pokemon.jsonc --logo-type file-raw --logo-height 10 --logo-width 5 --logo -
+# run fastfetch only if new terminal is opened not from ranger
+#if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfetch --logo "arch_small";dysk; fi
 
-# fastfetch. Will be disabled if above colorscript was chosen to install
-fastfetch -c $HOME/.config/fastfetch/config-compact.jsonc
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+fi
 
-# Set-up icons for files/directories in terminal using lsd
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 
-# Set-up FZF key bindings (CTRL R for fuzzy history finder)
-source <(fzf --zsh)
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/paul/dev/google-cloud-sdk/path.zsh.inc' ]; then . '/home/paul/dev/google-cloud-sdk/path.zsh.inc'; fi
 
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/paul/dev/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/paul/dev/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH=$PATH:$HOME/go/bin
+
+
+HISTSIZE=500000
+SAVEHIST=500000
 setopt appendhistory
+setopt INC_APPEND_HISTORY  
+setopt SHARE_HISTORY
+

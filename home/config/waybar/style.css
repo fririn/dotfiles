@@ -1,8 +1,4 @@
-/* ----------- 💫 https://github.com/JaKooLit 💫 -------- */
-/* .......Crystal Clear....................... */
-/* --- 👍 designed by https://github.com/Krautt  👍 --- */
 @define-color bg rgba(0, 0, 0, 0.55); 
-
 
 *{
 	font-family: "JetBrainsMono Nerd Font";
@@ -15,64 +11,10 @@
 	
 window#waybar {
 	background:transparent;
-	border-radius: 1px;
-	color: whitesmoke;
+  /* border: 2px solid #aaaaaa; */
 }
 	
-window#waybar.empty	
-window#waybar.empty #window {
-   padding: 0px;
-   border: 0px;
-   background-color: transparent;
-}
 
-#workspaces {
-  background-color: @bg;
-  margin-left: 10px;
-}
-#workspaces button:hover {
-  background: #d0ddd6;
-  color: #313244;
-	border-radius: 10px;
-}
-
-
-#taskbar button,	   
-#workspaces button {
-	color: #ffffff;
-}
-   
-#workspaces button.empty {
-  color: #000000;
-}
-
-#workspaces button.active {
-	color: whitesmoke;
-  border: 2px solid #ffffff;
-   	border-radius: 10px;
-   	padding-left: 8px;
-   	padding-right: 8px;
-}
-  
-#workspaces button.focused {
-	color: #d8dee9;
-}
-   
-#workspaces button.urgent {
-	color: whitesmoke;
-  border: 2px solid #ff0000;
-   	border-radius: 10px;
-   	padding-left: 8px;
-   	padding-right: 8px;
-}
-	   
-/* #workspaces button:hover { */
-/* 	color: whitesmoke; */
-/*     border-radius: 15px; */
-/*  	padding-left: 2px; */
-/*     padding-right: 2px; */
-/* } */
-	
 #backlight,
 #backlight-slider,
 #battery,
@@ -130,15 +72,67 @@ window#waybar.empty #window {
 #custom-weather.showyIcyDay,
 #custom-weather.snowyIcyNight,
 #custom-weather.sunnyDay {
-   margin-top: 13px;
+   margin-top: 14px;
   /* margin-left: 10px; */
-  box-shadow: 0 0 3px #000000;
+  box-shadow: 0 0 2px #000000;
   margin-right: 10px;
   margin-bottom: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
   background-color: @bg;
 }
+#workspaces {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+#workspaces button{
+  border: 2px solid transparent
+}
+#workspaces button:hover {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 0 5px #ffffff;
+	border-radius: 10px;
+}
+
+/**/
+/* #taskbar button,	    */
+/* #workspaces button { */
+/* 	color: #ffffff; */
+/* } */
+   
+#workspaces button.empty {
+  color: #000000;
+}
+
+#workspaces button.active,
+#workspaces button.urgent {
+	color: whitesmoke;
+  border: 2px solid #aaaaaa;
+  box-shadow: 0 0 3px #ffffff;
+  border-radius: 11px;
+}
+   
+#workspaces button.active {
+	color: whitesmoke;
+}
+#workspaces button.urgent {
+	color: whitesmoke;
+  border: 2px solid #ff0000;
+  box-shadow: 0 0 5px #ff0000;
+}
+  
+#workspaces button.focused {
+	color: #d8dee9;
+}
+	   
+/* #workspaces button:hover { */
+/* 	color: whitesmoke; */
+/*     border-radius: 15px; */
+/*  	padding-left: 2px; */
+/*     padding-right: 2px; */
+/* } */
+	
 	 
 #tray {
   margin-right: 20px;
@@ -164,20 +158,20 @@ window#waybar.empty #window {
 	color: #39FF14;
 }
 
-#taskbar button:hover {
-    padding-left: 3px;
-    padding-right: 3px;
-    animation: gradient_f 20s ease-in infinite;
-    transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
-}
-   
-#taskbar button.active {
-	background-color: #7f849c;
-    padding-left: 12px;
-    padding-right: 12px;
-    animation: gradient_f 20s ease-in infinite;
-    transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682);
-}
+/* #taskbar button:hover { */
+/*     padding-left: 3px; */
+/*     padding-right: 3px; */
+/*     animation: gradient_f 20s ease-in infinite; */
+/*     transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682); */
+/* } */
+/**/
+/* #taskbar button.active { */
+/* 	background-color: #7f849c; */
+/*     padding-left: 12px; */
+/*     padding-right: 12px; */
+/*     animation: gradient_f 20s ease-in infinite; */
+/*     transition: all 0.3s cubic-bezier(.55,-0.68,.48,1.682); */
+/* } */
 	   
 #battery.critical:not(.charging) {
 	color: #f53c3c;

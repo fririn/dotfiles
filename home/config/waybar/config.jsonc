@@ -81,9 +81,10 @@
     },
     "clock": {
       "interval": 1,
-      "format": "<span foreground='#dbabdb'>  </span><span>{:%d.%m %A %H:%M:%S}</span>",
-      "format-alt": "<span color='#dbabdb'>  </span>{:%H:%M}",
-      "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+      "format": "<span foreground='#dbabdb'>  </span><span>{:L%d.%m %A %H:%M:%S}</span>",
+      "locale": "ja_JP.UTF-8",
+      "format-alt": "<span color='#dbabdb'>  </span>{:L%H:%M}",
+      "tooltip-format": "<big>{:L%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "load": {
       "interval": 1,

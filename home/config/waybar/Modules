@@ -101,6 +101,7 @@
     "format": " {:%H:%M:%S}", // 24H
 	"format-alt": " {:%H:%M   %Y, %d %B, %A}",
 	"tooltip-format": "<tt><small>{calendar}</small></tt>",
+  "locale": "ja_JP.UTF-8",
 	"calendar": {
 		"mode": "year",
 		"mode-mon-col": 3,

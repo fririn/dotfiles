@@ -1,7 +1,7 @@
 #alias nvim="stty erase '^H'&&nvim"
 alias vim="nvim"
 #alias tmux="tmux -2"
-alias ls="lsd"
+#alias ls="lsd"
 alias l="ls -lh"
 alias ll="ls -lah"
 alias lst="lsd --tree"

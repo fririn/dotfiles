@@ -5,12 +5,28 @@ alias vim="nvim"
 alias l="ls -lh"
 alias ll="ls -lah"
 alias lst="lsd --tree"
+alias fdfind="fd"
+
+#-- Misc
+alias font='setfont ter-132n'
+alias mkdir="mkdir -pv"
+alias ra='y'
+alias sra='sudo ranger'
+alias reload='source ~/.zshrc'
+alias cm='cmatrix -u 3 -s'
+alias wrt='figlet -C utf8 -f banner'
+alias cal='cal -3m'
+alias penv=". ./venv/bin/activate"
+alias feh="feh -x"
+alias dfh="df -h -t ext4"
 
 alias packs="cd ~/work/nomad_packs"
 alias cluster="cd ~/work/nomad-cluster"
 alias src="cd ~/work/nodes_src"
 alias proxy="cd ~/work/nodes-proxy"
 alias iproxy="cd ~/work/internal-node-proxy"
+alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
+
 
 #-- Pacman 
 alias p='sudo pacman -S --needed'
@@ -24,9 +40,11 @@ alias rmpc="rmpc rescan && rmpc update && rmpc"
 # git 
 alias gt="git tag"
 alias gs="git status"
+alias gch="git checkout"
+alias greset="git reset --hard"
 #alias gi="git update-index --assume-unchanged "
 #alias gamend="git commit --amend --no-edit"
-alias gl="git log --oneline --graph"
+alias gl="git log --oneline --graph --all"
 
 gundo() {
   git reset --soft HEAD~${1:-1}
@@ -68,18 +86,6 @@ alias tf="terraform"
 
 
 
-#-- Misc
-alias font='setfont ter-132n'
-alias mkdir="mkdir -pv"
-alias ra='ranger'
-alias sra='sudo ranger'
-alias reload='source ~/.zshrc'
-alias cm='cmatrix -u 3 -s'
-alias wrt='figlet -C utf8 -f banner'
-alias cal='cal -3m'
-alias penv=". ./venv/bin/activate"
-alias feh="feh -x"
-alias dfh="df -h -t ext4"
 
 #-- Configs
 alias zshrc='vim ~/.zshrc'

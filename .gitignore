@@ -1,7 +1,6 @@
 install*
 
-home/config/coc/
-home/config/ranger/plugins/
+home/config/deprecated/ranger/plugins/
 all.txt
 home/config/hypr/wallust
 home/config/mpv/cache

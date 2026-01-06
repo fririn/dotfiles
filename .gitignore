@@ -12,3 +12,4 @@ getblock_hosts.txt
 nomad.sh
 home/config/waybar/wallust/colors-waybar.css
 home/config/swaync/wallust
+lazy-lock.json

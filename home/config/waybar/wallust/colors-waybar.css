@@ -1,6 +1,7 @@
 /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  
  /* wallust template - colors-waybar */
 
+<<<<<<< Updated upstream
  @define-color foreground #E8E8E8;
  @define-color background #2A2A2A;
  @define-color background-alt rgba(42,42,42,0.25);
@@ -22,3 +23,26 @@
  @define-color color13 #7B7B7B;
  @define-color color14 #BEBEBE;
  @define-color color15 #D6D6D6; 
+=======
+ @define-color foreground #F0F0E6;
+ @define-color background #2F2F2E;
+ @define-color background-alt rgba(47,47,46,0.25);
+ @define-color cursor #999891;
+ 
+ @define-color color0 #545452;
+ @define-color color1 #2D2D28;
+ @define-color color2 #31302C;
+ @define-color color3 #5F5F59;
+ @define-color color4 #A09F8A;
+ @define-color color5 #A09F8A;
+ @define-color color6 #A09F8A;
+ @define-color color7 #E2E1D3;
+ @define-color color8 #9E9E94;
+ @define-color color9 #3C3C36;
+ @define-color color10 #41413B;
+ @define-color color11 #7F7E76;
+ @define-color color12 #D5D4B8;
+ @define-color color13 #D5D4B8;
+ @define-color color14 #D5D4B8;
+ @define-color color15 #E2E1D3; 
+>>>>>>> Stashed changes

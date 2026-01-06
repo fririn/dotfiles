@@ -8,5 +8,7 @@ home/config/mpv/script-opts
 home/config/hypr/wallpaper_effects
 home/config/waybar/wallust/colors-waybar.css
 home/config/rofi/wallust/colors-rofi.rasi
+getblock_hosts.txt
+nomad.sh
 home/config/waybar/wallust/colors-waybar.css
 home/config/swaync/wallust

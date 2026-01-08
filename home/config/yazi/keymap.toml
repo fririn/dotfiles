@@ -1,6 +1,7 @@
 [mgr]
 prepend_keymap = [
   # General
+  { on = [ "q" ], run = "close",                       desc = "Close tab or quit" },
   { on = [ "d", "d" ], run = "yank --cut",             desc = "Cut (move) selected files" },
 	{ on = [ "y", "y" ], run = "yank",                   desc = "Copy selected files" },
 	{ on = [ "p", "p" ], run = "paste",                  desc = "Paste files" },

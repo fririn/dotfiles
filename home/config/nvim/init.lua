@@ -535,7 +535,7 @@ require("lazy").setup({
 
 			require("mini.icons").setup()
 			require("mini.icons").mock_nvim_web_devicons()
-			require("mini.pairs").setup() -- Auto-close brackets/quotes
+			-- require("mini.pairs").setup() -- Auto-close brackets/quotes
 			require("mini.comment").setup() -- Better commenting (gc)
 			require("mini.tabline").setup()
 			require("mini.bufremove").setup()

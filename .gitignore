@@ -13,3 +13,5 @@ nomad.sh
 home/config/waybar/wallust/colors-waybar.css
 home/config/swaync/wallust
 lazy-lock.json
+*env*
+nomad_hosts.txt

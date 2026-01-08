@@ -46,6 +46,8 @@ alias greset="git reset --hard"
 #alias gamend="git commit --amend --no-edit"
 alias gl="git log --oneline --graph --all"
 
+alias hey1000="hey -n 1000 -m POST -H"
+
 gundo() {
   git reset --soft HEAD~${1:-1}
 }

@@ -1,5 +1,6 @@
 [user]
-	email = pavel.toni@yandex.ru
-	name = Pavel Voronin
+	email = salierin@proton.me
+  name = Paul Doe
+
 [init]
-	defaultBranch = main
+	defaultBranch = master

@@ -27,6 +27,7 @@
       //"pulseaudio",
       "group/audio",
       "backlight",
+      "custom/updater",
       "tray",
       "battery",
       ],

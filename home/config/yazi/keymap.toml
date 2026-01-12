@@ -50,7 +50,7 @@ prepend_keymap = [
 	{ on = [ "z", "i" ], run = "plugin zoom 1",                      desc = "zoom preview in" },
 	{ on = [ "z", "o" ], run = "plugin zoom -1",                     desc = "zoom preview out" },
 
-	{ on = "_",     run = "hardlink",                    desc = "Hardlink yanked files" },
+	{ on = "<A-_>",     run = "hardlink",                    desc = "Hardlink yanked files" },
   # --- Archiving / Extraction ---
 	# { on = [ "c", "z" ], run = 'shell --confirm "zip -r archive.zip %*"',       desc = "Zip selected" },
 	# { on = [ "c", "t" ], run = 'shell --confirm "tar -czvf archive.tar.gz %*"', desc = "Tar.gz selected" },

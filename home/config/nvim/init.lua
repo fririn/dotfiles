@@ -96,6 +96,68 @@ require("lazy").setup({
 			current_line_blame_opts = {
 				delay = 100,
 			},
+			on_attach = function(bufnr)
+				local gs = package.loaded.gitsigns
+
+				local function map(mode, l, r, opts)
+					opts = opts or {}
+					opts.buffer = bufnr
+					vim.keymap.set(mode, l, r, opts)
+				end
+
+				map("n", "<leader>go", function()
+					-- FIX: Try the API first, fallback to the buffer variable
+					local blame_info = nil
+					if gs.get_current_line_blame_info then
+						blame_info = gs.get_current_line_blame_info()
+					else
+						-- Fallback for other versions: read directly from buffer variable
+						blame_info = vim.b[bufnr].gitsigns_blame_line_dict
+					end
+
+					if not blame_info then
+						print("No blame info available for this line yet.")
+						return
+					end
+
+					local commit_hash = blame_info.sha
+					-- Ignore 'Not Committed Yet' lines (hash often 00000000 or nil)
+					if not commit_hash or commit_hash == "00000000" then
+						print("Line is not committed.")
+						return
+					end
+
+					-- 1. Get remote URL
+					local handle = io.popen("git config --get remote.origin.url")
+					local remote_url = handle:read("*a")
+					handle:close()
+
+					remote_url = remote_url:gsub("[\n\r]", "")
+
+					-- 2. Clean URL (SSH -> HTTPS)
+					if remote_url:find("git@") then
+						remote_url = remote_url:gsub(":", "/"):gsub("git@", "https://"):gsub("%.git", "")
+					elseif remote_url:find("https://") then
+						remote_url = remote_url:gsub("%.git", "")
+					end
+
+					-- 3. Open in Browser
+					local final_url = remote_url .. "/commit/" .. commit_hash
+
+					-- Detect OS for open command
+					local open_cmd
+					if vim.fn.has("mac") == 1 then
+						open_cmd = "open"
+					elseif vim.fn.has("unix") == 1 then
+						open_cmd = "xdg-open"
+					elseif vim.fn.has("win32") == 1 then
+						open_cmd = "start"
+					end
+
+					print("Opening: " .. final_url)
+					os.execute(open_cmd .. " " .. final_url)
+				end, { desc = "Open commit in browser" })
+			end,
 		},
 	},
 

@@ -15,7 +15,6 @@
       ],
     "modules-center": [
       "clock",
-      "custom/swaync",
     //"hyprland/window"],
       "hyprland/language",
       ], 
@@ -30,6 +29,7 @@
       "custom/updater",
       "tray",
       "battery",
+      "custom/swaync",
       ],
     "hidden-state": "hide",
     "show-on-hover": true,

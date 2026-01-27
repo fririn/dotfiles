@@ -4,7 +4,7 @@
 @import '../../.config/waybar/wallust/colors-waybar.css';
 
 @define-color noti-border-color @color12;
-@define-color noti-bg rgba(0, 0, 0, 0.8);
+@define-color noti-bg rgba(0, 0, 0, 0.5);
 @define-color noti-bg-alt @background-alt;
 @define-color noti-bg-hover @background;
 @define-color text-color @foreground;
@@ -12,7 +12,7 @@
 * {
     font-family: "JetBrains Mono Nerd Font";
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 2rem;
 }
 
 .control-center .notification-row:focus,
@@ -30,8 +30,8 @@
 	/*color: @text-color;*/
     background: @noti-bg;
     padding: 3px 10px 3px 6px;
-    border-radius: 10px;
-    border: 2px solid @noti-border-color;
+    border-radius: 5px;
+    border: 0px solid @noti-border-color;
 }
 
 .notification-default-action {

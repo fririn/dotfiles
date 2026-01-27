@@ -45,7 +45,7 @@ alias greset="git reset --hard"
 #alias gi="git update-index --assume-unchanged "
 #alias gamend="git commit --amend --no-edit"
 alias gl="git log --oneline --graph --all"
-
+alias gmr=" glab mr create --fill --fill-commit-body --remove-source-branch"
 alias hey1000="hey -n 1000 -m POST -H"
 
 gundo() {

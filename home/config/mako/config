@@ -4,13 +4,12 @@ layer=overlay
 background-color=#000000
 border-size=1
 border-color=#555555
-border-radius=10
+border-radius=5
 default-timeout=10000
 ignore-timeout=1
 progress-color=#555555
-#anchor=bottom-right
-anchor=top-center
-font=JetBrainsMono Nerd Font Bold 12
+anchor=top-right
+font=JetBrainsMono Nerd Font Bold 16
 
 #[urgency=low]
 #border-color=#cccccc

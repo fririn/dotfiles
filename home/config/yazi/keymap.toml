@@ -12,7 +12,7 @@ prepend_keymap = [
 
   # Search 
   { on = [ "s", "f" ], run = "search --via=fd", desc = "Search files by name via fd" },
-  { on = [ "s", "h" ], run = "search --via=rg", desc = "Search files by content via rg" },
+  { on = [ "s", "g" ], run = "search --via=rg", desc = "Search files by content via rg" },
 
 	# Goto
 	{ on = [ "g", "h" ],       run = "cd ~",             desc = "Go home" },

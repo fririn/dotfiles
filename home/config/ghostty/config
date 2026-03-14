@@ -3,14 +3,14 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ── Appearance ────────────────────────────────────────────────────────────────
-theme                   = Catppuccin Mocha
-background              = #1e1e2e
-foreground              = #cdd6f4
-background-opacity      = 0.85
-selection-background    = #585b70
-selection-foreground    = #cdd6f4
-cursor-color            = #f5e0dc
-cursor-text             = #1e1e2e
+# theme sets base colours; explicit background/foreground override the theme
+theme            = Catppuccin Mocha
+background       = #1e1e2e
+foreground       = #cdd6f4
+background-opacity = 0.85
+cursor-color     = #f5e0dc
+# note: selection-background/foreground and cursor-text are not valid
+# top-level Ghostty options (they come from the theme)
 
 palette = 0=#45475a
 palette = 1=#f38ba8
@@ -30,25 +30,24 @@ palette = 14=#94e2d5
 palette = 15=#cdd6f4
 
 # ── Font ──────────────────────────────────────────────────────────────────────
-font-family   = FantasqueSansM Nerd Font Mono
-font-size     = 18
+font-family = FantasqueSansM Nerd Font Mono
+font-size   = 18
 
 # ── Window / padding ──────────────────────────────────────────────────────────
-window-padding-x        = 7
-window-padding-y        = 7
-window-padding-balance  = true
-scrollback-limit        = 100000
-audio-bell              = false
+window-padding-x       = 7
+window-padding-y       = 7
+window-padding-balance = true
+scrollback-limit       = 100000
 
 # ── macOS appearance ──────────────────────────────────────────────────────────
-macos-titlebar-style          = hidden
-macos-titlebar-proxy-icon     = hidden
-macos-non-native-fullscreen   = padded-notch
+macos-titlebar-style        = hidden
+macos-titlebar-proxy-icon   = hidden
+macos-non-native-fullscreen = padded-notch
 
 # ── Quick terminal (hyprland scratchpad terminal / F12 equivalent) ────────────
 # Toggle with cmd+` from anywhere in macOS
-quick-terminal-position        = top
-quick-terminal-screen          = main
+quick-terminal-position           = top
+quick-terminal-screen             = main
 quick-terminal-animation-duration = 0.15
 
 # ── CRITICAL: Option key as Alt/Meta ──────────────────────────────────────────
@@ -58,7 +57,6 @@ macos-option-as-alt = true
 
 # ── Keybinds ──────────────────────────────────────────────────────────────────
 # Clear ALL Ghostty defaults so nothing intercepts tmux sequences.
-# Ghostty would otherwise grab ctrl+shift+*, cmd+t, cmd+d, etc.
 keybind = clear
 
 # Clipboard
@@ -73,19 +71,21 @@ keybind = super+q=quit
 
 # ── tmux passthrough via cmd ───────────────────────────────────────────────────
 # AeroSpace owns alt/option globally. cmd is free inside Ghostty.
-# These translate cmd+key → ESC+key which tmux reads as M-key.
+# \e = ESC (0x1b) — Ghostty's text action escape format.
+# tmux reads ESC+key as M-key (Meta/Alt bound).
 #
-# Pane navigation (tmux: M-h/j/k/l → select-pane)
-keybind = super+h=text:\x1bh
-keybind = super+j=text:\x1bj
-keybind = super+k=text:\x1bk
-keybind = super+l=text:\x1bl
+# Pane navigation  →  tmux: M-h/j/k/l  →  select-pane
+keybind = super+h=text:\eh
+keybind = super+j=text:\ej
+keybind = super+k=text:\ek
+keybind = super+l=text:\el
 #
-# Pane resize (tmux: M-H/J/K/L → resize-pane)
-keybind = super+shift+h=text:\x1bH
-keybind = super+shift+j=text:\x1bJ
-keybind = super+shift+k=text:\x1bK
-keybind = super+shift+l=text:\x1bL
+# Pane resize  →  tmux: M-H/J/K/L  →  resize-pane
+# Use super+H (uppercase) — Ghostty uses the shifted character directly
+keybind = super+H=text:\eH
+keybind = super+J=text:\eJ
+keybind = super+K=text:\eK
+keybind = super+L=text:\eL
 #
-# Pane zoom/fullscreen (tmux: M-m → resize-pane -Z)
-keybind = super+m=text:\x1bm
+# Pane zoom  →  tmux: M-m  →  resize-pane -Z
+keybind = super+m=text:\em

@@ -47,3 +47,4 @@ setopt appendhistory
 setopt INC_APPEND_HISTORY  
 setopt SHARE_HISTORY
 
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

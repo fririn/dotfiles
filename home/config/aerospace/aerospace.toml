@@ -1,12 +1,13 @@
 # AeroSpace - Hyprland analog for macOS
-# Modifier: cmd (= Super/Win key on Linux — leaves alt/option free for tmux)
+# Modifier: alt/option (= Super/Win key on Linux)
 #
 # Workspace model mirrors hyprland:
 #   Workspaces 1-10  → main monitor
 #   Workspaces 11-12 → secondary monitor
 #
-# Focus/move/resize via cmd+hjkl just like super+hjkl in Hyprland.
-# tmux uses alt/option exclusively, so there is zero conflict.
+# alt = AeroSpace (window manager ops, fires globally)
+# cmd = tmux (passed through Ghostty as ESC sequences, fires inside terminal)
+# No modifier overlap, no conflicts.
 
 after-startup-command = ['exec-and-forget sketchybar']
 start-at-login = true
@@ -18,13 +19,14 @@ default-root-container-orientation = 'auto'
 # Snap mouse to focused window center (hyprland follow_mouse behaviour)
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-# Gaps — hyprland gaps_in=5, gaps_out=10
+# Gaps — outer.top must clear SketchyBar (32px bar ≈ 16pt on Retina).
+# Set to 44 to safely clear bar + give breathing room. Tune down if too large.
 [gaps]
 inner.horizontal = 5
 inner.vertical   = 5
 outer.left       = 10
 outer.right      = 10
-outer.top        = 10
+outer.top        = 44
 outer.bottom     = 10
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -32,72 +34,71 @@ outer.bottom     = 10
 # ──────────────────────────────────────────────────────────────────────────────
 [mode.main.binding]
 
-# Focus movement — cmd+hjkl  (hyprland: super+hjkl)
-cmd-h = 'focus left'
-cmd-j = 'focus down'
-cmd-k = 'focus up'
-cmd-l = 'focus right'
+# Focus movement — alt+hjkl  (hyprland: super+hjkl)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
 
-# Move window — cmd+shift+hjkl  (hyprland: super+ctrl+arrow)
-cmd-shift-h = 'move left'
-cmd-shift-j = 'move down'
-cmd-shift-k = 'move up'
-cmd-shift-l = 'move right'
+# Move window — alt+shift+hjkl  (hyprland: super+ctrl+arrow)
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
 
-# Resize — cmd+alt+hjkl  (hyprland: binde super, resize)
-cmd-alt-h = 'resize width -50'
-cmd-alt-j = 'resize height +50'
-cmd-alt-k = 'resize height -50'
-cmd-alt-l = 'resize width +50'
+# Resize — alt+ctrl+hjkl  (hyprland: binde super, resize)
+alt-ctrl-h = 'resize width -50'
+alt-ctrl-j = 'resize height +50'
+alt-ctrl-k = 'resize height -50'
+alt-ctrl-l = 'resize width +50'
 
 # Layout toggles
-cmd-space       = 'layout tiles horizontal vertical'  # cycle tile split axis
-cmd-shift-space = 'layout floating tiling'            # float/unfloat
-cmd-f           = 'layout floating tiling'            # hyprland super+f
-cmd-m           = 'fullscreen'                        # hyprland super+m
+alt-space       = 'layout tiles horizontal vertical'  # cycle tile split axis
+alt-shift-space = 'layout floating tiling'            # float/unfloat
+alt-f           = 'layout floating tiling'            # hyprland super+f
+alt-m           = 'fullscreen'                        # hyprland super+m
 
-# Close focused window — cmd+w (macOS standard; hyprland uses super+c)
-# Keep cmd+c free for copy everywhere.
-cmd-w = 'close'
+# Close focused window
+alt-w = 'close'
 
-# Workspace switching — cmd+1-0  (hyprland: super+1-0)
-cmd-1 = 'workspace 1'
-cmd-2 = 'workspace 2'
-cmd-3 = 'workspace 3'
-cmd-4 = 'workspace 4'
-cmd-5 = 'workspace 5'
-cmd-6 = 'workspace 6'
-cmd-7 = 'workspace 7'
-cmd-8 = 'workspace 8'
-cmd-9 = 'workspace 9'
-cmd-0 = 'workspace 10'
+# Workspace switching — alt+1-0  (hyprland: super+1-0)
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
 
 # Secondary-monitor workspaces
-cmd-minus = 'workspace 11'
-cmd-equal = 'workspace 12'
+alt-minus = 'workspace 11'
+alt-equal = 'workspace 12'
 
-# Move window to workspace — cmd+shift+1-0  (hyprland: super+shift+1-0)
-cmd-shift-1 = 'move-node-to-workspace 1'
-cmd-shift-2 = 'move-node-to-workspace 2'
-cmd-shift-3 = 'move-node-to-workspace 3'
-cmd-shift-4 = 'move-node-to-workspace 4'
-cmd-shift-5 = 'move-node-to-workspace 5'
-cmd-shift-6 = 'move-node-to-workspace 6'
-cmd-shift-7 = 'move-node-to-workspace 7'
-cmd-shift-8 = 'move-node-to-workspace 8'
-cmd-shift-9 = 'move-node-to-workspace 9'
-cmd-shift-0 = 'move-node-to-workspace 10'
+# Move window to workspace — alt+shift+1-0  (hyprland: super+shift+1-0)
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-0 = 'move-node-to-workspace 10'
 
-# Cycle workspaces — cmd+period/comma  (hyprland: super+period/comma)
-cmd-period = 'workspace --wrap-around next'
-cmd-comma  = 'workspace --wrap-around prev'
+# Cycle workspaces — alt+period/comma  (hyprland: super+period/comma)
+alt-period = 'workspace --wrap-around next'
+alt-comma  = 'workspace --wrap-around prev'
 
-# Launch terminal — cmd+return  (hyprland: super+return)
-cmd-enter       = 'exec-and-forget open -n /Applications/Ghostty.app'
-cmd-shift-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
+# Launch terminal — alt+return  (hyprland: super+return)
+alt-enter       = 'exec-and-forget open -n /Applications/Ghostty.app'
+alt-shift-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
 
 # Reload AeroSpace config
-cmd-shift-r = 'reload-config'
+alt-shift-r = 'reload-config'
 
 # ──────────────────────────────────────────────────────────────────────────────
 # MONITOR → WORKSPACE ASSIGNMENT

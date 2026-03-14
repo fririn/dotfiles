@@ -39,7 +39,3 @@ fi
 if [ -f "$HOME/dev/google-cloud-sdk/completion.zsh.inc" ]; then
   source "$HOME/dev/google-cloud-sdk/completion.zsh.inc"
 fi
-
-# ── macOS: disable ctrl+d sending EOF so it doesn't kill the shell in tmux ───
-# (prevents accidental tmux pane exit on ctrl+d)
-set -o ignoreeof

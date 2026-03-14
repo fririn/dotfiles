@@ -61,15 +61,31 @@ macos-option-as-alt = true
 # Ghostty would otherwise grab ctrl+shift+*, cmd+t, cmd+d, etc.
 keybind = clear
 
-# Clipboard — use super (cmd) only, never ctrl/alt which belong to tmux
+# Clipboard
 keybind = super+c=copy_to_clipboard
 keybind = super+v=paste_from_clipboard
 
 # Quick terminal toggle (cmd+` — like F12 scratchpad in hyprland)
 keybind = super+grave_accent=toggle_quick_terminal
 
-# Fullscreen
-keybind = super+m=toggle_fullscreen
-
 # Quit
 keybind = super+q=quit
+
+# ── tmux passthrough via cmd ───────────────────────────────────────────────────
+# AeroSpace owns alt/option globally. cmd is free inside Ghostty.
+# These translate cmd+key → ESC+key which tmux reads as M-key.
+#
+# Pane navigation (tmux: M-h/j/k/l → select-pane)
+keybind = super+h=text:\x1bh
+keybind = super+j=text:\x1bj
+keybind = super+k=text:\x1bk
+keybind = super+l=text:\x1bl
+#
+# Pane resize (tmux: M-H/J/K/L → resize-pane)
+keybind = super+shift+h=text:\x1bH
+keybind = super+shift+j=text:\x1bJ
+keybind = super+shift+k=text:\x1bK
+keybind = super+shift+l=text:\x1bL
+#
+# Pane zoom/fullscreen (tmux: M-m → resize-pane -Z)
+keybind = super+m=text:\x1bm

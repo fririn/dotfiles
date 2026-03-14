@@ -20,18 +20,17 @@ default-root-container-orientation = 'auto'
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
 # Gaps
-# outer.top must clear native macOS menu bar + SketchyBar on every display.
-# On the external 1x (non-Retina) display the two stack:
-#   native menu bar ≈ 24pt  +  SketchyBar 32px @ 1x = 32pt  →  ~56pt total
-# AeroSpace's safe area starts below the native bar, so outer.top only needs
-# to clear the SketchyBar height: 32pt + a few pt breathing room = 40.
-# On internal 2x Retina: SketchyBar = 16pt — 40 is more than enough.
+# SketchyBar (display=main) sits inside the macOS menu-bar safe area, so
+# AeroSpace's safe area already starts below it on the main display.
+# outer.top is just breathing room — 10pt works for all displays.
+# Secondary display (no SketchyBar) gets 10pt gap instead of the previous
+# 40pt (~2 cm) that was wasted.
 [gaps]
 inner.horizontal = 5
 inner.vertical   = 5
 outer.left       = 10
 outer.right      = 10
-outer.top        = 40
+outer.top        = 10
 outer.bottom     = 10
 
 # ──────────────────────────────────────────────────────────────────────────────

@@ -7,7 +7,10 @@
 theme            = Catppuccin Mocha
 background       = #1e1e2e
 foreground       = #cdd6f4
-background-opacity = 0.85
+background-opacity      = 0.85
+# Frosted-glass blur behind the transparent background (macOS vibrancy).
+# Increase value for more blur; 20 is a good balance.
+background-blur-radius  = 20
 cursor-color     = #f5e0dc
 # note: selection-background/foreground and cursor-text are not valid
 # top-level Ghostty options (they come from the theme)

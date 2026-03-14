@@ -5,7 +5,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 # ── Colours (Catppuccin Mocha) ────────────────────────────────────────────────
-BASE=0xff1e1e2e
+BASE=0xaa1e1e2e   # 67% opacity — frosted glass
 MANTLE=0xff181825
 CRUST=0xff11111b
 TEXT=0xffcdd6f4
@@ -22,9 +22,9 @@ PEACH=0xfffab387
 # ── Bar ───────────────────────────────────────────────────────────────────────
 sketchybar --bar \
   height=32 \
-  blur_radius=30 \
+  blur_radius=80 \
   position=top \
-  display=all \
+  display=main \
   sticky=on \
   padding_left=10 \
   padding_right=10 \
@@ -51,7 +51,7 @@ sketchybar --add event aerospace_workspace_change
 
 for sid in $(aerospace list-workspaces --all); do
   sketchybar --add item "space.$sid" left \
-    --subscribe "space.$sid" aerospace_workspace_change \
+    --subscribe "space.$sid" aerospace_workspace_change front_app_switched \
     --set "space.$sid" \
       background.corner_radius=4 \
       background.height=24 \

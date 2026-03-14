@@ -2,49 +2,44 @@ ZSH_THEME="crunch"
 CASE_SENSITIVE="true"
 plugins=(
   git
-  archlinux
-	colored-man-pages
-	zsh-autosuggestions
-	zsh-syntax-highlighting
+  macos
+  colored-man-pages
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 source $ZSH/oh-my-zsh.sh
 source ~/.shell_aliases
-#source ~/.config/rofi/bashrc_functions
 
+# ── Homebrew ──────────────────────────────────────────────────────────────────
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# run fastfetch only if new terminal is opened not from ranger
-#if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfetch --logo "arch_small";dysk; fi
-
-# if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-#     ssh-agent > "$XDG_RUNTIME_DIR/ssh-agent.env"
-# fi
-# if [[ ! -f "$SSH_AUTH_SOCK" ]]; then
-#     source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
-# fi
-
-# function y() {
-# 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-# 	yazi "$@" --cwd-file="$tmp"
-# 	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-# 		builtin cd -- "$cwd"
-# 	fi
-# 	rm -f -- "$tmp"
-# }
-alias y="yazi"
-alias ra="yazi"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/paul/dev/google-cloud-sdk/path.zsh.inc' ]; then . '/home/paul/dev/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/paul/dev/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/paul/dev/google-cloud-sdk/completion.zsh.inc'; fi
-export PATH=$PATH:$HOME/go/bin
-
-
+# ── History ───────────────────────────────────────────────────────────────────
 HISTSIZE=500000
 SAVEHIST=500000
 setopt appendhistory
-setopt INC_APPEND_HISTORY  
+setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 
+# ── PATH ──────────────────────────────────────────────────────────────────────
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="$PATH:$HOME/go/bin"
+export PATH="$PATH:$HOME/.local/bin"
+
+# ── Aliases / tools ───────────────────────────────────────────────────────────
+alias y="yazi"
+alias ra="yazi"
+
+# fzf with preview (same as Linux)
+alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
+
+# ── Google Cloud SDK ──────────────────────────────────────────────────────────
+if [ -f "$HOME/dev/google-cloud-sdk/path.zsh.inc" ]; then
+  source "$HOME/dev/google-cloud-sdk/path.zsh.inc"
+fi
+if [ -f "$HOME/dev/google-cloud-sdk/completion.zsh.inc" ]; then
+  source "$HOME/dev/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# ── macOS: disable ctrl+d sending EOF so it doesn't kill the shell in tmux ───
+# (prevents accidental tmux pane exit on ctrl+d)
+set -o ignoreeof

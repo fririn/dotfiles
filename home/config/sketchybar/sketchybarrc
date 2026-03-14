@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+# ──────────────────────────────────────────────────────────────────────────────
+# SketchyBar — waybar analog for macOS
+# Catppuccin Mocha palette to match Ghostty / Hyprland theme
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── Colours (Catppuccin Mocha) ────────────────────────────────────────────────
+BASE=0xff1e1e2e
+MANTLE=0xff181825
+CRUST=0xff11111b
+TEXT=0xffcdd6f4
+SUBTEXT=0xffa6adc8
+SURFACE0=0xff313244
+SURFACE1=0xff45475a
+BLUE=0xff89b4fa
+MAUVE=0xffcba6f7
+GREEN=0xffa6e3a1
+RED=0xfff38ba8
+YELLOW=0xfff9e2af
+PEACH=0xfffab387
+
+# ── Bar ───────────────────────────────────────────────────────────────────────
+sketchybar --bar \
+  height=32 \
+  blur_radius=30 \
+  position=top \
+  sticky=on \
+  padding_left=10 \
+  padding_right=10 \
+  color=$BASE \
+  border_width=0 \
+  notch_width=0
+
+# ── Defaults ──────────────────────────────────────────────────────────────────
+sketchybar --default \
+  icon.font="FantasqueSansM Nerd Font Mono:Bold:14.0" \
+  label.font="FantasqueSansM Nerd Font Mono:Bold:13.0" \
+  icon.color=$TEXT \
+  label.color=$TEXT \
+  padding_left=6 \
+  padding_right=6 \
+  label.padding_left=4 \
+  label.padding_right=4
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LEFT — AeroSpace workspaces
+# ══════════════════════════════════════════════════════════════════════════════
+
+sketchybar --add event aerospace_workspace_change
+
+for sid in $(aerospace list-workspaces --all); do
+  sketchybar --add item "space.$sid" left \
+    --subscribe "space.$sid" aerospace_workspace_change \
+    --set "space.$sid" \
+      background.corner_radius=4 \
+      background.height=24 \
+      background.drawing=off \
+      label="$sid" \
+      label.padding_left=6 \
+      label.padding_right=6 \
+      icon.drawing=off \
+      click_script="aerospace workspace $sid" \
+      script="$HOME/.config/sketchybar/plugins/aerospace.sh $sid"
+done
+
+# ── Separator ─────────────────────────────────────────────────────────────────
+sketchybar --add item separator left \
+  --set separator \
+    icon="|" \
+    icon.color=$SURFACE1 \
+    label.drawing=off \
+    padding_left=2 \
+    padding_right=2
+
+# ── Active app name ───────────────────────────────────────────────────────────
+sketchybar --add item front_app left \
+  --subscribe front_app front_app_switched \
+  --set front_app \
+    icon.drawing=off \
+    label.color=$MAUVE \
+    label.font="FantasqueSansM Nerd Font Mono:Bold:13.0" \
+    script="$HOME/.config/sketchybar/plugins/front_app.sh"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# RIGHT — clock, battery, network
+# ══════════════════════════════════════════════════════════════════════════════
+
+# ── Clock ─────────────────────────────────────────────────────────────────────
+sketchybar --add item clock right \
+  --set clock \
+    update_freq=1 \
+    icon="" \
+    icon.color=$BLUE \
+    script="$HOME/.config/sketchybar/plugins/clock.sh"
+
+# ── Battery ───────────────────────────────────────────────────────────────────
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=60 \
+    script="$HOME/.config/sketchybar/plugins/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+# ── Network ───────────────────────────────────────────────────────────────────
+sketchybar --add item network right \
+  --set network \
+    update_freq=5 \
+    icon="󰖩" \
+    icon.color=$GREEN \
+    script="$HOME/.config/sketchybar/plugins/network.sh"
+
+# ── Finalise ──────────────────────────────────────────────────────────────────
+sketchybar --update

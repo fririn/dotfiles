@@ -72,23 +72,25 @@ keybind = super+grave_accent=toggle_quick_terminal
 # Quit
 keybind = super+q=quit
 
-# ── tmux passthrough via cmd ───────────────────────────────────────────────────
-# AeroSpace owns alt/option globally. cmd is free inside Ghostty.
-# \e = ESC (0x1b) — Ghostty's text action escape format.
-# tmux reads ESC+key as M-key (Meta/Alt bound).
+# ── tmux passthrough via ctrl+cmd ─────────────────────────────────────────────
+# AeroSpace owns alt/option globally — alt+hjkl and alt+shift+hjkl are
+# intercepted before reaching the terminal, breaking pane nav and resize.
+# ctrl+cmd is free on macOS and not bound by AeroSpace.
 #
-# Pane navigation  →  tmux: M-h/j/k/l  →  select-pane
-keybind = super+h=text:\eh
-keybind = super+j=text:\ej
-keybind = super+k=text:\ek
-keybind = super+l=text:\el
+# Ghostty intercepts ctrl+cmd+KEY and writes an ESC sequence to the PTY.
+# tmux reads ESC+key as M-key (its Meta bind).
 #
-# Pane resize  →  tmux: M-H/J/K/L  →  resize-pane
-# Use super+H (uppercase) — Ghostty uses the shifted character directly
-keybind = super+H=text:\eH
-keybind = super+J=text:\eJ
-keybind = super+K=text:\eK
-keybind = super+L=text:\eL
+# Pane navigation  →  ctrl+cmd+hjkl  →  tmux M-h/j/k/l  →  select-pane
+keybind = ctrl+super+h=text:\eh
+keybind = ctrl+super+j=text:\ej
+keybind = ctrl+super+k=text:\ek
+keybind = ctrl+super+l=text:\el
 #
-# Pane zoom  →  tmux: M-m  →  resize-pane -Z
-keybind = super+m=text:\em
+# Pane resize  →  ctrl+cmd+shift+hjkl  →  tmux M-H/J/K/L  →  resize-pane
+keybind = ctrl+super+H=text:\eH
+keybind = ctrl+super+J=text:\eJ
+keybind = ctrl+super+K=text:\eK
+keybind = ctrl+super+L=text:\eL
+#
+# Pane zoom  →  ctrl+cmd+m  →  tmux M-m  →  resize-pane -Z
+keybind = ctrl+super+m=text:\em

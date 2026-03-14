@@ -22,15 +22,15 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Gaps
 # SketchyBar (display=main) sits inside the macOS menu-bar safe area, so
 # AeroSpace's safe area already starts below it on the main display.
-# outer.top is just breathing room — 10pt works for all displays.
-# Secondary display (no SketchyBar) gets 10pt gap instead of the previous
-# 40pt (~2 cm) that was wasted.
+# outer.top = bar height (32pt) + 4pt breathing. Hide the native macOS menu bar
+# (defaults write NSGlobalDomain _HIHideMenuBar -bool true + killall SystemUIServer)
+# so safe area = 0 on all displays; 36pt then clears SketchyBar everywhere.
 [gaps]
 inner.horizontal = 5
 inner.vertical   = 5
 outer.left       = 10
 outer.right      = 10
-outer.top        = 10
+outer.top        = 36
 outer.bottom     = 10
 
 # ──────────────────────────────────────────────────────────────────────────────

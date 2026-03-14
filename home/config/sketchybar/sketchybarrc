@@ -24,6 +24,7 @@ sketchybar --bar \
   height=32 \
   blur_radius=30 \
   position=top \
+  display=all \
   sticky=on \
   padding_left=10 \
   padding_right=10 \

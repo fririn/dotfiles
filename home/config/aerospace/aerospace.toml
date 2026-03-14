@@ -1,4 +1,4 @@
-# AeroSpace - Hyprland analog for macOS
+
 # Modifier: alt/option (= Super/Win key on Linux)
 #
 # Workspace model mirrors hyprland:
@@ -19,14 +19,19 @@ default-root-container-orientation = 'auto'
 # Snap mouse to focused window center (hyprland follow_mouse behaviour)
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 
-# Gaps — outer.top must clear SketchyBar (32px bar ≈ 16pt on Retina).
-# Set to 44 to safely clear bar + give breathing room. Tune down if too large.
+# Gaps
+# outer.top must clear native macOS menu bar + SketchyBar on every display.
+# On the external 1x (non-Retina) display the two stack:
+#   native menu bar ≈ 24pt  +  SketchyBar 32px @ 1x = 32pt  →  ~56pt total
+# AeroSpace's safe area starts below the native bar, so outer.top only needs
+# to clear the SketchyBar height: 32pt + a few pt breathing room = 40.
+# On internal 2x Retina: SketchyBar = 16pt — 40 is more than enough.
 [gaps]
 inner.horizontal = 5
 inner.vertical   = 5
 outer.left       = 10
 outer.right      = 10
-outer.top        = 44
+outer.top        = 40
 outer.bottom     = 10
 
 # ──────────────────────────────────────────────────────────────────────────────

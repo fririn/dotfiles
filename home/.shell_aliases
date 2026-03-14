@@ -77,7 +77,7 @@ kg() {
 kga() {
   kubectl get $1 -o wide --all-namespaces
 }
-kconf() {
+kns() {
   kubectl config set-context --current --namespace=$1
 }
 alias g='gcloud'

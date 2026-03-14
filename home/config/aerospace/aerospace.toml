@@ -46,11 +46,11 @@ alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
-# Resize — alt+ctrl+hjkl  (hyprland: binde super, resize)
-alt-ctrl-h = 'resize width -50'
-alt-ctrl-j = 'resize height +50'
-alt-ctrl-k = 'resize height -50'
-alt-ctrl-l = 'resize width +50'
+# Resize — alt+ctrl+arrows  (hjkl left free for tmux C-M-h/j/k/l binds)
+alt-ctrl-left  = 'resize width -50'
+alt-ctrl-down  = 'resize height +50'
+alt-ctrl-up    = 'resize height -50'
+alt-ctrl-right = 'resize width +50'
 
 # Layout toggles
 alt-space       = 'layout tiles horizontal vertical'  # cycle tile split axis

@@ -26,7 +26,6 @@ sketchybar --bar \
   position=top \
   display=main \
   sticky=on \
-  topmost=window \
   padding_left=10 \
   padding_right=10 \
   color=$BASE \

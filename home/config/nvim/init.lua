@@ -46,8 +46,13 @@ vim.keymap.set("n", "<leader>Y", '"+yg')
 vim.keymap.set("n", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>yy", '"+yy')
 
-vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<S-h>", ":bprev<CR>", { desc = "Previous Buffer" })
+vim.keymap.set("n", "<leader>h", "<C-w>h", { desc = "Move to left split" })
+vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Move to right split" })
+vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Move to split below" })
+vim.keymap.set("n", "<leader>k", "<C-w>k", { desc = "Move to split above" })
+
+vim.keymap.set("n", "<leader><S-h>", ":bnext<CR>", { desc = "Next Buffer" })
+vim.keymap.set("n", "<leader><S-l>", ":bprev<CR>", { desc = "Previous Buffer" })
 vim.keymap.set("n", "<leader>q", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete Buffer" })
@@ -191,7 +196,7 @@ require("lazy").setup({
 				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>w", group = "[W]orkspace" },
 				{ "<leader>t", group = "[T]oggle" },
-				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+				{ "<leader>gh", group = "Git [H]unk", mode = { "n", "v" } },
 			},
 		},
 	},

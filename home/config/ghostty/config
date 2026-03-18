@@ -4,13 +4,13 @@
 
 # ── Appearance ────────────────────────────────────────────────────────────────
 # theme sets base colours; explicit background/foreground override the theme
-theme            = Catppuccin Mocha
-background       = #1e1e2e
-foreground       = #cdd6f4
-background-opacity      = 0.85
+# theme            = Catppuccin Mocha
+background       = #000000
+# foreground       = #cdd6f4
+background-opacity      = 0.5
 # Frosted-glass blur behind the transparent background (macOS vibrancy).
 # Increase value for more blur; 20 is a good balance.
-background-blur-radius  = 20
+background-blur-radius  = 50
 cursor-color     = #f5e0dc
 # note: selection-background/foreground and cursor-text are not valid
 # top-level Ghostty options (they come from the theme)
@@ -37,10 +37,10 @@ font-family = FantasqueSansM Nerd Font Mono
 font-size   = 18
 
 # ── Window / padding ──────────────────────────────────────────────────────────
-window-padding-x       = 7
-window-padding-y       = 7
+window-padding-x = 15
+window-padding-y = 7
 window-padding-balance = true
-scrollback-limit       = 100000
+scrollback-limit       = 1000000
 
 # ── macOS appearance ──────────────────────────────────────────────────────────
 macos-titlebar-style        = hidden
@@ -53,24 +53,26 @@ quick-terminal-position           = top
 quick-terminal-screen             = main
 quick-terminal-animation-duration = 0.15
 
+
 # ── CRITICAL: Option key as Alt/Meta ──────────────────────────────────────────
 # Without this, Option+h sends "ˆ" instead of ESC-h, breaking ALL tmux
 # Meta binds (M-h/j/k/l pane nav, M-H/J/K/L resize, M-m zoom, etc.)
-macos-option-as-alt = true
+macos-option-as-alt = left
 
 # ── Keybinds ──────────────────────────────────────────────────────────────────
 # Clear ALL Ghostty defaults so nothing intercepts tmux sequences.
 keybind = clear
 
-# Clipboard
-keybind = super+c=copy_to_clipboard
-keybind = super+v=paste_from_clipboard
+keybind = performable:ctrl+shift+c=copy_to_clipboard
+keybind = performable:ctrl+shift+v=paste_from_clipboard
 
-# Quick terminal toggle (cmd+` — like F12 scratchpad in hyprland)
-keybind = super+grave_accent=toggle_quick_terminal
-
-# Quit
+keybind = ctrl+super+r=reload_config
 keybind = super+q=quit
+
+keybind = global:f12=toggle_quick_terminal
+keybind = global:alt+z=toggle_quick_terminal
+quick-terminal-size = 100%
+quick-terminal-position = bottom
 
 # ── tmux passthrough via ctrl+cmd ─────────────────────────────────────────────
 # AeroSpace owns alt/option globally — alt+hjkl and alt+shift+hjkl are
@@ -80,17 +82,27 @@ keybind = super+q=quit
 # Ghostty intercepts ctrl+cmd+KEY and writes an ESC sequence to the PTY.
 # tmux reads ESC+key as M-key (its Meta bind).
 #
-# Pane navigation  →  ctrl+cmd+hjkl  →  tmux M-h/j/k/l  →  select-pane
-keybind = ctrl+super+h=text:\eh
-keybind = ctrl+super+j=text:\ej
-keybind = ctrl+super+k=text:\ek
-keybind = ctrl+super+l=text:\el
+
+# # --- Pane Navigation (Cmd + hjkl) ---
+# keybind = super+h=text:\eh
+# keybind = super+j=text:\ej
+# keybind = super+k=text:\ek
+# keybind = super+l=text:\el
 #
-# Pane resize  →  ctrl+cmd+shift+hjkl  →  tmux M-H/J/K/L  →  resize-pane
-keybind = ctrl+super+H=text:\eH
-keybind = ctrl+super+J=text:\eJ
-keybind = ctrl+super+K=text:\eK
-keybind = ctrl+super+L=text:\eL
+# # --- Pane Resize (Cmd + Shift + hjkl) ---
+# # Note: Using capital HJKL automatically implies the Shift key
+# keybind = super+H=text:\eH
+# keybind = super+J=text:\eJ
+# keybind = super+K=text:\eK
+# keybind = super+L=text:\eL
 #
-# Pane zoom  →  ctrl+cmd+m  →  tmux M-m  →  resize-pane -Z
-keybind = ctrl+super+m=text:\em
+# # --- Windows & Splits (Ctrl + Cmd + hjkl/o) ---
+# # Maps Ctrl+Cmd to Ctrl+Meta escape sequences
+# keybind = ctrl+super+h=text:\e\x08
+# keybind = ctrl+super+l=text:\e\x0c
+# keybind = ctrl+super+k=text:\e\x0b
+# keybind = ctrl+super+j=text:\e\x0a
+# keybind = ctrl+super+o=text:\e\x0f
+#
+# # --- Zoom (Cmd + m) ---
+# keybind = super+m=text:\em

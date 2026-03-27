@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+id=$(xdo id -n Scratchy);
+if [ -z "$id" ]; then
+  alacritty --class="Scratchy" &
+else
+  action='hide';
+  if [[ $(xprop -id $id | grep "window state"| cut -d' ' -f3 | head -n1) == 'Withdrawn' ]]; then
+    action='show';
+  fi
+  xdo $action -n Scratchy
+fi

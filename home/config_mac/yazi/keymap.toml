@@ -1,0 +1,59 @@
+[mgr]
+prepend_keymap = [
+  # General
+  { on = [ "q" ], run = "close",                       desc = "Close tab or quit" },
+  { on = [ "d", "d" ], run = "yank --cut",             desc = "Cut (move) selected files" },
+	{ on = [ "y", "y" ], run = "yank",                   desc = "Copy selected files" },
+	{ on = [ "p", "p" ], run = "paste",                  desc = "Paste files" },
+	{ on = [ "p", "P" ], run = "paste --force",          desc = "Paste files (overwrite)" },
+	{ on = [ "d", "D" ], run = "remove --permanently",   desc = "Delete permanently" },
+	{ on = [ "c", "w" ], run = "rename --cursor=start",  desc = "Rename file" },
+	{ on = [ "z", "h" ], run = "hidden toggle",          desc = "Toggle hidden files" },
+
+  # Search 
+  { on = [ "s", "f" ], run = "search --via=fd", desc = "Search files by name via fd" },
+  { on = [ "s", "g" ], run = "search --via=rg", desc = "Search files by content via rg" },
+
+	# Goto
+	{ on = [ "g", "h" ],       run = "cd ~",             desc = "Go home" },
+	{ on = [ "g", "w" ],       run = "cd ~/work/",       desc = "Go work" },
+	{ on = [ "g", "c" ],       run = "cd ~/.config",     desc = "Go ~/.config" },
+	{ on = [ "g", "d" ],       run = "cd ~/Downloads",   desc = "Go ~/Downloads" },
+	{ on = [ "g", "D" ],       run = "cd ~/.dotfiles/home/",   desc = "Go ~/.dotfiles/home" },
+	{ on = [ "g", "f" ],       run = "cd ~/filedump",    desc = "Go ~/filedump" },
+	{ on = [ "g", "m" ],       run = "cd /mnt",          desc = "Go /mnt" },
+	{ on = [ "g", "s" ],       run = "follow",           desc = "Follow hovered symlink" },
+	{ on = [ "g", "<Space>" ], run = "cd --interactive", desc = "Jump interactively" },
+
+  # Sorting
+	{ on = [ "o", "m" ], run = [ "sort mtime --reverse=no", "linemode mtime" ],  desc = "Sort by modified time" },
+	{ on = [ "o", "M" ], run = [ "sort mtime --reverse=yes", "linemode mtime" ], desc = "Sort by modified time (reverse)" },
+	{ on = [ "o", "b" ], run = [ "sort btime --reverse=no", "linemode btime" ],  desc = "Sort by birth time" },
+	{ on = [ "o", "B" ], run = [ "sort btime --reverse=yes", "linemode btime" ], desc = "Sort by birth time (reverse)" },
+	{ on = [ "o", "e" ], run = "sort extension --reverse=no",                    desc = "Sort by extension" },
+	{ on = [ "o", "E" ], run = "sort extension --reverse=yes",                   desc = "Sort by extension (reverse)" },
+	{ on = [ "o", "a" ], run = "sort alphabetical --reverse=no",                 desc = "Sort alphabetically" },
+	{ on = [ "o", "A" ], run = "sort alphabetical --reverse=yes",                desc = "Sort alphabetically (reverse)" },
+	{ on = [ "o", "n" ], run = "sort natural --reverse=no",                      desc = "Sort naturally" },
+	{ on = [ "o", "N" ], run = "sort natural --reverse=yes",                     desc = "Sort naturally (reverse)" },
+	{ on = [ "o", "s" ], run = [ "sort size --reverse=no", "linemode size" ],    desc = "Sort by size" },
+	{ on = [ "o", "S" ], run = [ "sort size --reverse=yes", "linemode size" ],   desc = "Sort by size (reverse)" },
+	{ on = [ "o", "r" ], run = "sort random --reverse=no",                       desc = "Sort randomly" },
+
+  # custom silly things and plugins
+  { on = [ "<A-d>" ],  run = 'shell -- dragon-drop -x -i -T "$@"', desc = "drag n drop" },
+  { on = [ "m", "a" ], run = "linemode size_and_perm",             desc = "Linemode: size and perm" },
+  { on = [ "i" ],      run = "plugin toggle-pane max-preview",     desc = "Toggle preview pane" },
+  { on = [ "S" ],      run = "shell --block $SHELL",               desc = "open in shell" },
+	{ on = [ "z", "z" ], run = "plugin fzf",                         desc = "Fzf" },
+	{ on = [ "z", "Z" ], run = "plugin zoxide",                      desc = "zoxide" },
+	{ on = [ "z", "i" ], run = "plugin zoom 1",                      desc = "zoom preview in" },
+	{ on = [ "z", "o" ], run = "plugin zoom -1",                     desc = "zoom preview out" },
+
+	{ on = "<A-_>",     run = "hardlink",                    desc = "Hardlink yanked files" },
+  # --- Archiving / Extraction ---
+	# { on = [ "c", "z" ], run = 'shell --confirm "zip -r archive.zip %*"',       desc = "Zip selected" },
+	# { on = [ "c", "t" ], run = 'shell --confirm "tar -czvf archive.tar.gz %*"', desc = "Tar.gz selected" },
+	# { on = [ "u", "z" ], run = 'shell --confirm "unzip %0"',                    desc = "Unzip current" },
+	# { on = [ "u", "t" ], run = 'shell --confirm "tar -xvf %0"',
+]

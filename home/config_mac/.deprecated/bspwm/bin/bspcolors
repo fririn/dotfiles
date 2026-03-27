@@ -1,0 +1,104 @@
+#!/usr/bin/bash
+
+## A script to get colours from xrdb & deploy it to polybar, alacritty & rofi.
+DIR="$HOME/.config"
+
+getcolors () {
+	FOREGROUND="$(xrdb -get foreground)"
+	BACKGROUND="$(xrdb -get background)"
+	CURSOR="$(xrdb -get cursorColor)"
+	BLACK="$(xrdb -get color0)"
+	RED="$(xrdb -get color1)"
+	GREEN="$(xrdb -get color2)"
+	YELLOW="$(xrdb -get color3)"
+	BLUE="$(xrdb -get color4)"
+	MAGENTA="$(xrdb -get color5)"
+	CYAN="$(xrdb -get color6)"
+	WHITE="$(xrdb -get color7)"
+	ALTBLACK="$(xrdb -get color8)"
+	ALTRED="$(xrdb -get color9)"
+	ALTGREEN="$(xrdb -get color10)"
+	ALTYELLOW="$(xrdb -get color11)"
+	ALTBLUE="$(xrdb -get color12)"
+	ALTMAGENTA="$(xrdb -get color13)"
+	ALTCYAN="$(xrdb -get color14)"
+	ALTWHITE="$(xrdb -get color15)"
+}
+
+bspbar () {
+	cat > $DIR/polybar/colors <<- EOF
+	[color]
+
+	FOREGROUND = ${FOREGROUND}
+	BACKGROUND = ${BACKGROUND}
+	BLACK = ${BLACK}
+	RED = ${RED}
+	GREEN = ${GREEN}
+	YELLOW = ${YELLOW}
+	BLUE = ${BLUE}
+	MAGENTA = ${MAGENTA}
+	CYAN = ${CYAN}
+	WHITE = ${WHITE}
+	ALTBLACK = ${ALTBLACK}
+	ALTRED = ${ALTRED}
+	ALTGREEN = ${ALTGREEN}
+	ALTYELLOW = ${ALTYELLOW}
+	ALTBLUE = ${ALTBLUE}
+	ALTMAGENTA = ${ALTMAGENTA}
+	ALTCYAN = ${ALTCYAN}
+	ALTWHITE = ${ALTWHITE}
+	EOF
+}
+
+bspterm () {
+	cat > $DIR/alacritty/colors.yml <<- EOF
+		## Colors configuration
+		colors:
+		  # Default colors
+		  primary:
+		    background: '${BACKGROUND}'
+		    foreground: '${FOREGROUND}'
+
+		  # Normal colors
+		  normal:
+		    black:   '${BLACK}'
+		    red:     '${RED}'
+		    green:   '${GREEN}'
+		    yellow:  '${YELLOW}'
+		    blue:    '${BLUE}'
+		    magenta: '${MAGENTA}'
+		    cyan:    '${CYAN}'
+		    white:   '${WHITE}'
+
+		  # Bright colors
+		  bright:
+		    black:   '${ALTBLACK}'
+		    red:     '${ALTRED}'
+		    green:   '${ALTGREEN}'
+		    yellow:  '${ALTYELLOW}'
+		    blue:    '${ALTBLUE}'
+		    magenta: '${ALTMAGENTA}'
+		    cyan:    '${ALTCYAN}'
+		    white:   '${ALTWHITE}'
+	EOF
+}
+
+bsprofi () {
+	cat > $DIR/rofi/themes/colors.rasi <<- EOF
+	* {
+		background:			${BACKGROUND};
+		foreground:			${FOREGROUND};
+		selected:			${BLUE};
+		highlight:			${YELLOW};
+		urgent:				${RED};
+		on:					${GREEN};
+		off:				${RED};
+	}
+	EOF
+}
+
+getcolors
+bspbar
+bspterm
+bsprofi
+

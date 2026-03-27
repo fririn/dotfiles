@@ -1,0 +1,141 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"
+opacity = 0.4
+blur = true
+option_as_alt = "OnlyLeft"
+
+[scrolling]
+history = 100000
+
+[font]
+normal = { family = "Hack Nerd Font", style = "Regular" }
+bold   = { family = "Hack Nerd Font", style = "Bold" }
+italic = { family = "Hack Nerd Font", style = "Italic" }
+size=16
+
+
+
+[[hints.enabled]]
+binding = { key = "U", mods = "Control|Shift" }
+command = "open"
+hyperlinks = false
+mouse.enabled = true
+mouse.mods = "Control"
+post_processing = true
+persist = false
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩‘]+"
+
+# ── Keybindings ───────────────────────────────────────────────────────────────
+# Alacritty has no "clear all defaults" — but its default binds are minimal
+# and don't conflict with the sequences below. The ones that could conflict
+# (Cmd+Q, Cmd+C, Cmd+V) are explicitly overridden here.
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Super"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "V"
+mods = "Super"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "Q"
+mods = "Super"
+action = "Quit"
+
+# ── Pane navigation passthrough: Cmd+hjkl → ESC+hjkl (Alt+hjkl in tmux) ──────
+
+[[keyboard.bindings]]
+key = "H"
+mods = "Super"
+chars = "\u001bh"
+
+[[keyboard.bindings]]
+key = "J"
+mods = "Super"
+chars = "\u001bj"
+
+[[keyboard.bindings]]
+key = "K"
+mods = "Super"
+chars = "\u001bk"
+
+[[keyboard.bindings]]
+key = "L"
+mods = "Super"
+chars = "\u001bl"
+
+# ── Splits: Cmd+Ctrl+k/j → ESC+^K / ESC+^J ───────────────────────────────────
+
+[[keyboard.bindings]]
+key = "K"
+mods = "Super|Control"
+chars = "\u001b\u000b"
+
+[[keyboard.bindings]]
+key = "J"
+mods = "Super|Control"
+chars = "\u001b\u000a"
+
+# ── Pane resize: Cmd+Shift+hjkl → ESC+HJKL ───────────────────────────────────
+
+[[keyboard.bindings]]
+key = "H"
+mods = "Super|Shift"
+chars = "\u001bH"
+
+[[keyboard.bindings]]
+key = "J"
+mods = "Super|Shift"
+chars = "\u001bJ"
+
+[[keyboard.bindings]]
+key = "K"
+mods = "Super|Shift"
+chars = "\u001bK"
+
+[[keyboard.bindings]]
+key = "L"
+mods = "Super|Shift"
+chars = "\u001bL"
+
+# ── Zoom pane: Cmd+m → ESC+m ──────────────────────────────────────────────────
+# NOTE: Alacritty intercepts Cmd+M by default to minimise the window.
+# This override replaces that behaviour.
+
+[[keyboard.bindings]]
+key = "M"
+mods = "Super"
+chars = "\u001bm"
+
+# ── Rotate layout: Cmd+o → ESC+^O ────────────────────────────────────────────
+
+[[keyboard.bindings]]
+key = "O"
+mods = "Super"
+chars = "\u001b\u000f"
+
+# ── Prev/next tmux window: Cmd+Ctrl+h/l → ESC+^H / ESC+^L ───────────────────
+
+[[keyboard.bindings]]
+key = "H"
+mods = "Super|Control"
+chars = "\u001b\u0008"
+
+[[keyboard.bindings]]
+key = "L"
+mods = "Super|Control"
+chars = "\u001b\u000c"
+
+
+
+
+
+

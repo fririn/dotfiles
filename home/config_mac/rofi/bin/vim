@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# --- Configuration ---
+TERMINAL="kitty"
+EDITOR="nvim"
+RofiDir="$HOME/.config/rofi"
+
+options="$HOME/.config/nvim/init.vim
+$HOME/work
+$HOME/.config/hypr
+$HOME/work/nodes-proxy
+$HOME/work/nomad-cluster"
+# --- End Configuration ---
+
+
+# 1. Pipe the list into rofi -dmenu
+# -i makes the search case-insensitive
+# -p sets a prompt
+selected=$(echo -e "$options" | rofi -dmenu -i -p "Open in $EDITOR" -theme "$RofiDir"/themes/launcher.rasi)
+
+# 2. Check if a selection was made (user didn't press Esc)
+if [ -n "$selected" ]; then
+    # 3. Open the selection in your terminal
+    $TERMINAL -e $EDITOR "$selected"
+fi

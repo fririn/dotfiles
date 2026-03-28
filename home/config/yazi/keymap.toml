@@ -41,7 +41,7 @@ prepend_keymap = [
 	{ on = [ "o", "r" ], run = "sort random --reverse=no",                       desc = "Sort randomly" },
 
   # custom silly things and plugins
-  { on = [ "<A-d>" ],  run = 'shell -- dragon-drop -x -i -T "$@"', desc = "drag n drop" },
+  { on = [ "<A-d>" ],  run = 'shell -- dragon-drop -x -a -i -T "$@"', desc = "drag n drop" },
   { on = [ "m", "a" ], run = "linemode size_and_perm",             desc = "Linemode: size and perm" },
   { on = [ "i" ],      run = "plugin toggle-pane max-preview",     desc = "Toggle preview pane" },
   { on = [ "S" ],      run = "shell --block $SHELL",               desc = "open in shell" },

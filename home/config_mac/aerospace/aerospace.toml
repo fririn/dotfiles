@@ -1,0 +1,165 @@
+
+# Modifier: alt/option (= Super/Win key on Linux)
+#
+# Workspace model mirrors hyprland:
+#   Workspaces 1-10  → main monitor
+#   Workspaces 11-12 → secondary monitor
+#
+# alt = AeroSpace (window manager ops, fires globally)
+# cmd = tmux (passed through Ghostty as ESC sequences, fires inside terminal)
+# No modifier overlap, no conflicts.
+
+# after-startup-command = ['exec-and-forget sketchybar']
+start-at-login = true
+
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Snap mouse to focused window center (hyprland follow_mouse behaviour)
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+on-focus-changed = ['move-mouse window-lazy-center']
+
+automatically-unhide-macos-hidden-apps = false
+
+# Gaps
+# AeroSpace has no per-monitor gap support. outer.top is global.
+# SketchyBar lives on the external (main) display at height=24.
+# outer.top = bar height (24pt) + 10pt breathing = 34pt clears the bar on external.
+# Internal display gets a 34pt empty zone at top (no bar there — accepted trade-off).
+# Native menu bar must be hidden so safe area = 0 everywhere:
+#   defaults write NSGlobalDomain _HIHideMenuBar -bool true && killall SystemUIServer
+[gaps]
+inner.horizontal = 5
+inner.vertical   = 5
+outer.left       = 10
+outer.right      = 10
+outer.bottom     = 10
+outer.top        = 10
+
+# outer.top = [
+#         { monitor."^built-in retina display$" = 11 },
+#         43,
+# ]
+
+# ──────────────────────────────────────────────────────────────────────────────
+# KEY BINDINGS
+# ──────────────────────────────────────────────────────────────────────────────
+[mode.main.binding]
+
+# Focus movement — alt+hjkl  (hyprland: super+hjkl)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move window — alt+shift+hjkl  (hyprland: super+ctrl+arrow)
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# Resize — alt+ctrl+arrows  (hjkl left free for tmux C-M-h/j/k/l binds)
+alt-ctrl-left  = 'resize width -50'
+alt-ctrl-down  = 'resize height +50'
+alt-ctrl-up    = 'resize height -50'
+alt-ctrl-right = 'resize width +50'
+
+# Layout toggles
+# alt-space       = 'layout tiles horizontal vertical'  # cycle tile split axis
+# alt-shift-space = 'layout floating tiling'            # float/unfloat
+alt-f           = 'layout floating tiling'            # hyprland super+f
+alt-m           = 'fullscreen'                        # hyprland super+m
+
+alt-slash = 'layout tiles horizontal vertical'
+# Close focused window
+#alt-c = 'close'
+
+# Workspace switching — alt+1-0  (hyprland: super+1-0)
+#this is for normal sane people
+# alt-1 = 'workspace 1'
+# alt-2 = 'workspace 2'
+# alt-3 = 'workspace 3'
+# alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-0 = 'workspace 10'
+
+#this is for me :)
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-q = 'workspace 5'
+alt-w = 'workspace 6'
+alt-e = 'workspace 7'
+alt-r = 'workspace 8'
+alt-a = 'workspace 9'
+alt-s = 'workspace 10'
+# f12 = 'workspace z'
+#
+# Secondary-monitor workspaces
+alt-minus = 'workspace 11'
+alt-equal = 'workspace 12'
+
+# Move window to workspace — alt+shift+1-0  (hyprland: super+shift+1-0)
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+alt-shift-6 = 'move-node-to-workspace 6'
+alt-shift-7 = 'move-node-to-workspace 7'
+alt-shift-8 = 'move-node-to-workspace 8'
+alt-shift-9 = 'move-node-to-workspace 9'
+alt-shift-0 = 'move-node-to-workspace 10'
+alt-shift-q = 'move-node-to-workspace 5'
+alt-shift-w = 'move-node-to-workspace 6'
+alt-shift-e = 'move-node-to-workspace 7'
+alt-shift-r = 'move-node-to-workspace 8'
+alt-shift-a = 'move-node-to-workspace 9'
+alt-shift-s = 'move-node-to-workspace 10'
+# shift-f12 = 'move-node-to-workspace z'
+alt-shift-z = 'move-node-to-workspace z'
+
+# Cycle workspaces — alt+period/comma  (hyprland: super+period/comma)
+alt-period = 'workspace --wrap-around next'
+alt-comma  = 'workspace --wrap-around prev'
+
+# Launch terminal — alt+return  (hyprland: super+return)
+alt-enter       = 'exec-and-forget open -n /Applications/Ghostty.app'
+alt-shift-enter = 'exec-and-forget open -n /Applications/Ghostty.app'
+
+# Reload AeroSpace config
+alt-ctrl-shift-r = 'reload-config'
+
+# ──────────────────────────────────────────────────────────────────────────────
+# MONITOR → WORKSPACE ASSIGNMENT
+# (mirrors hyprland workspace = N, monitor:$primary / monitor:$secondary)
+# AeroSpace will fall back to any available monitor if the named one is absent.
+# ──────────────────────────────────────────────────────────────────────────────
+[workspace-to-monitor-force-assignment]
+1  = ['main', 'built-in']
+2  = ['main', 'built-in']
+3  = ['main', 'built-in']
+4  = ['main', 'built-in']
+5  = ['main', 'built-in']
+6  = ['main', 'built-in']
+7  = ['main', 'built-in']
+8  = ['main', 'built-in']
+9  = ['main', 'built-in']
+10 = ['main', 'built-in']
+11 = ['secondary', 'main', 'built-in']
+12 = ['secondary', 'main', 'built-in']
+
+
+ [[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+if.app-name-regex-substring = 'settings'
+if.window-title-regex-substring = 'substring'
+if.workspace = 'workspace-name'
+if.during-aerospace-startup = true
+check-further-callbacks = true
+run = ['layout floating', 'move-node-to-workspace 0']

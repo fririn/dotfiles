@@ -1,0 +1,38 @@
+{
+  "bundleId" : "io.gechr.WhichSpace",
+  "settings" : {
+    "clickToSwitchSpaces" : true,
+    "dimInactiveSpaces" : true,
+    "hideEmptySpaces" : false,
+    "hideFullscreenApps" : false,
+    "hideSingleSpace" : false,
+    "launchAtLogin" : true,
+    "localSpaceNumbers" : true,
+    "paddingScale" : 65,
+    "showAllDisplays" : false,
+    "showAllSpaces" : true,
+    "sizeScale" : 100,
+    "soundName" : "",
+    "uniqueIconsPerDisplay" : false
+  },
+  "spacePreferences" : {
+    "badges" : {
+      "7" : {
+        "character" : "",
+        "position" : "topLeft"
+      }
+    },
+    "iconStyles" : {
+      "1" : "transparent",
+      "2" : "transparent",
+      "3" : "transparent",
+      "4" : "transparent",
+      "5" : "transparent",
+      "6" : "transparent",
+      "7" : "transparent",
+      "8" : "transparent",
+      "9" : "transparent"
+    }
+  },
+  "version" : "0.17.8"
+}

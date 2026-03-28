@@ -1,17 +1,12 @@
-#alias nvim="stty erase '^H'&&nvim"
 alias vim="nvim"
-#alias tmux="tmux -2"
-#alias ls="lsd"
 alias l="ls -lh"
 alias ll="ls -lah"
 alias lst="lsd --tree"
-alias fdfind="fd"
 
-#-- Misc
-alias font='setfont ter-132n'
+# ── Misc ────
 alias mkdir="mkdir -pv"
-alias ra='y'
-alias sra='sudo ranger'
+alias ra='yazi'
+alias y='yazi'
 alias reload='source ~/.zshrc'
 alias cm='cmatrix -u 3 -s'
 alias wrt='figlet -C utf8 -f banner'
@@ -19,84 +14,25 @@ alias cal='cal -3m'
 alias penv=". ./venv/bin/activate"
 alias feh="feh -x"
 alias dfh="df -h -t ext4"
-
-alias packs="cd ~/work/nomad_packs"
-alias cluster="cd ~/work/nomad-cluster"
-alias src="cd ~/work/nodes_src"
-alias proxy="cd ~/work/nodes-proxy"
-alias iproxy="cd ~/work/internal-node-proxy"
 alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
+alias rmpc="rmpc rescan && rmpc update && rmpc"
 
+# ── Package management ─────────────────────────────────────
+# brew (macos)
+alias b='brew install'
+alias br='brew uninstall'
+alias bu='brew upgrade'
+alias bo='brew outdated'
+alias bq='brew list'
+alias bqi='brew info'
 
-#-- Pacman 
+# pacman (arch linux btw)
 alias p='sudo pacman -S --needed'
 alias pr='sudo pacman -Rsn'
 alias pu='sudo pacman -Syu'
 alias parus='paru -S --needed'
 alias pq='pacman -Q'
 alias pqi='pacman -Qi'
-alias rmpc="rmpc rescan && rmpc update && rmpc"
-
-# git 
-alias gt="git tag"
-alias gs="git status"
-alias gch="git checkout"
-alias greset="git reset --hard"
-#alias gi="git update-index --assume-unchanged "
-#alias gamend="git commit --amend --no-edit"
-alias gl="git log --oneline --graph --all"
-alias gmr=" glab mr create --fill --fill-commit-body --remove-source-branch"
-alias hey1000="hey -n 1000 -m POST -H"
-
-gundo() {
-  git reset --soft HEAD~${1:-1}
-}
-gfix() {
-  git add . && git commit --amend --no-edit
-}
-gfind() {
-  git log --all --oneline --graph --decorate --grep="$1"
-}
-
-
-# docker and docker-compose
-alias d="docker"
-alias dps="docker ps -a"
-alias dc="docker compose"
-alias dcb="docker compose up -d --no-deps --build"
-alias dcr="docker compose up -d --force-recreate"
-
-# k8s
-alias k="kubectl"
-alias kd="kubectl describe"
-alias kc="kubectl create"
-alias ke="kubectl edit"
-kg() {
-  kubectl get $1 -o wide
-}
-kga() {
-  kubectl get $1 -o wide --all-namespaces
-}
-kns() {
-  kubectl config set-context --current --namespace=$1
-}
-alias g='gcloud'
-
-# terraform
-
-alias tf="terraform"
-
-
-
-
-#-- Configs
-alias zshrc='vim ~/.zshrc'
-
-alias pas='pass git pull; pass nksupport/all | less'
-alias newpass='openssl rand -base64'
-alias myip='wget -q -O - ipinfo.io/ip'
-alias prename='/usr/bin/vendor_perl/rename'
-
 packages-by-date() {
   pacman -Qi |
   grep '^\(Name\|Install Date\)\s*:' |
@@ -108,3 +44,61 @@ packages-by-date() {
   echo "$install_date   $pkg_name"
   done | sort
 }
+
+# ── Navigation ────────────────────────────────────────────────────────────────
+alias packs="cd ~/work/nomad_packs"
+alias cluster="cd ~/work/nomad-cluster"
+alias src="cd ~/work/nodes_src"
+alias proxy="cd ~/work/nodes-proxy"
+alias iproxy="cd ~/work/internal-node-proxy"
+
+# ── git ───────────────────────────────────────────────────────────────────────
+alias gt="git tag"
+alias gs="git status"
+alias gch="git checkout"
+alias greset="git reset --hard"
+alias gl="git log --oneline --graph --all"
+alias gmr="glab mr create --fill --fill-commit-body --remove-source-branch"
+alias hey1000="hey -n 1000 -m POST -H"
+
+greset() {
+  local count=${1:-1}
+  echo "Rewinding $count commit(s) (keeping changes staged)..."
+  git reset --soft HEAD~"$count"
+}
+gfix()  { git add . && git commit --amend --no-edit }
+gfind() { git log --all --oneline --graph --decorate --grep="$1" }
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+alias d="docker"
+alias dps="docker ps -a"
+alias dc="docker compose"
+alias dcb="docker compose up -d --no-deps --build"
+alias dcr="docker compose up -d --force-recreate"
+
+# ── Kubernetes ────────────────────────────────────────────────────────────────
+alias k="kubectl"
+alias kd="kubectl describe"
+alias kc="kubectl create"
+alias ke="kubectl edit"
+kg()  { kubectl get $1 -o wide }
+kga() { kubectl get $1 -o wide --all-namespaces }
+kns() { kubectl config set-context --current --namespace=$1 }
+alias g='gcloud'
+
+# ── Terraform ─────────────────────────────────────────────────────────────────
+alias tf="terraform"
+
+# ── Misc utils ────────────────────────────────────────────────────────────────
+alias zshrc='vim ~/.zshrc'
+alias pas='pass git pull; pass nksupport/all | less'
+alias newpass='openssl rand -base64'
+alias myip='curl -s ipinfo.io/ip'
+
+# work
+
+alias packs="cd ~/work/nomad_packs"
+alias cluster="cd ~/work/nomad-cluster"
+alias src="cd ~/work/nodes_src"
+alias proxy="cd ~/work/nodes-proxy"
+alias iproxy="cd ~/work/internal-node-proxy"

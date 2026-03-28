@@ -1,0 +1,11 @@
+
+[general]
+# ~/.config/alacritty/quickterm.toml
+import = ["~/.config/alacritty/alacritty.toml"]
+
+[window]
+opacity = 0.8
+decorations = "None"
+padding.x = 2
+padding.y = 2
+dynamic_padding = false

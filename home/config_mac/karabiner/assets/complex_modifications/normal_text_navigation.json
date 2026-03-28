@@ -1,0 +1,105 @@
+{
+  "title": "Windows-style text navigation (Ctrl=word, Opt=line/doc)",
+  "rules": [
+    {
+      "description": "Ctrl+Delete → delete word forward (like Windows)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "delete_or_backspace", "modifiers": { "mandatory": ["control"], "optional": ["any"] } },
+          "to": [{ "key_code": "delete_or_backspace", "modifiers": ["option"] }]
+        }
+      ]
+    },
+    {
+      "description": "Ctrl+Left → move one word left (like Windows)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_arrow", "modifiers": { "mandatory": ["control"], "optional": ["any"] } },
+          "to": [{ "key_code": "left_arrow", "modifiers": ["option"] }]
+        }
+      ]
+    },
+    {
+      "description": "Ctrl+Right → move one word right (like Windows)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "right_arrow", "modifiers": { "mandatory": ["control"], "optional": ["any"] } },
+          "to": [{ "key_code": "right_arrow", "modifiers": ["option"] }]
+        }
+      ]
+    },
+    {
+      "description": "Ctrl+Shift+Left → select one word left (like Windows)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_arrow", "modifiers": { "mandatory": ["control", "shift"], "optional": ["any"] } },
+          "to": [{ "key_code": "left_arrow", "modifiers": ["option", "shift"] }]
+        }
+      ]
+    },
+    {
+      "description": "Ctrl+Shift+Right → select one word right (like Windows)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "right_arrow", "modifiers": { "mandatory": ["control", "shift"], "optional": ["any"] } },
+          "to": [{ "key_code": "right_arrow", "modifiers": ["option", "shift"] }]
+        }
+      ]
+    },
+    {
+      "description": "Opt+Delete → delete to beginning of line (like Windows Home+Shift+Delete)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "delete_or_backspace", "modifiers": { "mandatory": ["option"], "optional": ["any"] } },
+          "to": [{ "key_code": "delete_or_backspace", "modifiers": ["command"] }]
+        }
+      ]
+    },
+    {
+      "description": "Opt+Left → move to beginning of line (like Windows Home)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_arrow", "modifiers": { "mandatory": ["option"], "optional": ["any"] } },
+          "to": [{ "key_code": "left_arrow", "modifiers": ["command"] }]
+        }
+      ]
+    },
+    {
+      "description": "Opt+Right → move to end of line (like Windows End)",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "right_arrow", "modifiers": { "mandatory": ["option"], "optional": ["any"] } },
+          "to": [{ "key_code": "right_arrow", "modifiers": ["command"] }]
+        }
+      ]
+    },
+    {
+      "description": "Opt+Shift+Left → select to beginning of line",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "left_arrow", "modifiers": { "mandatory": ["option", "shift"], "optional": ["any"] } },
+          "to": [{ "key_code": "left_arrow", "modifiers": ["command", "shift"] }]
+        }
+      ]
+    },
+    {
+      "description": "Opt+Shift+Right → select to end of line",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": { "key_code": "right_arrow", "modifiers": { "mandatory": ["option", "shift"], "optional": ["any"] } },
+          "to": [{ "key_code": "right_arrow", "modifiers": ["command", "shift"] }]
+        }
+      ]
+    }
+  ]
+}

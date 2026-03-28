@@ -1,5 +1,5 @@
 install*
-
+*.out
 home/config/deprecated/ranger/plugins/
 all.txt
 home/config/hypr/wallust
@@ -15,3 +15,4 @@ home/config/swaync/wallust
 lazy-lock.json
 *env*
 nomad_hosts.txt
+*backup*

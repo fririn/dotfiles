@@ -135,6 +135,10 @@ mods = "Super|Control"
 chars = "\u001b\u000c"
 
 
+[[keyboard.bindings]]
+key = "T"
+mods = "Super"
+chars = "\u001bt"
 
 
 

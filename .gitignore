@@ -1,5 +1,5 @@
 install*
-
+*.out
 home/config/deprecated/ranger/plugins/
 all.txt
 home/config/hypr/wallust

@@ -13,15 +13,15 @@ alt - 5 : yabai -m space --focus 5
 alt - 6 : yabai -m space --focus 6
 alt - 7 : yabai -m space --focus 7
 alt - 8 : yabai -m space --focus 8
-alt - 9 : yabai -m space --focus 9
-alt - 0 : yabai -m space --focus 10
+# alt - 9 : yabai -m space --focus 9
+# alt - 0 : yabai -m space --focus 10
 
 alt - q : yabai -m space --focus 5
 alt - w : yabai -m space --focus 6
 alt - e : yabai -m space --focus 7
 alt - r : yabai -m space --focus 8
-alt - a : yabai -m space --focus 9
-alt - s : yabai -m space --focus 10
+# alt - a : yabai -m space --focus 9
+# alt - s : yabai -m space --focus 10
 
 # send window to desktop and follow focus
 shift + alt - 1 : yabai -m window --space  1; yabai -m space --focus 1
@@ -32,15 +32,15 @@ shift + alt - 5 : yabai -m window --space  5; yabai -m space --focus 5
 shift + alt - 6 : yabai -m window --space  6; yabai -m space --focus 6
 shift + alt - 7 : yabai -m window --space  7; yabai -m space --focus 7
 shift + alt - 8 : yabai -m window --space  8; yabai -m space --focus 8
-shift + alt - 9 : yabai -m window --space  9; yabai -m space --focus 9
-shift + alt - 0 : yabai -m window --space  10; yabai -m space --focus 10
+# shift + alt - 9 : yabai -m window --space  9; yabai -m space --focus 9
+# shift + alt - 0 : yabai -m window --space  10; yabai -m space --focus 10
 
 shift + alt - q : yabai -m window --space  5; yabai -m space --focus 5
 shift + alt - w : yabai -m window --space  6; yabai -m space --focus 6
 shift + alt - e : yabai -m window --space  7; yabai -m space --focus 7
 shift + alt - r : yabai -m window --space  8; yabai -m space --focus 8
-shift + alt - a : yabai -m window --space  9; yabai -m space --focus 9
-shift + alt - s : yabai -m window --space  10; yabai -m space --focus 10
+# shift + alt - a : yabai -m window --space  9; yabai -m space --focus 9
+# shift + alt - s : yabai -m window --space  10; yabai -m space --focus 10
 
 # let yabai manage / unmanage window
 alt - f : yabai -m window --toggle float
@@ -52,8 +52,13 @@ alt - m : yabai -m query --windows --space | jq '.[].id' | xargs -I{} yabai -m w
 #           yabai -m window --toggle zoom-fullscreen
 
 # open ghostty
-alt - return : open -n /Applications/Alacritty.app
+alt - return : /Applications/Alacritty.app/Contents/MacOS/alacritty
+alt + shift - return : yabai -m rule --add --one-shot app="^Alacritty$" manage=off grid=1:1:0:0:1:1; /Applications/Alacritty.app/Contents/MacOS/alacritty --title "quickterm" --config-file ~/.config/alacritty/alacritty_quickterminal.toml
 
 #ctrl + alt + shift - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"
 
 alt + ctrl - s : osascript -e 'tell application "Terminal" to do script "/Users/paul/work/custom/ssh-menu/ssh_menu.sh; exit"' && osascript -e 'tell application "Terminal" to set miniaturized of every window to true'
+
+alt - z : ~/.config/yabai/toggle_alacritty.sh
+
+alt + ctrl - r : yabai --restart-service; shkd --restart-service

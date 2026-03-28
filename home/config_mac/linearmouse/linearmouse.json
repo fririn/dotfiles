@@ -1,0 +1,170 @@
+{
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.4",
+  "schemes" : [
+    {
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xf575",
+          "productName" : "2.4G Wireless Receiver",
+          "vendorID" : "0x3554"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1.5,
+        "disableAcceleration" : true
+      },
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "distance" : {
+          "vertical" : 3
+        },
+        "modifiers" : {
+          "vertical" : {
+            "command" : {
+              "type" : "preventDefault"
+            },
+            "control" : {
+              "type" : "zoom"
+            },
+            "option" : {
+              "type" : "preventDefault"
+            }
+          }
+        },
+        "reverse" : {
+          "vertical" : true
+        },
+        "speed" : {
+          "vertical" : 0
+        }
+      }
+    },
+    {
+      "if" : {
+        "device" : {
+          "category" : "trackpad",
+          "productID" : "0x0",
+          "productName" : "Apple Internal Keyboard \/ Trackpad",
+          "vendorID" : "0x0"
+        }
+      },
+      "pointer" : {
+        "acceleration" : "unset",
+        "disableAcceleration" : false,
+        "redirectsToScroll" : false,
+        "speed" : "unset"
+      },
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 3.7
+        },
+        "distance" : {
+          "vertical" : "auto"
+        },
+        "reverse" : false,
+        "speed" : {
+          "vertical" : 6.78
+        }
+      }
+    },
+    {
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xb5",
+          "productName" : "Naga V2 HS",
+          "vendorID" : "0x68e"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1,
+        "disableAcceleration" : true
+      },
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true
+        }
+      }
+    },
+    {
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xb4",
+          "productName" : "Razer Naga V2 HyperSpeed",
+          "serialNumber" : "000000000000",
+          "vendorID" : "0x1532"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1,
+        "disableAcceleration" : true
+      },
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "distance" : {
+          "vertical" : 6
+        },
+        "modifiers" : {
+          "vertical" : {
+            "command" : {
+              "type" : "zoom"
+            },
+            "control" : {
+              "type" : "pinchZoom"
+            }
+          }
+        },
+        "speed" : {
+          "vertical" : 0
+        }
+      }
+    },
+    {
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xfa6c",
+          "productName" : "GravaStar X",
+          "vendorID" : "0x25a7"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1.3125,
+        "disableAcceleration" : true
+      },
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "distance" : {
+          "vertical" : 5
+        },
+        "modifiers" : {
+          "vertical" : {
+            "command" : {
+              "type" : "zoom"
+            }
+          }
+        },
+        "speed" : {
+          "vertical" : 0
+        }
+      }
+    }
+  ]
+}

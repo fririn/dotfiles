@@ -39,7 +39,6 @@ vim.opt.scrolloff = 15
 -- Basic Keymaps
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("i", "kj", "<Esc>")
-vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<CR>")
 
 vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>Y", '"+yg')
@@ -51,8 +50,8 @@ vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Move to right split" })
 vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Move to split below" })
 vim.keymap.set("n", "<leader>k", "<C-w>k", { desc = "Move to split above" })
 
-vim.keymap.set("n", "<S-h>", ":bnext<CR>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<S-l>", ":bprev<CR>", { desc = "Previous Buffer" })
+vim.keymap.set("n", "<S-h>", ":bprev<CR>", { desc = "Previous Buffer" })
+vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>q", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete Buffer" })
@@ -60,9 +59,6 @@ end, { desc = "Delete Buffer" })
 -- wrap word into ' or "
 vim.keymap.set("n", '<leader>"', 'ciw""<Esc>P', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>'", "ciw''<Esc>P", { noremap = true, silent = true })
-
--- Diagnostic keymaps
--- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Basic Autocommands
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -86,86 +82,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Configure and install plugins
 require("lazy").setup({
-	-- Git Signs
-	{
-		"lewis6991/gitsigns.nvim",
-		opts = {
-			signs = {
-				add = { text = "+" },
-				change = { text = "~" },
-				delete = { text = "-" },
-				topdelete = { text = "‾" },
-				changedelete = { text = "_" },
-			},
-			current_line_blame = true,
-			current_line_blame_opts = {
-				delay = 100,
-			},
-			on_attach = function(bufnr)
-				local gs = package.loaded.gitsigns
-
-				local function map(mode, l, r, opts)
-					opts = opts or {}
-					opts.buffer = bufnr
-					vim.keymap.set(mode, l, r, opts)
-				end
-
-				map("n", "<leader>go", function()
-					-- FIX: Try the API first, fallback to the buffer variable
-					local blame_info = nil
-					if gs.get_current_line_blame_info then
-						blame_info = gs.get_current_line_blame_info()
-					else
-						-- Fallback for other versions: read directly from buffer variable
-						blame_info = vim.b[bufnr].gitsigns_blame_line_dict
-					end
-
-					if not blame_info then
-						print("No blame info available for this line yet.")
-						return
-					end
-
-					local commit_hash = blame_info.sha
-					-- Ignore 'Not Committed Yet' lines (hash often 00000000 or nil)
-					if not commit_hash or commit_hash == "00000000" then
-						print("Line is not committed.")
-						return
-					end
-
-					-- 1. Get remote URL
-					local handle = io.popen("git config --get remote.origin.url")
-					local remote_url = handle:read("*a")
-					handle:close()
-
-					remote_url = remote_url:gsub("[\n\r]", "")
-
-					-- 2. Clean URL (SSH -> HTTPS)
-					if remote_url:find("git@") then
-						remote_url = remote_url:gsub(":", "/"):gsub("git@", "https://"):gsub("%.git", "")
-					elseif remote_url:find("https://") then
-						remote_url = remote_url:gsub("%.git", "")
-					end
-
-					-- 3. Open in Browser
-					local final_url = remote_url .. "/commit/" .. commit_hash
-
-					-- Detect OS for open command
-					local open_cmd
-					if vim.fn.has("mac") == 1 then
-						open_cmd = "open"
-					elseif vim.fn.has("unix") == 1 then
-						open_cmd = "xdg-open"
-					elseif vim.fn.has("win32") == 1 then
-						open_cmd = "start"
-					end
-
-					print("Opening: " .. final_url)
-					os.execute(open_cmd .. " " .. final_url)
-				end, { desc = "Open commit in browser" })
-			end,
-		},
-	},
-
 	-- Which Key
 	{
 		"folke/which-key.nvim",
@@ -279,59 +195,14 @@ require("lazy").setup({
 		},
 	},
 	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {
-			indent = {
-				char = "▏", -- The character to use (other options: ┊, ┆, ¦, or ▏)
-				tab_char = "▏",
-			},
-			scope = {
-				enabled = true, -- Highlight the scope you are currently inside
-				show_start = true,
-				show_end = false,
-			},
-			exclude = {
-				filetypes = {
-					"help",
-					"alpha",
-					"dashboard",
-					"neo-tree",
-					"Trouble",
-					"trouble",
-					"lazy",
-					"mason",
-					"notify",
-				},
-			},
-		},
-	},
-	{
-		"MagicDuck/grug-far.nvim",
-		config = function()
-			require("grug-far").setup({
-				-- options, see usage section in readme
-			})
-		end,
-	},
-	{
 		"MagicDuck/grug-far.nvim",
 		config = function()
 			require("grug-far").setup({
 				keymaps = {
-					-- sync changes
 					replace = { n = "<localleader>r" },
-					-- close the grug buffer
 					close = { n = "<localleader>q" },
-					-- help for grug-far
 					help = { n = "<localleader>h" },
 				},
-				-- Example: default search to literal string instead of regex
-				-- engines = {
-				--   ripgrep = {
-				--     extra_args = { "--fixed-strings" }
-				--   }
-				-- }
 			})
 		end,
 	},
@@ -351,10 +222,9 @@ require("lazy").setup({
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 			end
 
-			-- Cleaner virtual text (optional, less clutter)
 			vim.diagnostic.config({
 				virtual_text = {
-					prefix = "●", -- Could be '■', '▎', 'x'
+					prefix = "●",
 				},
 			})
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -421,6 +291,8 @@ require("lazy").setup({
 						},
 					},
 				},
+				terraformls = {},
+				tflint = {},
 			}
 
 			local ensure_installed = vim.tbl_keys(servers or {})
@@ -428,9 +300,6 @@ require("lazy").setup({
 				"stylua",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-			require("lspconfig").terraformls.setup({})
-			require("lspconfig").tflint.setup({})
 
 			require("mason-lspconfig").setup({
 				handlers = {
@@ -453,18 +322,6 @@ require("lazy").setup({
 			},
 		},
 		dependencies = { { "echasnovski/mini.icons", opts = {} } },
-	},
-
-	{
-		"nvim-tree/nvim-tree.lua",
-		version = "*",
-		lazy = false,
-		dependencies = {
-			"echasnovski/mini.icons",
-		},
-		config = function()
-			require("nvim-tree").setup({})
-		end,
 	},
 
 	{ -- Autoformat
@@ -602,8 +459,7 @@ require("lazy").setup({
 
 			require("mini.icons").setup()
 			require("mini.icons").mock_nvim_web_devicons()
-			-- require("mini.pairs").setup() -- Auto-close brackets/quotes
-			require("mini.comment").setup() -- Better commenting (gc)
+			require("mini.comment").setup()
 			require("mini.tabline").setup()
 			require("mini.bufremove").setup()
 		end,
@@ -612,7 +468,6 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs",
-		-- Add the textobjects plugin as a dependency
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
@@ -633,24 +488,22 @@ require("lazy").setup({
 			auto_install = true,
 			highlight = { enable = true },
 			indent = { enable = true },
-			-- [[ Configure Text Objects ]]
 			textobjects = {
 				select = {
 					enable = true,
-					lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+					lookahead = true,
 					keymaps = {
-						-- You can use the capture groups defined in textobjects.scm
-						["aa"] = "@parameter.outer", -- 'a'rgument 'a'round (outer)
-						["ia"] = "@parameter.inner", -- 'i'nner 'a'rgument
-						["af"] = "@function.outer", -- 'a'round 'f'unction
-						["if"] = "@function.inner", -- 'i'nner 'f'unction
-						["ac"] = "@class.outer", -- 'a'round 'c'lass
-						["ic"] = "@class.inner", -- 'i'nner 'c'lass
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
 					},
 				},
 				move = {
 					enable = true,
-					set_jumps = true, -- whether to set jumps in the jumplist
+					set_jumps = true,
 					goto_next_start = {
 						["]m"] = "@function.outer",
 						["]]"] = "@class.outer",
@@ -664,6 +517,7 @@ require("lazy").setup({
 		},
 	},
 
+	{ import = "kickstart.plugins" },
 	{ import = "custom.plugins" },
 }, {
 	ui = {

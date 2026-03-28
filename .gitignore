@@ -15,3 +15,4 @@ home/config/swaync/wallust
 lazy-lock.json
 *env*
 nomad_hosts.txt
+*backup*

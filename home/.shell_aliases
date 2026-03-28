@@ -14,6 +14,7 @@ alias cal='cal -3m'
 alias penv=". ./venv/bin/activate"
 alias feh="feh -x"
 alias dfh="df -h -t ext4"
+
 alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
 alias rmpc="rmpc rescan && rmpc update && rmpc"
 
@@ -49,7 +50,7 @@ packages-by-date() {
 alias packs="cd ~/work/nomad_packs"
 alias cluster="cd ~/work/nomad-cluster"
 alias src="cd ~/work/nodes_src"
-alias proxy="cd ~/work/nodes-proxy"
+alias proxy="cd ~/work/nodes-proxy/routes"
 alias iproxy="cd ~/work/internal-node-proxy"
 
 # ── git ───────────────────────────────────────────────────────────────────────

@@ -94,3 +94,11 @@ alias zshrc='vim ~/.zshrc'
 alias pas='pass git pull; pass nksupport/all | less'
 alias newpass='openssl rand -base64'
 alias myip='curl -s ipinfo.io/ip'
+
+# work
+
+alias packs="cd ~/work/nomad_packs"
+alias cluster="cd ~/work/nomad-cluster"
+alias src="cd ~/work/nodes_src"
+alias proxy="cd ~/work/nodes-proxy"
+alias iproxy="cd ~/work/internal-node-proxy"

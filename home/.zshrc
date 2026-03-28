@@ -9,6 +9,11 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 source ~/.shell_aliases
+eval `ssh-agent` && ssh-add
+
+
+# run fastfetch only if new terminal is opened not from ranger
+#if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfetch --logo "arch_small";dysk; fi
 
 # ── History ───────────────────────────────────────────────────────────────────
 HISTSIZE=500000
@@ -36,3 +41,45 @@ fi
 if [ -f "$HOME/dev/google-cloud-sdk/completion.zsh.inc" ]; then
   source "$HOME/dev/google-cloud-sdk/completion.zsh.inc"
 fi
+
+# ── Blockchain test curls ──────────────────────────────────────────────────────────
+
+checkrpc_evm() {
+    if [ -z "$1" ]; then
+        echo "Usage: checkrpc <rpc_url>"
+        return 1
+    fi
+
+    curl -i --location "$1" \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "jsonrpc": "2.0",
+        "method": "eth_getBlockByNumber",
+        "params": ["latest", false],
+        "id": "gemini-check"
+    }'
+}
+checkrpc_sol() {
+    curl -i -s --location "$1" \
+    --header 'Content-Type: application/json' \
+    --data '{"jsonrpc":"2.0","id":1, "method":"getHealth"}'
+}
+checkrpc_btc() {
+    curl -i -s --location "$1" \
+    --header 'Content-Type: application/json' \
+    --data '{"jsonrpc":"1.0","id":"check","method":"getblockchaininfo","params":[]}'
+}
+checkrpc_cosmos() {
+    curl -i -s --location "$1" \
+    --header 'Content-Type: application/json' \
+    --data '{"jsonrpc":"2.0","id":1,"method":"abci_info","params":[]}'
+}
+checkrpc_near() {
+    curl -i -s --location "$1" \
+    --header 'Content-Type: application/json' \
+    --data '{"jsonrpc":"2.0","id":"dontcare","method":"status","params":[]}'
+}
+checkrpc_aptos() {
+    # Aptos uses a REST path for health
+    curl -i -s --location "$1/v1/-/healthy"
+}

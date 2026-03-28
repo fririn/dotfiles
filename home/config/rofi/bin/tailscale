@@ -1,0 +1,8 @@
+#!/bin/bash
+# Get the list of nicknames, exclude the header and current active (*)
+CHOICE=$(tailscale switch --list | grep -v "ID" | awk '{print $3}' | rofi -dmenu -p "Tailscale Profile" -theme "$DIR"/themes/launcher.rasi)
+
+if [ -n "$CHOICE" ]; then
+    tailscale switch "$CHOICE"
+    notify-send "Tailscale" "Switched to $CHOICE"
+fi

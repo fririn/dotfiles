@@ -3,23 +3,47 @@ alias l="ls -lh"
 alias ll="ls -lah"
 alias lst="lsd --tree"
 
-#-- Misc
+# ── Misc ────
 alias mkdir="mkdir -pv"
 alias ra='yazi'
 alias y='yazi'
 alias reload='source ~/.zshrc'
 alias cm='cmatrix -u 3 -s'
+alias wrt='figlet -C utf8 -f banner'
 alias cal='cal -3m'
 alias penv=". ./venv/bin/activate"
+alias feh="feh -x"
+alias dfh="df -h -t ext4"
 alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
+alias rmpc="rmpc rescan && rmpc update && rmpc"
 
-# ── Package management (macOS → Homebrew) ─────────────────────────────────────
-# Maps the muscle-memory pacman shortcuts to brew equivalents
-alias p='brew install'
-alias pr='brew uninstall'
-alias pu='brew upgrade'
-alias pq='brew list'
-alias pqi='brew info'
+# ── Package management ─────────────────────────────────────
+# brew (macos)
+alias b='brew install'
+alias br='brew uninstall'
+alias bu='brew upgrade'
+alias bo='brew outdated'
+alias bq='brew list'
+alias bqi='brew info'
+
+# pacman (arch linux btw)
+alias p='sudo pacman -S --needed'
+alias pr='sudo pacman -Rsn'
+alias pu='sudo pacman -Syu'
+alias parus='paru -S --needed'
+alias pq='pacman -Q'
+alias pqi='pacman -Qi'
+packages-by-date() {
+  pacman -Qi |
+  grep '^\(Name\|Install Date\)\s*:' |
+  cut -d ':' -f 2- |
+  paste - - |
+  while read pkg_name install_date
+  do
+  install_date=$(date --date="$install_date" -Iseconds)   
+  echo "$install_date   $pkg_name"
+  done | sort
+}
 
 # ── Navigation ────────────────────────────────────────────────────────────────
 alias packs="cd ~/work/nomad_packs"
@@ -37,7 +61,11 @@ alias gl="git log --oneline --graph --all"
 alias gmr="glab mr create --fill --fill-commit-body --remove-source-branch"
 alias hey1000="hey -n 1000 -m POST -H"
 
-gundo() { git reset --soft HEAD~${1:-1} }
+greset() {
+  local count=${1:-1}
+  echo "Rewinding $count commit(s) (keeping changes staged)..."
+  git reset --soft HEAD~"$count"
+}
 gfix()  { git add . && git commit --amend --no-edit }
 gfind() { git log --all --oneline --graph --decorate --grep="$1" }
 
@@ -66,14 +94,3 @@ alias zshrc='vim ~/.zshrc'
 alias pas='pass git pull; pass nksupport/all | less'
 alias newpass='openssl rand -base64'
 alias myip='curl -s ipinfo.io/ip'
-
-# ── macOS-specific ────────────────────────────────────────────────────────────
-# Open Finder in current directory (like thunar .)
-alias files='open .'
-# Flush DNS cache
-alias flushdns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
-# Show/hide hidden files in Finder
-alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES && killall Finder'
-alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO  && killall Finder'
-# Lock screen (like hyprland super+escape → hyprlock)
-alias lock='pmset displaysleepnow'

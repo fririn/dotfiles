@@ -419,6 +419,15 @@ require("lazy").setup({
 				sidebars = "transparent",
 				floats = "transparent",
 			},
+			on_highlights = function(hl, c)
+				-- Brighter line numbers (default fg_gutter is very dim on transparent bg)
+				hl.LineNr = { fg = c.dark5 }
+				hl.LineNrAbove = { fg = c.dark5 }
+				hl.LineNrBelow = { fg = c.dark5 }
+				hl.CursorLineNr = { fg = c.orange, bold = true }
+				-- Brighter split border
+				hl.WinSeparator = { fg = c.blue0 }
+			end,
 		},
 	},
 

@@ -1,6 +1,6 @@
 -- Set <space> as the leader key
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = "\\"
 
 -- Default in Neovim 0.10+, but harmless to keep for older versions
 vim.opt.termguicolors = true
@@ -55,6 +55,9 @@ vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>q", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete Buffer" })
+
+-- :q closes current buffer instead of quitting nvim
+vim.cmd("cnoreabbrev q bd")
 
 -- wrap word into ' or "
 vim.keymap.set("n", '<leader>"', 'ciw""<Esc>P', { noremap = true, silent = true })
@@ -213,19 +216,18 @@ require("lazy").setup({
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
-			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
-			local signs = { Error = "✘", Warn = "▲", Hint = "⚑", Info = "»" }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-			end
-
 			vim.diagnostic.config({
-				virtual_text = {
-					prefix = "●",
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = "✘",
+						[vim.diagnostic.severity.WARN] = "▲",
+						[vim.diagnostic.severity.HINT] = "⚑",
+						[vim.diagnostic.severity.INFO] = "»",
+					},
 				},
+				virtual_text = { prefix = "●" },
 			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
@@ -280,8 +282,7 @@ require("lazy").setup({
 				end,
 			})
 
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			local servers = {
 				lua_ls = {
@@ -293,6 +294,11 @@ require("lazy").setup({
 				},
 				terraformls = {},
 				tflint = {},
+				ts_ls = {},
+				pyright = {},
+				cssls = {},
+				html = {},
+				jsonls = {},
 			}
 
 			local ensure_installed = vim.tbl_keys(servers or {})
@@ -364,9 +370,9 @@ require("lazy").setup({
 		},
 	},
 
-	{ -- Autocompletion
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
+	{ -- Autocompletion (blink.cmp — faster, built-in ghost text & signature help)
+		"saghen/blink.cmp",
+		version = "*",
 		dependencies = {
 			{
 				"L3MON4D3/LuaSnip",
@@ -377,50 +383,28 @@ require("lazy").setup({
 					return "make install_jsregexp"
 				end)(),
 			},
-			"saadparwaiz1/cmp_luasnip",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
 		},
-		config = function()
-			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			luasnip.config.setup({})
-
-			cmp.setup({
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end,
+		opts = {
+			keymap = { preset = "default" },
+			appearance = {
+				nerd_font_variant = "mono",
+			},
+			snippets = { preset = "luasnip" },
+			sources = {
+				default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100,
+					},
 				},
-				completion = { completeopt = "menu,menuone,noinsert" },
-				mapping = cmp.mapping.preset.insert({
-					["<C-n>"] = cmp.mapping.select_next_item(),
-					["<C-p>"] = cmp.mapping.select_prev_item(),
-					["<C-u>"] = cmp.mapping.scroll_docs(-4),
-					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					["<Tab>"] = cmp.mapping.select_next_item(),
-					["<S-Tab>"] = cmp.mapping.select_prev_item(),
-					["<C-Space>"] = cmp.mapping.complete({}),
-					["<C-l>"] = cmp.mapping(function()
-						if luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						end
-					end, { "i", "s" }),
-					["<C-H>"] = cmp.mapping(function()
-						if luasnip.locally_jumpable(-1) then
-							luasnip.jump(-1)
-						end
-					end, { "i", "s" }),
-				}),
-				sources = {
-					{ name = "lazydev", group_index = 0 },
-					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
-					{ name = "path" },
-				},
-			})
-		end,
+			},
+			completion = {
+				ghost_text = { enabled = true },
+			},
+			signature = { enabled = true },
+		},
 	},
 
 	{
@@ -443,6 +427,33 @@ require("lazy").setup({
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = { signs = false },
+	},
+
+	{ -- Better f/t/s navigation with jump labels
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		opts = {},
+		keys = {
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash Jump" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+		},
+	},
+
+	{ -- Inline color swatches for hex/rgb/hsl/tailwind
+		"brenoprata10/nvim-highlight-colors",
+		opts = {
+			render = "background",
+			enable_tailwind = true,
+		},
+	},
+
+	{ -- Symbols outline sidebar (like VS Code's Outline panel)
+		"stevearc/aerial.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },
+		opts = {},
+		keys = {
+			{ "<leader>a", "<cmd>AerialToggle!<CR>", desc = "Toggle Symbols Outline" },
+		},
 	},
 
 	{
@@ -475,15 +486,19 @@ require("lazy").setup({
 			ensure_installed = {
 				"bash",
 				"c",
+				"css",
 				"diff",
 				"html",
+				"javascript",
+				"json",
 				"lua",
 				"luadoc",
 				"markdown",
+				"python",
+				"typescript",
 				"vim",
 				"vimdoc",
-				"python",
-				"javascript",
+				"yaml",
 			},
 			auto_install = true,
 			highlight = { enable = true },

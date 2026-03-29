@@ -72,6 +72,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- Brighten dim UI elements (line numbers, split border) on transparent backgrounds
+vim.api.nvim_create_autocmd("ColorScheme", {
+	desc = "Brighten line numbers and split border for transparent bg",
+	group = vim.api.nvim_create_augroup("bright-ui-elements", { clear = true }),
+	callback = function()
+		vim.api.nvim_set_hl(0, "LineNr", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#e8a24a", bold = true })
+		vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#4a5568" })
+	end,
+})
+
 -- Install `lazy.nvim` plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -408,27 +421,14 @@ require("lazy").setup({
 	},
 
 	{
-		"folke/tokyonight.nvim",
+		"bluz71/vim-moonfly-colors",
+		name = "moonfly",
 		priority = 1000,
 		init = function()
-			vim.cmd.colorscheme("tokyonight")
+			vim.g.moonflyTransparent = true
+			vim.g.moonflyNormalFloat = true
+			vim.cmd.colorscheme("moonfly")
 		end,
-		opts = {
-			transparent = true,
-			styles = {
-				sidebars = "transparent",
-				floats = "transparent",
-			},
-			on_highlights = function(hl, c)
-				-- Brighter line numbers (default fg_gutter is very dim on transparent bg)
-				hl.LineNr = { fg = c.dark5 }
-				hl.LineNrAbove = { fg = c.dark5 }
-				hl.LineNrBelow = { fg = c.dark5 }
-				hl.CursorLineNr = { fg = c.orange, bold = true }
-				-- Brighter split border
-				hl.WinSeparator = { fg = c.blue0 }
-			end,
-		},
 	},
 
 	{

@@ -72,11 +72,17 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
--- Brighten dim UI elements (line numbers, split border) on transparent backgrounds
+-- Force transparency + brighten dim UI elements on every theme change
 vim.api.nvim_create_autocmd("ColorScheme", {
-	desc = "Brighten line numbers and split border for transparent bg",
+	desc = "Transparency and brighter line numbers/split border",
 	group = vim.api.nvim_create_augroup("bright-ui-elements", { clear = true }),
 	callback = function()
+		-- Transparency (works for any theme)
+		vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
+		-- Brighter line numbers and split border
 		vim.api.nvim_set_hl(0, "LineNr", { fg = "#6b7280" })
 		vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6b7280" })
 		vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#6b7280" })
@@ -432,6 +438,7 @@ require("lazy").setup({
 
 	{
 		"zaldih/themery.nvim",
+		lazy = false,
 		priority = 1000,
 		opts = {
 			themes = {

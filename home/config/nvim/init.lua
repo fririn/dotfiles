@@ -425,17 +425,29 @@ require("lazy").setup({
 		},
 	},
 
+	-- Themes (loaded on demand, themery handles activation + persistence)
+	{ "bluz71/vim-moonfly-colors", name = "moonfly", lazy = true },
+	{ "miikanissi/modus-themes.nvim", lazy = true },
+	{ "folke/tokyonight.nvim", lazy = true },
+
 	{
-		"bluz71/vim-moonfly-colors",
-		name = "moonfly",
+		"zaldih/themery.nvim",
 		priority = 1000,
-		init = function()
-			vim.g.moonflyTransparent = true
-			vim.g.moonflyNormalFloat = true
-			vim.cmd.colorscheme("moonfly")
-		end,
+		opts = {
+			themes = {
+				{ name = "Moonfly", colorscheme = "moonfly", before = [[vim.g.moonflyTransparent = true; vim.g.moonflyNormalFloat = true]] },
+				{ name = "Modus Operandi", colorscheme = "modus_operandi" },
+				{ name = "Modus Vivendi", colorscheme = "modus_vivendi" },
+				{ name = "Tokyo Night", colorscheme = "tokyonight" },
+				{ name = "Tokyo Night Storm", colorscheme = "tokyonight-storm" },
+				{ name = "Tokyo Night Day", colorscheme = "tokyonight-day" },
+			},
+			livePreview = true,
+		},
+		keys = {
+			{ "<leader>tt", "<cmd>Themery<CR>", desc = "[T]oggle [T]heme picker" },
+		},
 	},
-	{ "miikanissi/modus-themes.nvim", priority = 1000 },
 
 	{
 		"folke/todo-comments.nvim",

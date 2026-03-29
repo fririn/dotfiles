@@ -56,8 +56,8 @@ vim.keymap.set("n", "<leader>q", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete Buffer" })
 
--- :q closes current buffer instead of quitting nvim
-vim.cmd("cnoreabbrev q bd")
+-- :q closes current buffer, or quits nvim if it's the last one
+vim.cmd([[cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? (len(getbufinfo({'buflisted': 1})) > 1 ? 'bd' : 'q') : 'q']])
 
 -- wrap word into ' or "
 vim.keymap.set("n", '<leader>"', 'ciw""<Esc>P', { noremap = true, silent = true })

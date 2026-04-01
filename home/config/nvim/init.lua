@@ -57,7 +57,9 @@ vim.keymap.set("n", "<leader>q", function()
 end, { desc = "Delete Buffer" })
 
 -- :q closes current buffer, or quits nvim if it's the last one
-vim.cmd([[cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? (len(getbufinfo({'buflisted': 1})) > 1 ? 'bd' : 'q') : 'q']])
+vim.cmd(
+	[[cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? (len(getbufinfo({'buflisted': 1})) > 1 ? 'bd' : 'q') : 'q']]
+)
 
 -- wrap word into ' or "
 vim.keymap.set("n", '<leader>"', 'ciw""<Esc>P', { noremap = true, silent = true })
@@ -434,7 +436,20 @@ require("lazy").setup({
 	-- Themes (loaded on demand, themery handles activation + persistence)
 	{ "bluz71/vim-moonfly-colors", name = "moonfly", lazy = true },
 	{ "miikanissi/modus-themes.nvim", lazy = true },
-	{ "folke/tokyonight.nvim", lazy = true },
+	{
+		"folke/tokyonight.nvim",
+		priority = 1000,
+		init = function()
+			vim.cmd.colorscheme("tokyonight")
+		end,
+		opts = {
+			transparent = true,
+			styles = {
+				sidebars = "transparent",
+				floats = "transparent",
+			},
+		},
+	},
 
 	{
 		"zaldih/themery.nvim",
@@ -442,7 +457,11 @@ require("lazy").setup({
 		priority = 1000,
 		opts = {
 			themes = {
-				{ name = "Moonfly", colorscheme = "moonfly", before = [[vim.g.moonflyTransparent = true; vim.g.moonflyNormalFloat = true]] },
+				{
+					name = "Moonfly",
+					colorscheme = "moonfly",
+					before = [[vim.g.moonflyTransparent = true; vim.g.moonflyNormalFloat = true]],
+				},
 				{ name = "Modus Operandi", colorscheme = "modus_operandi" },
 				{ name = "Modus Vivendi", colorscheme = "modus_vivendi" },
 				{ name = "Tokyo Night", colorscheme = "tokyonight" },
@@ -468,8 +487,22 @@ require("lazy").setup({
 		event = "VeryLazy",
 		opts = {},
 		keys = {
-			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash Jump" },
-			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+			{
+				"s",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump()
+				end,
+				desc = "Flash Jump",
+			},
+			{
+				"S",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
 		},
 	},
 

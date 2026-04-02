@@ -6,6 +6,17 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     opts = {
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '-' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '_' },
+      },
+      current_line_blame = true,
+      current_line_blame_opts = {
+        delay = 100,
+      },
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
 
@@ -52,9 +63,43 @@ return {
         map('n', '<leader>hD', function()
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
+
         -- Toggles
         map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
         map('n', '<leader>tD', gitsigns.toggle_deleted, { desc = '[T]oggle git show [D]eleted' })
+
+        -- Open commit in browser
+        map('n', '<leader>go', function()
+          local blame_info = gitsigns.get_current_line_blame_info and gitsigns.get_current_line_blame_info()
+            or vim.b[bufnr].gitsigns_blame_line_dict
+
+          if not blame_info then
+            print 'No blame info available for this line yet.'
+            return
+          end
+
+          local commit_hash = blame_info.sha
+          if not commit_hash or commit_hash == '00000000' then
+            print 'Line is not committed.'
+            return
+          end
+
+          local handle = io.popen 'git config --get remote.origin.url'
+          local remote_url = handle:read '*a'
+          handle:close()
+          remote_url = remote_url:gsub('[\n\r]', '')
+
+          if remote_url:find 'git@' then
+            remote_url = remote_url:gsub(':', '/'):gsub('git@', 'https://'):gsub('%.git', '')
+          else
+            remote_url = remote_url:gsub('%.git', '')
+          end
+
+          local final_url = remote_url .. '/commit/' .. commit_hash
+          local open_cmd = vim.fn.has 'mac' == 1 and 'open' or vim.fn.has 'win32' == 1 and 'start' or 'xdg-open'
+          print('Opening: ' .. final_url)
+          os.execute(open_cmd .. ' ' .. final_url)
+        end, { desc = 'Open commit in browser' })
       end,
     },
   },

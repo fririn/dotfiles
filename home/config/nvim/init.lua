@@ -1,6 +1,6 @@
 -- Set <space> as the leader key
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = "\\"
 
 -- Default in Neovim 0.10+, but harmless to keep for older versions
 vim.opt.termguicolors = true
@@ -39,7 +39,6 @@ vim.opt.scrolloff = 15
 -- Basic Keymaps
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("i", "kj", "<Esc>")
-vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<CR>")
 
 vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>Y", '"+yg')
@@ -51,18 +50,20 @@ vim.keymap.set("n", "<leader>l", "<C-w>l", { desc = "Move to right split" })
 vim.keymap.set("n", "<leader>j", "<C-w>j", { desc = "Move to split below" })
 vim.keymap.set("n", "<leader>k", "<C-w>k", { desc = "Move to split above" })
 
-vim.keymap.set("n", "<S-h>", ":bnext<CR>", { desc = "Next Buffer" })
-vim.keymap.set("n", "<S-l>", ":bprev<CR>", { desc = "Previous Buffer" })
+vim.keymap.set("n", "<S-h>", ":bprev<CR>", { desc = "Previous Buffer" })
+vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next Buffer" })
 vim.keymap.set("n", "<leader>q", function()
 	require("mini.bufremove").delete(0, false)
 end, { desc = "Delete Buffer" })
 
+-- :q closes current buffer, or quits nvim if it's the last one
+vim.cmd(
+	[[cnoreabbrev <expr> q (getcmdtype() == ':' && getcmdline() == 'q') ? (len(getbufinfo({'buflisted': 1})) > 1 ? 'bd' : 'q') : 'q']]
+)
+
 -- wrap word into ' or "
 vim.keymap.set("n", '<leader>"', 'ciw""<Esc>P', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>'", "ciw''<Esc>P", { noremap = true, silent = true })
-
--- Diagnostic keymaps
--- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Basic Autocommands
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -70,6 +71,25 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
+	end,
+})
+
+-- Force transparency + brighten dim UI elements on every theme change
+vim.api.nvim_create_autocmd("ColorScheme", {
+	desc = "Transparency and brighter line numbers/split border",
+	group = vim.api.nvim_create_augroup("bright-ui-elements", { clear = true }),
+	callback = function()
+		-- Transparency (works for any theme)
+		vim.api.nvim_set_hl(0, "Normal", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE", ctermbg = "NONE" })
+		vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE", ctermbg = "NONE" })
+		-- Brighter line numbers and split border
+		vim.api.nvim_set_hl(0, "LineNr", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#6b7280" })
+		vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#e8a24a", bold = true })
+		vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#4a5568" })
 	end,
 })
 
@@ -86,86 +106,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Configure and install plugins
 require("lazy").setup({
-	-- Git Signs
-	{
-		"lewis6991/gitsigns.nvim",
-		opts = {
-			signs = {
-				add = { text = "+" },
-				change = { text = "~" },
-				delete = { text = "-" },
-				topdelete = { text = "‾" },
-				changedelete = { text = "_" },
-			},
-			current_line_blame = true,
-			current_line_blame_opts = {
-				delay = 100,
-			},
-			on_attach = function(bufnr)
-				local gs = package.loaded.gitsigns
-
-				local function map(mode, l, r, opts)
-					opts = opts or {}
-					opts.buffer = bufnr
-					vim.keymap.set(mode, l, r, opts)
-				end
-
-				map("n", "<leader>go", function()
-					-- FIX: Try the API first, fallback to the buffer variable
-					local blame_info = nil
-					if gs.get_current_line_blame_info then
-						blame_info = gs.get_current_line_blame_info()
-					else
-						-- Fallback for other versions: read directly from buffer variable
-						blame_info = vim.b[bufnr].gitsigns_blame_line_dict
-					end
-
-					if not blame_info then
-						print("No blame info available for this line yet.")
-						return
-					end
-
-					local commit_hash = blame_info.sha
-					-- Ignore 'Not Committed Yet' lines (hash often 00000000 or nil)
-					if not commit_hash or commit_hash == "00000000" then
-						print("Line is not committed.")
-						return
-					end
-
-					-- 1. Get remote URL
-					local handle = io.popen("git config --get remote.origin.url")
-					local remote_url = handle:read("*a")
-					handle:close()
-
-					remote_url = remote_url:gsub("[\n\r]", "")
-
-					-- 2. Clean URL (SSH -> HTTPS)
-					if remote_url:find("git@") then
-						remote_url = remote_url:gsub(":", "/"):gsub("git@", "https://"):gsub("%.git", "")
-					elseif remote_url:find("https://") then
-						remote_url = remote_url:gsub("%.git", "")
-					end
-
-					-- 3. Open in Browser
-					local final_url = remote_url .. "/commit/" .. commit_hash
-
-					-- Detect OS for open command
-					local open_cmd
-					if vim.fn.has("mac") == 1 then
-						open_cmd = "open"
-					elseif vim.fn.has("unix") == 1 then
-						open_cmd = "xdg-open"
-					elseif vim.fn.has("win32") == 1 then
-						open_cmd = "start"
-					end
-
-					print("Opening: " .. final_url)
-					os.execute(open_cmd .. " " .. final_url)
-				end, { desc = "Open commit in browser" })
-			end,
-		},
-	},
-
 	-- Which Key
 	{
 		"folke/which-key.nvim",
@@ -279,59 +219,14 @@ require("lazy").setup({
 		},
 	},
 	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {
-			indent = {
-				char = "▏", -- The character to use (other options: ┊, ┆, ¦, or ▏)
-				tab_char = "▏",
-			},
-			scope = {
-				enabled = true, -- Highlight the scope you are currently inside
-				show_start = true,
-				show_end = false,
-			},
-			exclude = {
-				filetypes = {
-					"help",
-					"alpha",
-					"dashboard",
-					"neo-tree",
-					"Trouble",
-					"trouble",
-					"lazy",
-					"mason",
-					"notify",
-				},
-			},
-		},
-	},
-	{
-		"MagicDuck/grug-far.nvim",
-		config = function()
-			require("grug-far").setup({
-				-- options, see usage section in readme
-			})
-		end,
-	},
-	{
 		"MagicDuck/grug-far.nvim",
 		config = function()
 			require("grug-far").setup({
 				keymaps = {
-					-- sync changes
 					replace = { n = "<localleader>r" },
-					-- close the grug buffer
 					close = { n = "<localleader>q" },
-					-- help for grug-far
 					help = { n = "<localleader>h" },
 				},
-				-- Example: default search to literal string instead of regex
-				-- engines = {
-				--   ripgrep = {
-				--     extra_args = { "--fixed-strings" }
-				--   }
-				-- }
 			})
 		end,
 	},
@@ -342,20 +237,18 @@ require("lazy").setup({
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
-			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
-			local signs = { Error = "✘", Warn = "▲", Hint = "⚑", Info = "»" }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-			end
-
-			-- Cleaner virtual text (optional, less clutter)
 			vim.diagnostic.config({
-				virtual_text = {
-					prefix = "●", -- Could be '■', '▎', 'x'
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = "✘",
+						[vim.diagnostic.severity.WARN] = "▲",
+						[vim.diagnostic.severity.HINT] = "⚑",
+						[vim.diagnostic.severity.INFO] = "»",
+					},
 				},
+				virtual_text = { prefix = "●" },
 			})
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
@@ -410,8 +303,7 @@ require("lazy").setup({
 				end,
 			})
 
-			local capabilities = vim.lsp.protocol.make_client_capabilities()
-			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			local servers = {
 				lua_ls = {
@@ -421,6 +313,13 @@ require("lazy").setup({
 						},
 					},
 				},
+				terraformls = {},
+				tflint = {},
+				ts_ls = {},
+				pyright = {},
+				cssls = {},
+				html = {},
+				jsonls = {},
 			}
 
 			local ensure_installed = vim.tbl_keys(servers or {})
@@ -428,9 +327,6 @@ require("lazy").setup({
 				"stylua",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-			require("lspconfig").terraformls.setup({})
-			require("lspconfig").tflint.setup({})
 
 			require("mason-lspconfig").setup({
 				handlers = {
@@ -453,18 +349,6 @@ require("lazy").setup({
 			},
 		},
 		dependencies = { { "echasnovski/mini.icons", opts = {} } },
-	},
-
-	{
-		"nvim-tree/nvim-tree.lua",
-		version = "*",
-		lazy = false,
-		dependencies = {
-			"echasnovski/mini.icons",
-		},
-		config = function()
-			require("nvim-tree").setup({})
-		end,
 	},
 
 	{ -- Autoformat
@@ -507,9 +391,9 @@ require("lazy").setup({
 		},
 	},
 
-	{ -- Autocompletion
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
+	{ -- Autocompletion (blink.cmp — faster, built-in ghost text & signature help)
+		"saghen/blink.cmp",
+		version = "*",
 		dependencies = {
 			{
 				"L3MON4D3/LuaSnip",
@@ -520,52 +404,38 @@ require("lazy").setup({
 					return "make install_jsregexp"
 				end)(),
 			},
-			"saadparwaiz1/cmp_luasnip",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
 		},
-		config = function()
-			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			luasnip.config.setup({})
-
-			cmp.setup({
-				snippet = {
-					expand = function(args)
-						luasnip.lsp_expand(args.body)
-					end,
+		opts = {
+			keymap = {
+				preset = "default",
+				["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+				["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
+				["<CR>"] = { "accept", "fallback" },
+			},
+			appearance = {
+				nerd_font_variant = "mono",
+			},
+			snippets = { preset = "luasnip" },
+			sources = {
+				default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+				providers = {
+					lazydev = {
+						name = "LazyDev",
+						module = "lazydev.integrations.blink",
+						score_offset = 100,
+					},
 				},
-				completion = { completeopt = "menu,menuone,noinsert" },
-				mapping = cmp.mapping.preset.insert({
-					["<C-n>"] = cmp.mapping.select_next_item(),
-					["<C-p>"] = cmp.mapping.select_prev_item(),
-					["<C-u>"] = cmp.mapping.scroll_docs(-4),
-					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					["<Tab>"] = cmp.mapping.select_next_item(),
-					["<S-Tab>"] = cmp.mapping.select_prev_item(),
-					["<C-Space>"] = cmp.mapping.complete({}),
-					["<C-l>"] = cmp.mapping(function()
-						if luasnip.expand_or_locally_jumpable() then
-							luasnip.expand_or_jump()
-						end
-					end, { "i", "s" }),
-					["<C-H>"] = cmp.mapping(function()
-						if luasnip.locally_jumpable(-1) then
-							luasnip.jump(-1)
-						end
-					end, { "i", "s" }),
-				}),
-				sources = {
-					{ name = "lazydev", group_index = 0 },
-					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
-					{ name = "path" },
-				},
-			})
-		end,
+			},
+			completion = {
+				ghost_text = { enabled = true },
+			},
+			signature = { enabled = true },
+		},
 	},
 
+	-- Themes (loaded on demand, themery handles activation + persistence)
+	{ "bluz71/vim-moonfly-colors", name = "moonfly", lazy = true },
+	{ "miikanissi/modus-themes.nvim", lazy = true },
 	{
 		"folke/tokyonight.nvim",
 		priority = 1000,
@@ -582,10 +452,75 @@ require("lazy").setup({
 	},
 
 	{
+		"zaldih/themery.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {
+			themes = {
+				{
+					name = "Moonfly",
+					colorscheme = "moonfly",
+					before = [[vim.g.moonflyTransparent = true; vim.g.moonflyNormalFloat = true]],
+				},
+				{ name = "Modus Operandi", colorscheme = "modus_operandi" },
+				{ name = "Modus Vivendi", colorscheme = "modus_vivendi" },
+				{ name = "Tokyo Night", colorscheme = "tokyonight" },
+				{ name = "Tokyo Night Storm", colorscheme = "tokyonight-storm" },
+				{ name = "Tokyo Night Day", colorscheme = "tokyonight-day" },
+			},
+			livePreview = true,
+		},
+		keys = {
+			{ "<leader>tt", "<cmd>Themery<CR>", desc = "[T]oggle [T]heme picker" },
+		},
+	},
+
+	{
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = { signs = false },
+	},
+
+	{ -- Better f/t/s navigation with jump labels
+		"folke/flash.nvim",
+		event = "VeryLazy",
+		opts = {},
+		keys = {
+			{
+				"s",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump()
+				end,
+				desc = "Flash Jump",
+			},
+			{
+				"S",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
+		},
+	},
+
+	{ -- Inline color swatches for hex/rgb/hsl/tailwind
+		"brenoprata10/nvim-highlight-colors",
+		opts = {
+			render = "background",
+			enable_tailwind = true,
+		},
+	},
+
+	{ -- Symbols outline sidebar (like VS Code's Outline panel)
+		"stevearc/aerial.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.icons" },
+		opts = {},
+		keys = {
+			{ "<leader>a", "<cmd>AerialToggle!<CR>", desc = "Toggle Symbols Outline" },
+		},
 	},
 
 	{
@@ -602,8 +537,7 @@ require("lazy").setup({
 
 			require("mini.icons").setup()
 			require("mini.icons").mock_nvim_web_devicons()
-			-- require("mini.pairs").setup() -- Auto-close brackets/quotes
-			require("mini.comment").setup() -- Better commenting (gc)
+			require("mini.comment").setup()
 			require("mini.tabline").setup()
 			require("mini.bufremove").setup()
 		end,
@@ -612,7 +546,6 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs",
-		-- Add the textobjects plugin as a dependency
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
@@ -620,37 +553,39 @@ require("lazy").setup({
 			ensure_installed = {
 				"bash",
 				"c",
+				"css",
 				"diff",
 				"html",
+				"javascript",
+				"json",
 				"lua",
 				"luadoc",
 				"markdown",
+				"python",
+				"typescript",
 				"vim",
 				"vimdoc",
-				"python",
-				"javascript",
+				"yaml",
 			},
 			auto_install = true,
 			highlight = { enable = true },
 			indent = { enable = true },
-			-- [[ Configure Text Objects ]]
 			textobjects = {
 				select = {
 					enable = true,
-					lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+					lookahead = true,
 					keymaps = {
-						-- You can use the capture groups defined in textobjects.scm
-						["aa"] = "@parameter.outer", -- 'a'rgument 'a'round (outer)
-						["ia"] = "@parameter.inner", -- 'i'nner 'a'rgument
-						["af"] = "@function.outer", -- 'a'round 'f'unction
-						["if"] = "@function.inner", -- 'i'nner 'f'unction
-						["ac"] = "@class.outer", -- 'a'round 'c'lass
-						["ic"] = "@class.inner", -- 'i'nner 'c'lass
+						["aa"] = "@parameter.outer",
+						["ia"] = "@parameter.inner",
+						["af"] = "@function.outer",
+						["if"] = "@function.inner",
+						["ac"] = "@class.outer",
+						["ic"] = "@class.inner",
 					},
 				},
 				move = {
 					enable = true,
-					set_jumps = true, -- whether to set jumps in the jumplist
+					set_jumps = true,
 					goto_next_start = {
 						["]m"] = "@function.outer",
 						["]]"] = "@class.outer",
@@ -664,6 +599,7 @@ require("lazy").setup({
 		},
 	},
 
+	{ import = "kickstart.plugins" },
 	{ import = "custom.plugins" },
 }, {
 	ui = {

@@ -59,6 +59,7 @@ alias gs="git status"
 alias gch="git checkout"
 alias gl="git log -p"
 alias gll="git log --oneline --graph --all"
+alias gldig="git log -p --format='%ncommit %H%nhttps://gitlab.com/$(git config --get remote.origin.url | sed 's/.*:\(.*\)\.git/\1/')/-/commit/%H%nAuthor: %an%nDate: %ad%n'"
 alias gmr="glab mr create --fill --fill-commit-body --remove-source-branch"
 alias hey1000="hey -n 1000 -m POST -H"
 

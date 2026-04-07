@@ -160,6 +160,22 @@ require("lazy").setup({
 		},
 		config = function()
 			require("telescope").setup({
+				defaults = {
+					layout_strategy = "horizontal", -- "horizontal" | "vertical" | "flex" | "cursor" | "center" | "bottom_pane"
+					layout_config = {
+						horizontal = {
+							width = 0.95,
+							height = 0.95,
+							preview_width = 0.7, -- preview takes 60% of the picker width
+							preview_cutoff = 80, -- hide preview if terminal < 80 cols wide
+						},
+						vertical = {
+							width = 0.95,
+							height = 0.95,
+							preview_height = 0.7,
+						},
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -196,6 +212,105 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sn", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "[S]earch [N]eovim files" })
+
+			-- open a Telescope picker over `git log -<flag> <query>`
+			local function git_log_search(flag, prompt_label, desc_flag)
+				vim.ui.input({ prompt = "git log -" .. flag .. ": " }, function(query)
+					if not query or query == "" then
+						return
+					end
+
+					local pickers = require("telescope.pickers")
+					local finders = require("telescope.finders")
+					local conf = require("telescope.config").values
+					local previewers = require("telescope.previewers")
+
+					local raw = vim.fn.systemlist({
+						"git",
+						"log",
+						"--format=%H\t%ad\t%an\t%s",
+						"--date=short",
+						"-" .. flag,
+						query,
+					})
+
+					if vim.v.shell_error ~= 0 or #raw == 0 then
+						vim.notify("git log -" .. flag .. " '" .. query .. "': no commits found", vim.log.levels.INFO)
+						return
+					end
+
+					local entries = {}
+					for _, line in ipairs(raw) do
+						local hash, date, author, subject = line:match("^([^\t]+)\t([^\t]+)\t([^\t]+)\t(.*)$")
+						if hash then
+							table.insert(entries, {
+								hash = hash,
+								short = hash:sub(1, 8),
+								date = date,
+								author = author,
+								subject = subject,
+							})
+						end
+					end
+
+					pickers
+						.new({
+							layout_strategy = "vertical", -- "horizontal" | "vertical" | "flex" | "cursor" | "center" | "bottom_pane"
+							layout_config = {
+								horizontal = {
+									width = 0.95,
+									height = 0.95,
+									preview_width = 0.7, -- preview takes 60% of the picker width
+									preview_cutoff = 80, -- hide preview if terminal < 80 cols wide
+								},
+								vertical = {
+									width = 0.95,
+									height = 0.95,
+									preview_height = 0.7,
+								},
+							},
+						}, {
+							prompt_title = "git log -" .. flag .. " '" .. query .. "'",
+							finder = finders.new_table({
+								results = entries,
+								entry_maker = function(e)
+									local display = string.format(
+										"%s  %s  %-20s  %s",
+										e.short,
+										e.date,
+										e.author:sub(1, 20),
+										e.subject
+									)
+									return {
+										value = e.hash,
+										display = display,
+										ordinal = e.date .. " " .. e.author .. " " .. e.subject,
+									}
+								end,
+							}),
+							previewer = previewers.new_buffer_previewer({
+								title = "Patch",
+								define_preview = function(self, entry)
+									local lines = vim.fn.systemlist({ "git", "show", "--stat", "-p", entry.value })
+									vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+									vim.bo[self.state.bufnr].filetype = "diff"
+								end,
+							}),
+							sorter = conf.generic_sorter({}),
+						})
+						:find()
+				end)
+			end
+
+			-- <leader>sS  →  git log -S (pickaxe: commits that change the count of a string)
+			vim.keymap.set("n", "<leader>sS", function()
+				git_log_search("S", "git log -S", "S")
+			end, { desc = "[S]earch git log -[S] pickaxe (string)" })
+
+			-- <leader>sG  →  git log -G (regex match in patch text)
+			vim.keymap.set("n", "<leader>sG", function()
+				git_log_search("G", "git log -G", "G")
+			end, { desc = "[S]earch git log -[G] pickaxe (regex)" })
 		end,
 	},
 

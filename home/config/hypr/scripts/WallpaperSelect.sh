@@ -3,7 +3,7 @@
 # WALLPAPERS PATH
 terminal=kitty
 wallDIR="$HOME/Pictures/Wallpapers"
-SCRIPTSDIR="$HOME/.config/hypr/scripts_all"
+SCRIPTSDIR="$HOME/.config/hypr/scripts"
 wallpaper_current="$HOME/.config/hypr/wallpaper_effects/.wallpaper_current"
 
 # Directory for swaync
@@ -62,12 +62,12 @@ menu() {
 apply_image_wallpaper() {
   local image_path="$1"
 
-  if ! pgrep -x "swww-daemon" >/dev/null; then
-    echo "Starting swww-daemon..."
-    swww-daemon &
+  if ! pgrep -x "awww-daemon" >/dev/null; then
+    echo "Starting awww-daemon..."
+    awww-daemon &
   fi
 
-  swww img "$image_path"
+  awww img "$image_path"
 
   rm ~/.config/hypr/wallpaper_effects/.wallpaper_current
   cp "$image_path" ~/.config/hypr/wallpaper_effects/.wallpaper_current

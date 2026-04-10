@@ -224,6 +224,15 @@ require("lazy").setup({
 					local finders = require("telescope.finders")
 					local conf = require("telescope.config").values
 					local previewers = require("telescope.previewers")
+					local actions = require("telescope.actions")
+					local action_state = require("telescope.actions.state")
+
+					-- derive web base URL from git remote (SSH or HTTPS, GitLab or GitHub)
+					local remote = (vim.fn.systemlist({ "git", "remote", "get-url", "origin" })[1] or "")
+					local web_base = remote
+						:gsub("^git@([^:]+):", "https://%1/") -- SSH → HTTPS
+						:gsub("%.git$", "") -- strip .git suffix
+					local commit_path = web_base:find("gitlab", 1, true) and "/-/commit/" or "/commit/"
 
 					local raw = vim.fn.systemlist({
 						"git",
@@ -297,6 +306,17 @@ require("lazy").setup({
 								end,
 							}),
 							sorter = conf.generic_sorter({}),
+							attach_mappings = function(prompt_bufnr)
+								actions.select_default:replace(function()
+									actions.close(prompt_bufnr)
+									local entry = action_state.get_selected_entry()
+									if entry then
+										local url = web_base .. commit_path .. entry.value
+										vim.ui.open(url)
+									end
+								end)
+								return true
+							end,
 						})
 						:find()
 				end)

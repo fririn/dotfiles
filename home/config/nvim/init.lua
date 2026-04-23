@@ -345,6 +345,11 @@ require("lazy").setup({
 		},
 	},
 	{
+		"akinsho/git-conflict.nvim",
+		version = "*",
+		config = true,
+	},
+	{
 		"folke/trouble.nvim",
 		dependencies = { "echasnovski/mini.icons" },
 		opts = {},

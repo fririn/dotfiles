@@ -93,6 +93,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "Disable Treesitter in Telescope prompt buffers",
+	group = vim.api.nvim_create_augroup("telescope-prompt-no-treesitter", { clear = true }),
+	pattern = "TelescopePrompt",
+	callback = function(event)
+		pcall(vim.treesitter.stop, event.buf)
+	end,
+})
+
 -- Install `lazy.nvim` plugin manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -174,6 +183,9 @@ require("lazy").setup({
 							height = 0.95,
 							preview_height = 0.7,
 						},
+					},
+					preview = {
+						treesitter = false,
 					},
 				},
 				extensions = {
@@ -708,7 +720,12 @@ require("lazy").setup({
 				"yaml",
 			},
 			auto_install = true,
-			highlight = { enable = true },
+			highlight = {
+				enable = true,
+				disable = function(_, bufnr)
+					return vim.bo[bufnr].buftype == "prompt" or vim.bo[bufnr].filetype == "TelescopePrompt"
+				end,
+			},
 			indent = { enable = true },
 			textobjects = {
 				select = {

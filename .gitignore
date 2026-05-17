@@ -15,3 +15,4 @@ lazy-lock.json
 *env*
 nomad_hosts.txt
 *backup*
+home/config/cliphist/db

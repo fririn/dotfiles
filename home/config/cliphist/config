@@ -1,0 +1,2 @@
+max-items 1000000000
+db-path $XDG_CONFIG_HOME/cliphist/

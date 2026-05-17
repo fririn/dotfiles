@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+tmux_bin=${TMUX_BIN:-tmux}
+
+usage() {
+  "$tmux_bin" display-message "Usage: tmux-clone-ssh window|split [-h|-v] pane_pid pane_tty pane_path"
+}
+
+shell_command_from_proc() {
+  local pid=$1
+  local comm_file="/proc/$pid/comm"
+  local cmdline_file="/proc/$pid/cmdline"
+
+  [[ -r "$comm_file" && -r "$cmdline_file" ]] || return 1
+  [[ "$(<"$comm_file")" == "ssh" ]] || return 1
+
+  local arg quoted out=
+  while IFS= read -r -d '' arg; do
+    printf -v quoted '%q' "$arg"
+    if [[ -n "$out" ]]; then
+      out+=" "
+    fi
+    out+="$quoted"
+  done < "$cmdline_file"
+
+  [[ -n "$out" ]] || return 1
+  printf '%s\n' "$out"
+}
+
+foreground_pgid_for_pane_pid() {
+  local stat_file="/proc/$1/stat"
+  [[ -r "$stat_file" ]] || return 1
+
+  local stat rest
+  stat=$(<"$stat_file")
+  rest=${stat##*) }
+
+  # /proc/<pid>/stat fields after "comm" start at state, so tpgid is field 6.
+  set -- $rest
+  [[ ${6:-} =~ ^[0-9]+$ && ${6:-0} -gt 0 ]] || return 1
+  printf '%s\n' "$6"
+}
+
+ssh_command_from_proc() {
+  local pane_pid=$1
+  local foreground_pgid
+
+  foreground_pgid=$(foreground_pgid_for_pane_pid "$pane_pid") || return 1
+  shell_command_from_proc "$foreground_pgid"
+}
+
+ssh_command_from_tty() {
+  local pane_tty=$1
+  local tty_name=${pane_tty#/dev/}
+
+  ps -o stat= -o comm= -o command= -t "$tty_name" 2>/dev/null |
+    awk '
+      $1 ~ /\+/ && ($2 == "ssh" || $2 ~ /\/ssh$/) {
+        sub(/^[^[:space:]]+[[:space:]]+[^[:space:]]+[[:space:]]+/, "")
+        print
+        exit
+      }
+    '
+}
+
+action=${1:-}
+case "$action" in
+  window)
+    [[ $# -eq 4 ]] || { usage; exit 1; }
+    pane_pid=$2
+    pane_tty=$3
+    pane_path=$4
+    ;;
+  split)
+    [[ $# -eq 5 && ( ${2:-} == "-h" || ${2:-} == "-v" ) ]] || { usage; exit 1; }
+    split_direction=$2
+    pane_pid=$3
+    pane_tty=$4
+    pane_path=$5
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
+
+ssh_command=$(ssh_command_from_proc "$pane_pid" || ssh_command_from_tty "$pane_tty" || true)
+
+if [[ -z "$ssh_command" ]]; then
+  "$tmux_bin" display-message "No foreground ssh session found in current pane"
+  exit 0
+fi
+
+case "$action" in
+  window)
+    "$tmux_bin" new-window -c "$pane_path" "$ssh_command"
+    ;;
+  split)
+    "$tmux_bin" split-window "$split_direction" -c "$pane_path" "$ssh_command"
+    ;;
+esac

@@ -39,3 +39,10 @@ fi
 if [ -f "$HOME/dev/google-cloud-sdk/completion.zsh.inc" ]; then
   source "$HOME/dev/google-cloud-sdk/completion.zsh.inc"
 fi
+
+# bun completions
+[ -s "/Users/paul/.bun/_bun" ] && source "/Users/paul/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

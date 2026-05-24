@@ -16,3 +16,5 @@ lazy-lock.json
 nomad_hosts.txt
 *backup*
 home/config/cliphist/db
+.zsh_history
+packages.txt

@@ -1,218 +1,243 @@
 {
-    "include": [
+  "include": [
     "$HOME/.config/waybar/Modules",
- //   "$HOME/.config/waybar/ModulesWorkspaces",
+    //   "$HOME/.config/waybar/ModulesWorkspaces",
     "$HOME/.config/waybar/ModulesCustom",
     "$HOME/.config/waybar/ModulesGroups",
     "$HOME/.config/waybar/UserModules",
-    ],
-    "layer": "bottom",
-    //"output": "HDMI-A-1",
-    "output": "DP-2",
-    //"output": "eDP-1",
-    "modules-left":   [
-      "hyprland/workspaces",
-      ],
-    "modules-center": [
-      "clock",
+  ],
+  "layer": "bottom",
+  //"output": "HDMI-A-1",
+  "output": "DP-2",
+  //"output": "eDP-1",
+  "modules-left": [
+    "hyprland/workspaces",
+  ],
+  "modules-center": [
+    "clock",
     //"hyprland/window"],
-      "hyprland/language",
-      ], 
-    "modules-right":  [
-      "group/mobo_drawer",
-      //"memory",
-      //"power-profiles-daemon",
-      //"custom/backlight",
-      //"pulseaudio",
-      "group/audio",
-      "backlight",
-      "custom/updater",
-      "tray",
-      "battery",
-      "custom/swaync",
-      ],
-    "hidden-state": "hide",
-    "show-on-hover": true,
-    "exclusive": true,
-    "passthrough": false,
-
-    "signal": {
-      "usr1": "toggleVisibility"  // THIS MUST BE PRESENT
-    },
-
-
-    "hyprland/workspaces": {
-      "format": "{icon}",
-      "on-click": "activate",
-      "all-outputs": true,
-      "persistent_workspaces" :{
-          "1": [],
-          "2": [],
-          "3": [],
-          "4": [],
-          "5": [],
-          "6": [],
-          "7": [],
-          "8": [],
-          "9": [],
-          "10":[]
-        }
-    },
-
-
-    "backlight/slider": {
-      "min": 0,
-      "max": 100,
-      "orientation": "horizontal",
-      "device": "intel_backlight"
-    },
-
-    "custom/backlight": {
-      "exec": "echo '✨'",  
-      "interval": 1,
-      "format": "{}"
-    },
-
-    "hyprland/window": {
-      "format": "{class} -> {title}",
-      "max-length": "30",
-      "rewrite": {
-        "(.*) — Mozilla Firefox": "🌎 $1"
-      },
-      "separate-outputs": false
-    },
-    "clock": {
-      "interval": 1,
-      "format": "<span foreground='#dbabdb'>  </span><span>{:L%d.%m %A %H:%M:%S}</span>",
-      "locale": "ja_JP.UTF-8",
-      "format-alt": "<span color='#dbabdb'>  </span>{:L%H:%M}",
-      "tooltip-format": "<big>{:L%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
-    },
-    "load": {
-      "interval": 1,
-      "format": "{load1}",
-      "on-click": "kitty -e htop"
-    },
-    "systemd-failed-units": {
-      "hide-on-ok": true, // Do not hide if there is zero failed units.
-      "format": "✗ {nr_failed}",
-      "format-ok": "✓",
-      "system": true, // Monitor failed systemwide units.
-      "user": true // Ignore failed user units.
-    },
-    "hyprland/language": {
-      "format": "{}",
-      "format-en": "EN",
-      "format-ru": "RU"
-      //"format-en": "AMERICA, HELL YEAH!",
-      //"format-ru": "Я РУССКИЙ!"
-    },
-    "backlight": {
-      "device": "amdgpu_b10",
-      "format": "<span color='#94beec'>{icon}</span> {percent}%",
-      "format-icons": ["", "", "", "", "", "", "", "", ""]
-    },
-    "mpd": {
-      "format": "{stateIcon} {artist} - {title}", //({elapsedTime:%M:%S}/{totalTime:%M:%S})  ",
-      "format-disconnected": "",
-      "format-stopped": "",
-      "interval": 10,
-      "consume-icons": {
-          "on": " " // Icon shows only when "consume" is on
-      },
-      "random-icons": {
-          "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
-          "on": " "
-      },
-      "repeat-icons": {
-          "on": " "
-      },
-      "single-icons": {
-          "on": "1 "
-      },
-      "state-icons": {
-          "paused": "",
-          "playing": ""
-      },
-      "tooltip-format": "MPD (connected)",
-      "tooltip-format-disconnected": "MPD (disconnected)"
-    },
-    "network": {
-      "interface": "wlan0",
-      "format": "{ifname}",
-      "format-wifi": "<span color='#8a8af8'> </span>{essid}({signalStrength}%)",
-      "format-ethernet": "{ipaddr}/{cidr} ",
-      "format-disconnected": "<span color='#e80064'>󰖪 </span>No Network",
-      "on-click": "kitty nmtui"
-    },
-    "battery": {
-      "format": "<span color='#81dc98'>{icon}</span> {capacity}%",
-      "format-icons": ["", "", "", "", "", "", "", "", "", ""],
-      "format-charging": "<span color='#81dc98'></span> {capacity}%"
-    },
-    "pulseaudio": {
-      "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-      "format": "<span color='#6dd9d9'> </span> {volume}%",
-      "format-muted": "<span color='#ff0000'> </span>",
-      "format-icons": {
-        "headphone": "",
-        "hands-free": "",
-        "headset": "",
-        "default": [" ", " "]
-      },
-      "on-click-right" : "",
-      "on-click-middle" : "pavucontrol"
-    },
-    "memory": {
-      "format": "{}%",
-      "on-click": "kitty htop"
-    },
-    "tray": {
-      "icon-size": 16,
-      "reverse-direction": false,
-      "spacing": 6
-    },
-    "cpu": {
-      "format": "<span foreground='#7bc0b3'></span> {usage}%"
-    },
-    "temperature": {
-      "critical-threshold": 80,
-      "format": "<span foreground='#5d73ca'></span> {temperatureC}°C"
-    },
-    "custom/playerctl": {
-      "format": "{icon}<span>{}</span>",
-      "return-type": "json",
-      "max-length": 55,
-      "exec": "playerctl -a metadata --format '{\"text\": \"  {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
-      "on-click-middle": "playerctl previous",
-      "on-click": "playerctl play-pause",
-      "on-click-right": "playerctl next",
-      "format-icons": {
-        "Paused": "<span foreground='#6dd9d9'></span>",
-        "Playing": "<span foreground='#82db97'></span>"
-      }
-    },
-    "cava": {
-        "cava_config": "$XDG_CONFIG_HOME/cava/config",
-        "framerate": 30,
-        "autosens": 1,
-        "sensitivity": 100,
-        "bars": 7,
-        "lower_cutoff_freq": 50,
-        "higher_cutoff_freq": 10000,
-        "method": "pipewire",
-        "source": "auto",
-        "stereo": true,
-        "reverse": false,
-        "bar_delimiter": 0,
-        "monstercat": false,
-        "waves": false,
-        "noise_reduction": 0.77,
-        "input_delay": 2,
-        "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
-        "actions": {
-                   "on-click-right": "mode"
-                   }
+    "hyprland/language",
+  ],
+  "modules-right": [
+    "group/mobo_drawer",
+    //"memory",
+    //"power-profiles-daemon",
+    //"custom/backlight",
+    //"pulseaudio",
+    "group/audio",
+    //"backlight",
+    //"custom/updater",
+    "tray",
+    //"battery",
+    //"custom/swaync",
+  ],
+  "hidden-state": "hide",
+  "show-on-hover": true,
+  "exclusive": true,
+  "passthrough": false,
+  "signal": {
+    "usr1": "toggleVisibility" // THIS MUST BE PRESENT
+  },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
+      "9": [],
+      "10": []
     }
-
+  },
+  "backlight/slider": {
+    "min": 0,
+    "max": 100,
+    "orientation": "horizontal",
+    "device": "intel_backlight"
+  },
+  "custom/backlight": {
+    "exec": "echo '✨'",
+    "interval": 1,
+    "format": "{}"
+  },
+  "hyprland/window": {
+    "format": "{class} -> {title}",
+    "max-length": "30",
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "🌎 $1"
+    },
+    "separate-outputs": false
+  },
+  "clock": {
+    "interval": 1,
+    "format": "<span foreground='#dbabdb'>  </span><span>{:L%d.%m %A %H:%M:%S}</span>",
+    "locale": "ja_JP.UTF-8",
+    "format-alt": "<span color='#dbabdb'>  </span>{:L%H:%M}",
+    "tooltip-format": "<big>{:L%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "load": {
+    "interval": 1,
+    "format": "{load1}",
+    "on-click": "kitty -e htop"
+  },
+  "systemd-failed-units": {
+    "hide-on-ok": true, // Do not hide if there is zero failed units.
+    "format": "✗ {nr_failed}",
+    "format-ok": "✓",
+    "system": true, // Monitor failed systemwide units.
+    "user": true // Ignore failed user units.
+  },
+  "hyprland/language": {
+    "format": "{}",
+    "format-en": "EN",
+    "format-ru": "RU"
+    //"format-en": "AMERICA, HELL YEAH!",
+    //"format-ru": "Я РУССКИЙ!"
+  },
+  "backlight": {
+    "device": "amdgpu_b10",
+    "format": "<span color='#94beec'>{icon}</span> {percent}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "mpd": {
+    "format": "{stateIcon} {artist} - {title}", //({elapsedTime:%M:%S}/{totalTime:%M:%S})  ",
+    "format-disconnected": "",
+    "format-stopped": "",
+    "interval": 10,
+    "consume-icons": {
+      "on": " " // Icon shows only when "consume" is on
+    },
+    "random-icons": {
+      "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
+      "on": " "
+    },
+    "repeat-icons": {
+      "on": " "
+    },
+    "single-icons": {
+      "on": "1 "
+    },
+    "state-icons": {
+      "paused": "",
+      "playing": ""
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+  },
+  "network": {
+    "interface": "wlan0",
+    "format": "{ifname}",
+    "format-wifi": "<span color='#8a8af8'> </span>{essid}({signalStrength}%)",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "format-disconnected": "<span color='#e80064'>󰖪 </span>No Network",
+    "on-click": "kitty nmtui"
+  },
+  "battery": {
+    "format": "<span color='#81dc98'>{icon}</span> {capacity}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "format-charging": "<span color='#81dc98'></span> {capacity}%"
+  },
+  "pulseaudio": {
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "format": "<span color='#6dd9d9'> </span> {volume}%",
+    "format-muted": "<span color='#ff0000'> </span>",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "default": [
+        " ",
+        " "
+      ]
+    },
+    "on-click-right": "",
+    "on-click-middle": "pavucontrol"
+  },
+  "memory": {
+    "format": "{}%",
+    "on-click": "kitty htop"
+  },
+  "tray": {
+    "icon-size": 16,
+    "reverse-direction": false,
+    "spacing": 6
+  },
+  "cpu": {
+    "format": "<span foreground='#7bc0b3'></span> {usage}%"
+  },
+  "temperature": {
+    "critical-threshold": 80,
+    "format": "<span foreground='#5d73ca'></span> {temperatureC}°C"
+  },
+  "custom/playerctl": {
+    "format": "{icon}<span>{}</span>",
+    "return-type": "json",
+    "max-length": 55,
+    "exec": "playerctl -a metadata --format '{\"text\": \"  {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+    "on-click-middle": "playerctl previous",
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "format-icons": {
+      "Paused": "<span foreground='#6dd9d9'></span>",
+      "Playing": "<span foreground='#82db97'></span>"
+    }
+  },
+  "cava": {
+    "cava_config": "$XDG_CONFIG_HOME/cava/config",
+    "framerate": 30,
+    "autosens": 1,
+    "sensitivity": 100,
+    "bars": 7,
+    "lower_cutoff_freq": 50,
+    "higher_cutoff_freq": 10000,
+    "method": "pipewire",
+    "source": "auto",
+    "stereo": true,
+    "reverse": false,
+    "bar_delimiter": 0,
+    "monstercat": false,
+    "waves": false,
+    "noise_reduction": 0.77,
+    "input_delay": 2,
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ],
+    "actions": {
+      "on-click-right": "mode"
+    }
+  }
 }

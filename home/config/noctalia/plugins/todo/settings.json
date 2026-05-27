@@ -1,5 +1,33 @@
 {
-  "todos": [],
+  "todos": [
+    {
+      "id": 1779686258118,
+      "text": "anki",
+      "completed": true,
+      "createdAt": "2026-05-25T05:17:38.118Z",
+      "pageId": 0,
+      "priority": "medium",
+      "details": ""
+    },
+    {
+      "id": 1779686249668,
+      "text": "go through tickets",
+      "completed": true,
+      "createdAt": "2026-05-25T05:17:29.668Z",
+      "pageId": 0,
+      "priority": "medium",
+      "details": ""
+    },
+    {
+      "id": 1779686242930,
+      "text": "update cv",
+      "completed": true,
+      "createdAt": "2026-05-25T05:17:22.930Z",
+      "pageId": 0,
+      "priority": "medium",
+      "details": ""
+    }
+  ],
   "pages": [
     {
       "id": 0,
@@ -7,8 +35,8 @@
     }
   ],
   "current_page_id": 0,
-  "count": 0,
-  "completedCount": 0,
+  "count": 3,
+  "completedCount": 3,
   "showCompleted": true,
   "showBackground": true,
   "isExpanded": false,

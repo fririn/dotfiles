@@ -83,3 +83,8 @@ checkrpc_aptos() {
     # Aptos uses a REST path for health
     curl -i -s --location "$1/v1/-/healthy"
 }
+
+# ── getblock-io repo sync ──────────────────────────────────────────────────
+alias gbpull='zsh ~/work/getblock-sync.sh pull'   # pull all getblock repos
+alias gbclone='zsh ~/work/getblock-sync.sh clone' # clone any missing repos
+alias gbsync='zsh ~/work/getblock-sync.sh sync'   # clone missing + pull all

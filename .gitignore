@@ -18,3 +18,4 @@ nomad_hosts.txt
 home/config/cliphist/db
 .zsh_history
 packages.txt
+settings.json

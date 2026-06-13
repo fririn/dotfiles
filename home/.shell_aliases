@@ -3,6 +3,8 @@ alias l="ls -lh"
 alias ll="ls -lah"
 alias lst="lsd --tree"
 
+alias fix-hypr='source ~/.config/hypr/scripts/fix-hypr-sig.sh'
+
 # ── Misc ────
 alias mkdir="mkdir -pv"
 alias ra='yazi'

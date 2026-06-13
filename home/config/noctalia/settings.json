@@ -43,7 +43,7 @@
         "autoHideDelay": 500,
         "autoShowDelay": 50,
         "backgroundOpacity": 0.93,
-        "barType": "framed",
+        "barType": "simple",
         "capsuleColorKey": "none",
         "capsuleOpacity": 0.31,
         "contentPadding": 30,
@@ -75,7 +75,7 @@
         "showOnWorkspaceSwitch": false,
         "showOutline": false,
         "useSeparateOpacity": false,
-        "widgetSpacing": 6,
+        "widgetSpacing": 0,
         "widgets": {
             "center": [
                 {
@@ -102,6 +102,13 @@
                     "textColor": "none",
                     "useFixedWidth": false,
                     "visualizerType": "linear"
+                },
+                {
+                    "displayMode": "forceOpen",
+                    "iconColor": "none",
+                    "id": "KeyboardLayout",
+                    "showIcon": true,
+                    "textColor": "none"
                 }
             ],
             "left": [
@@ -162,10 +169,40 @@
                     ]
                 },
                 {
-                    "displayMode": "alwaysShow",
+                    "displayMode": "onhover",
                     "iconColor": "none",
                     "id": "Volume",
                     "middleClickCommand": "pwvucontrol || pavucontrol",
+                    "textColor": "none"
+                },
+                {
+                    "hideWhenZero": false,
+                    "hideWhenZeroUnread": false,
+                    "iconColor": "none",
+                    "id": "NotificationHistory",
+                    "showUnreadBadge": true,
+                    "unreadBadgeColor": "primary"
+                },
+                {
+                    "deviceNativePath": "__default__",
+                    "displayMode": "graphic",
+                    "hideIfIdle": false,
+                    "hideIfNotDetected": true,
+                    "id": "Battery",
+                    "showNoctaliaPerformance": true,
+                    "showPowerProfiles": true
+                },
+                {
+                    "displayMode": "onhover",
+                    "iconColor": "none",
+                    "id": "Bluetooth",
+                    "textColor": "none"
+                },
+                {
+                    "applyToAllMonitors": false,
+                    "displayMode": "onhover",
+                    "iconColor": "none",
+                    "id": "Brightness",
                     "textColor": "none"
                 },
                 {
@@ -195,14 +232,6 @@
                         "useCustomColors": false
                     },
                     "id": "plugin:todo"
-                },
-                {
-                    "hideWhenZero": false,
-                    "hideWhenZeroUnread": false,
-                    "iconColor": "none",
-                    "id": "NotificationHistory",
-                    "showUnreadBadge": true,
-                    "unreadBadgeColor": "primary"
                 }
             ]
         }
@@ -345,7 +374,7 @@
     "general": {
         "allowPanelsOnScreenWithoutBar": true,
         "allowPasswordWithFprintd": false,
-        "animationDisabled": false,
+        "animationDisabled": true,
         "animationSpeed": 2,
         "autoStartAuth": false,
         "avatarImage": "/home/paul/.face",
@@ -354,10 +383,10 @@
         "clockStyle": "custom",
         "compactLockScreen": false,
         "dimmerOpacity": 0,
-        "enableBlurBehind": true,
+        "enableBlurBehind": false,
         "enableLockScreenCountdown": true,
         "enableLockScreenMediaControls": false,
-        "enableShadows": true,
+        "enableShadows": false,
         "forceBlackScreenCorners": false,
         "iRadiusRatio": 1.2,
         "keybinds": {
@@ -470,7 +499,7 @@
     },
     "noctaliaPerformance": {
         "disableDesktopWidgets": true,
-        "disableWallpaper": true
+        "disableWallpaper": false
     },
     "notifications": {
         "backgroundOpacity": 0.7000000000000001,
@@ -648,13 +677,13 @@
         "fontDefaultScale": 1,
         "fontFixed": "monospace",
         "fontFixedScale": 1,
-        "panelBackgroundOpacity": 0.51,
+        "panelBackgroundOpacity": 1,
         "panelsAttachedToBar": true,
         "scrollbarAlwaysVisible": true,
         "settingsPanelMode": "attached",
         "settingsPanelSideBarCardStyle": false,
         "tooltipsEnabled": true,
-        "translucentWidgets": true
+        "translucentWidgets": false
     },
     "wallpaper": {
         "automationEnabled": false,

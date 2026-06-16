@@ -13,7 +13,7 @@ eval `ssh-agent` && ssh-add && clear
 
 
 # run fastfetch only if new terminal is opened not from ranger
-#if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfetch --logo "arch_small";dysk; fi
+if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfetch --logo "arch_small"; fi
 
 # ── History ───────────────────────────────────────────────────────────────────
 HISTSIZE=500000

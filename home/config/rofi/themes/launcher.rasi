@@ -16,7 +16,7 @@ configuration {
     dimmed-foreground:       #bbbbbb;
     off:                     #bbbbbb;
     on:                      #ffffff;
-    background:              rgba(0,0,0,0.5); 
+    background:              rgba(0,0,0,1); 
     // border-color:            @foreground;
     border-radius:           10px;
     // border: 1px;

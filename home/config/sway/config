@@ -48,6 +48,33 @@ workspace 9 output eDP-1
 workspace 10 output eDP-1
 workspace terminal output DP-1 eDP-1
 
+### Autostart
+#
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec ~/.config/sway/scripts/Polkit.sh
+exec pipewire
+exec wireplumber
+exec pipewire-pulse
+# for japanese input
+exec fcitx5
+# Clipboard manager
+exec wl-paste --type text --watch cliphist -max-items 99999999 store
+exec wl-paste --type image --watch cliphist -max-items 99999999 store
+# Notification daemon
+#exec swaync
+
+# Startup apps, launched on their target workspace.
+# Sway has no true "silent" spawn-to-workspace like Hyprland's exec-once
+# rule, so this switches workspace right before each launch -- expect a
+# brief flicker through these workspaces at login.
+exec sh -c 'swaymsg workspace terminal; exec $term -e tmux'
+exec sh -c 'swaymsg workspace number 1; exec zen-browser --no-remote -P "work"'
+exec sh -c 'swaymsg workspace number 2; exec slack'
+exec sh -c 'swaymsg workspace number 4; exec zen-browser --no-remote -P "Default (release)"'
+exec sh -c 'swaymsg workspace number 5; exec telegram-desktop'
+#exec sh -c 'swaymsg workspace number 7; exec anki'
+
 ### Idle configuration
 #
 # Example configuration:
@@ -267,7 +294,7 @@ bindsym --to-code $mod+r mode "resize"
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
-    # position top
+    position top
     #
     # # When the status_command prints a new line to stdout, swaybar updates.
     # # The default just shows the current date and time.

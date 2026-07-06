@@ -4,7 +4,7 @@
 # The "primary" monitor is whatever external display is connected (DP-1,
 # DP-3, HDMI-A-1, ...), so we never hardcode its name.
 
-LAPTOP="DP-1"
+LAPTOP="eDP-1"
 
 # First connected monitor whose name is not the laptop panel.
 get_external() {

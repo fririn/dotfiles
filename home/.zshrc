@@ -1,4 +1,4 @@
-ZSH_THEME="candy"
+ZSH_THEME="crunch"
 CASE_SENSITIVE="true"
 plugins=(
   git

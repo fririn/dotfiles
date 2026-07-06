@@ -14,7 +14,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term kitty
+set $term foot
 set $RofiDir $HOME/.config/rofi
 # Your preferred application launcher
 set $menu pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window -theme "$RofiDir"/themes/launcher.rasi -drun-display-format "{name}" -display-drun ""

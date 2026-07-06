@@ -21,14 +21,14 @@ for _ in $(seq 1 20); do
 done
 
 if [ -n "$external" ]; then
-    for i in $(seq 1 10); do
+    for i in $(seq 1 8); do
         hyprctl keyword workspace "$i, monitor:$external, persistent:true"
     done
-    hyprctl keyword workspace "11, monitor:$LAPTOP, persistent:true"
-    hyprctl keyword workspace "12, monitor:$LAPTOP, persistent:true"
+    hyprctl keyword workspace "9, monitor:$LAPTOP, persistent:true"
+    hyprctl keyword workspace "10, monitor:$LAPTOP, persistent:true"
     hyprctl dispatch focusmonitor "$external"
 else
-    for i in $(seq 1 12); do
+    for i in $(seq 1 10); do
         hyprctl keyword workspace "$i, monitor:$LAPTOP, persistent:true"
     done
 fi

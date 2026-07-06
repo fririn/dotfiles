@@ -8,7 +8,7 @@ plugins=(
 )
 source $ZSH/oh-my-zsh.sh
 source ~/.shell_aliases
-#eval `ssh-agent` && ssh-add && clear
+eval `ssh-agent` && ssh-add && clear
 
 
 # run fastfetch only if new terminal is opened not from ranger

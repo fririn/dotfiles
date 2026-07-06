@@ -38,7 +38,7 @@ sudo xbps-install -Sy \
     brightnessctl grim slurp wl-clipboard jq \
     tlp iwd \
     zsh tmux yazi fastfetch neovim git rsync curl unzip gcc psmisc \
-    kitty i3status \
+    kitty i3blocks i3blocks-blocklets acpi iw ethtool \
     firefox qutebrowser telegram-desktop steam \
     nodejs tailscale
 
@@ -91,7 +91,7 @@ for f in .zshrc .zshenv .shell_aliases .tmux.conf .vimrc .gitconfig; do
 done
 
 mkdir -p "$HOME/.config"
-for app in sway i3status foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser; do
+for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser; do
     link "$DOTFILES_DIR/home/config/$app" "$HOME/.config/$app"
 done
 

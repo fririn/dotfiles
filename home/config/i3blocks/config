@@ -1,0 +1,58 @@
+# i3blocks configuration file.
+# see "man i3blocks" for documentation.
+
+separator=true
+separator_block_width=30
+
+[volume-pipewire]
+command=~/.config/i3blocks/scripts/volume-pipewire/volume-pipewire
+interval=persist
+SUBSCRIBE=1
+USE_ALSA_NAME=1
+
+[sway-focusedwindow]
+command=~/.config/i3blocks/scripts/sway-focusedwindow/sway-focusedwindow
+interval=persist
+
+[calendar]
+command=~/.config/i3blocks/scripts/calendar/calendar
+interval=1
+LABEL= 
+DATEFMT=+%H:%M:%S
+# SHORTFMT=+%H:%M:%S
+HEIGHT=180
+WIDTH=220
+
+[wireless]
+command=~/.config/i3blocks/scripts/wireless
+interval=5
+
+[ethernet]
+command=~/.config/i3blocks/scripts/ethernet
+interval=5
+
+[battery]
+command=/usr/libexec/i3blocks/battery
+interval=30
+BAT_NUMBER=0
+
+[disk]
+command=/usr/libexec/i3blocks/disk
+DIR=/
+interval=30
+
+[load_average]
+command=/usr/libexec/i3blocks/load_average
+interval=5
+
+[memory]
+command=/usr/libexec/i3blocks/memory
+interval=5
+
+[kubernetes]
+command=~/.config/i3blocks/scripts/kubernetes/kubernetes
+interval=10
+
+# [time]
+# command=date '+%Y-%m-%d %H:%M:%S'
+# interval=1

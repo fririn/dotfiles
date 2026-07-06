@@ -1,0 +1,25 @@
+#!/bin/sh
+# Mirrors i3status's `ethernet _first_` block:
+#   format_up   = "E: %ip (%speed)"
+#   format_down = "E: down"
+
+IF=$(for f in /sys/class/net/*; do
+	d=$(basename "$f")
+	case "$d" in lo|wl*|ww*) continue ;; esac
+	[ -d "$f/wireless" ] && continue
+	echo "$d"
+	break
+done)
+[ -z "$IF" ] && exit 0
+
+if [ "$(cat "/sys/class/net/$IF/operstate" 2>/dev/null)" != "up" ]; then
+	echo "E: down"
+	echo "E: down"
+	exit 0
+fi
+
+IP=$(ip -4 addr show "$IF" 2>/dev/null | awk '/inet /{print $2}' | cut -d/ -f1)
+SPEED=$(ethtool "$IF" 2>/dev/null | awk -F': ' '/Speed:/{print $2}')
+
+echo "E: ${IP} (${SPEED})"
+echo "E: ${IP} (${SPEED})"

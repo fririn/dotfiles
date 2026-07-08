@@ -22,8 +22,8 @@ set $menu pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,windo
 ### Appearance
 #
 # Disable per-window title bars (just show a thin border instead)
-default_border pixel 1
-default_floating_border pixel 1
+default_border pixel 2
+default_floating_border pixel 2
 
 ### Output configuration
 #
@@ -54,7 +54,8 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec ~/.config/sway/scripts/Polkit.sh
 exec pipewire
-exec wireplumber
+# wireplumber is auto-started by pipewire itself (see /etc/pipewire/pipewire.conf.d/10-wireplumber.conf);
+# launching it here too caused two competing instances and no real audio sink.
 exec pipewire-pulse
 # for japanese input
 exec fcitx5

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+load="$(cut -d ' ' -f1 /proc/loadavg)"
+cpus="$(nproc)"
+
+# full text
+echo "$load"
+# short text
+echo "$load"
+
+# integer-scaled comparison (load has 2 decimals -> multiply by 100)
+load_i=$(printf '%s' "$load" | tr -d '.')   # e.g. 3.47 -> 347
+half=$((cpus * 100 / 2))
+full=$((cpus * 100))
+
+if [ "$load_i" -ge "$full" ]; then
+    echo "#FF0000"
+    exit 33
+elif [ "$load_i" -ge "$half" ]; then
+    echo "#FFFF00"
+fi

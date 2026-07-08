@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Cycle on left click
+if [ "$BLOCK_BUTTON" = "1" ]; then
+    current=$(powerprofilesctl get)
+    case "$current" in
+        power-saver)  powerprofilesctl set balanced ;;
+        balanced)     powerprofilesctl set performance ;;
+        performance)  powerprofilesctl set power-saver ;;
+        *)            powerprofilesctl set balanced ;;
+    esac
+fi
+
+profile=$(powerprofilesctl get)
+
+case "$profile" in
+    power-saver)  color="#00FF00"; label="eco" ;;
+    balanced)     color="#FFFF00"; label="balanced" ;;
+    performance)  color="#FF0000"; label="perf" ;;
+    *)            color="#FFFFFF"; label="$profile" ;;
+esac
+
+echo "$label"      # full text
+echo "$label"      # short text
+echo "$color"      # color

@@ -31,7 +31,6 @@ alias bqi='brew info'
 
 # pacman (arch linux btw)
 alias p='sudo pacman -S --needed'
-alias xb="sudo xbps-install"
 alias pr='sudo pacman -Rsn'
 alias pu='sudo pacman -Syu'
 alias parus='paru -S --needed'
@@ -48,6 +47,10 @@ packages-by-date() {
   echo "$install_date   $pkg_name"
   done | sort
 }
+
+# xbps (enter the Void)
+alias xb="sudo xbps-install"
+alias xbu="sudo xbps-install -Su"
 
 # ── Navigation ────────────────────────────────────────────────────────────────
 alias packs="cd ~/work/nomad_packs"

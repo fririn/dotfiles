@@ -1,0 +1,50 @@
+#!/bin/sh
+# i3blocks volume block
+# left click:   toggle mute
+# scroll up/down: volume +/- 5%
+# middle click: open pavucontrol
+# right click:  cycle to next output sink
+
+case "$BLOCK_BUTTON" in
+    1) wpctl set-mute   @DEFAULT_AUDIO_SINK@ toggle ;;
+    2) pavucontrol >/dev/null 2>&1 & disown ;;
+    3)
+        current=$(pactl get-default-sink)
+        next=$(pactl -f json list sinks \
+            | jq -r '.[] | select(.ports[0].availability != "not available") | .name' \
+            | awk -v cur="$current" '
+            { names[NR] = $0; if ($0 == cur) idx = NR }
+            END { n = NR; if (idx == "") idx = 0; print names[(idx % n) + 1] }
+        ')
+        [ -n "$next" ] && pactl set-default-sink "$next"
+        pactl list short sink-inputs | cut -f1 | while read -r id; do
+            pactl move-sink-input "$id" "$next" 2>/dev/null
+        done
+        ;;
+    4) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ ;;
+    5) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- ;;
+esac
+
+set -- $(wpctl get-volume @DEFAULT_AUDIO_SINK@)
+vol=$2
+mute=$3
+sink=$(pactl get-default-sink)
+
+# short label: pull the port name out of e.g. "...HiFi__Speaker__sink" -> "Speaker";
+# fall back to the (truncated) description for sinks that don't follow that naming
+label=$(printf '%s' "$sink" | sed -n 's/.*__\(.*\)__sink$/\1/p')
+if [ -z "$label" ]; then
+    desc=$(pactl -f json list sinks | jq -r --arg n "$sink" '.[] | select(.name==$n) | .description')
+    max=${MAXLEN:-16}
+    if [ "${#desc}" -gt "$max" ]; then
+        label=$(printf '%s' "$desc" | cut -c1-$((max - 1)))…
+    else
+        label=$desc
+    fi
+fi
+
+if echo "$mute" | grep -q MUTED; then
+    printf "婢 muted (%s)\n" "$label"
+else
+    printf " %d%% (%s)\n" "$(echo "$vol * 100" | bc | cut -d. -f1)" "$label"
+fi

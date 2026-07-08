@@ -54,16 +54,18 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec ~/.config/sway/scripts/Polkit.sh
 exec pipewire
-# wireplumber is auto-started by pipewire itself (see /etc/pipewire/pipewire.conf.d/10-wireplumber.conf);
-# launching it here too caused two competing instances and no real audio sink.
 exec pipewire-pulse
+
 # for japanese input
 exec fcitx5
+
 # Clipboard manager
 exec wl-paste --type text --watch cliphist -max-items 99999999 store
 exec wl-paste --type image --watch cliphist -max-items 99999999 store
 # Notification daemon
 #exec swaync
+
+exec flameshot
 
 # Startup apps, launched on their target workspace.
 # Sway has no true "silent" spawn-to-workspace like Hyprland's exec-once
@@ -288,7 +290,8 @@ bindsym --to-code $mod+r mode "resize"
     bindsym --locked XF86Sleep exec systemctl suspend
 
     # Screenshot: select an area, save it timestamped, and copy to clipboard
-    bindsym Print exec mkdir -p ~/Pictures/Screenshots/Clipboard && grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/Clipboard/$(date +%Y%m%d-%H%M%S).png | wl-copy
+    bindsym Shift+Print exec mkdir -p ~/Pictures/Screenshots/Clipboard && grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/Clipboard/$(date +%Y%m%d-%H%M%S).png | wl-copy
+    bindsym Print exec falmeshot gui
 
 #
 # Status Bar:
@@ -307,6 +310,8 @@ bar {
     #     inactive_workspace #32323200 #32323200 #5c5c5c
     # }
     status_command i3blocks
+    tray_output *
+    tray_padding 4
 }
 
 include /etc/sway/config.d/*

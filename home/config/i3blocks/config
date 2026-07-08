@@ -15,13 +15,9 @@ command=IF=$(for f in /sys/class/net/*; do d=$(basename "$f"); case "$d" in lo|w
 interval=5
 
 [tailscale]
-command=command -v tailscale >/dev/null 2>&1 || exit 0; J=$(tailscale status --json 2>/dev/null); STATE=$(echo "$J" | jq -r '.BackendState'); [ "$STATE" = "Running" ] || exit 0; EXIT=$(echo "$J" | jq -r '[.Peer[]? | select(.ExitNode==true) | .HostName][0] // empty'); [ -z "$EXIT" ] && exit 0; echo "Exit: $EXIT"; echo "Exit: $EXIT"; echo "#73C991"
+command=command -v tailscale >/dev/null 2>&1 || exit 0; J=$(tailscale status --json 2>/dev/null); STATE=$(echo "$J" | jq -r '.BackendState'); [ "$STATE" = "Running" ] || (echo "tailscale down"; echo "tailscale down"; echo "#FF0000";exit 0); EXIT=$(echo "$J" | jq -r '[.Peer[]? | select(.ExitNode==true) | .HostName][0] // empty'); [ -z "$EXIT" ] && exit 0; echo "Exit: $EXIT"; echo "Exit: $EXIT"; echo "#008800"
 interval=10
 
-[battery]
-command=/usr/libexec/i3blocks/battery
-interval=30
-BAT_NUMBER=0
 
 [powerprofile]
 command=~/.config/i3blocks/scripts/powerprofile
@@ -44,6 +40,12 @@ command=~/.config/i3blocks/scripts/volume
 interval=once
 signal=10
 
+[battery]
+command=/usr/libexec/i3blocks/battery
+interval=30
+BAT_NUMBER=0
+
 [time]
 command=date '+%d.%m %a %H:%M:%S'
 interval=1
+color=#008800

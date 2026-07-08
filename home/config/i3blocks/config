@@ -14,6 +14,10 @@ interval=5
 command=IF=$(for f in /sys/class/net/*; do d=$(basename "$f"); case "$d" in lo|wl*|ww*) continue;; esac; [ -d "$f/wireless" ] && continue; echo "$d"; break; done); [ -z "$IF" ] && exit 0; [ "$(cat /sys/class/net/$IF/operstate 2>/dev/null)" = "up" ] || exit 0; IFACE="$IF" LABEL=E: /usr/libexec/i3blocks/iface
 interval=5
 
+[tailscale]
+command=command -v tailscale >/dev/null 2>&1 || exit 0; J=$(tailscale status --json 2>/dev/null); STATE=$(echo "$J" | jq -r '.BackendState'); [ "$STATE" = "Running" ] || exit 0; EXIT=$(echo "$J" | jq -r '[.Peer[]? | select(.ExitNode==true) | .HostName][0] // empty'); [ -z "$EXIT" ] && exit 0; echo "Exit: $EXIT"; echo "Exit: $EXIT"; echo "#73C991"
+interval=10
+
 [battery]
 command=/usr/libexec/i3blocks/battery
 interval=30

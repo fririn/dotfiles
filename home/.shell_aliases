@@ -92,6 +92,11 @@ alias ke="kubectl edit"
 kg()  { kubectl get $1 -o wide }
 kga() { kubectl get $1 -o wide --all-namespaces }
 kns() { kubectl config set-context --current --namespace=$1 }
+alias ktx="kubectl config use-context"
+alias keu="kubectl config use-context prod-eu-pinniped"
+alias kus="kubectl config use-context prod-us-pinniped"
+alias kap="kubectl config use-context prod-asia-pinniped"
+
 alias g='gcloud'
 
 # ── Terraform ─────────────────────────────────────────────────────────────────

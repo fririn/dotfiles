@@ -1,26 +1,17 @@
-# i3blocks configuration file.
-# see "man i3blocks" for documentation.
-
 separator=true
 separator_block_width=20
 
-
 [sway-focusedwindow]
-command=~/.config/i3blocks/scripts/sway-focusedwindow/sway-focusedwindow
+command=/usr/libexec/i3blocks/sway-focusedwindow
 interval=persist
-
-[volume]
-command=~/.config/i3blocks/scripts/volume
-interval=once
-signal=10
-
+color=#555555
 
 [wireless]
-command=~/.config/i3blocks/scripts/wireless
+command=IF=$(for f in /sys/class/net/*/wireless; do basename "${f%/wireless}"; break; done); [ -z "$IF" ] && exit 0; ip -4 addr show "$IF" 2>/dev/null | grep -q 'inet ' || exit 0; IFACE="$IF" display_wifi_name=1 LABEL=W: /usr/libexec/i3blocks/iface
 interval=5
 
 [ethernet]
-command=~/.config/i3blocks/scripts/ethernet
+command=IF=$(for f in /sys/class/net/*; do d=$(basename "$f"); case "$d" in lo|wl*|ww*) continue;; esac; [ -d "$f/wireless" ] && continue; echo "$d"; break; done); [ -z "$IF" ] && exit 0; [ "$(cat /sys/class/net/$IF/operstate 2>/dev/null)" = "up" ] || exit 0; IFACE="$IF" LABEL=E: /usr/libexec/i3blocks/iface
 interval=5
 
 [battery]
@@ -41,17 +32,13 @@ command=/usr/libexec/i3blocks/memory
 interval=5
 
 [kubernetes]
-command=~/.config/i3blocks/scripts/kubernetes/kubernetes
+command=/usr/libexec/i3blocks/kubernetes
 interval=10
 
-# [calendar]
-# command=~/.config/i3blocks/scripts/calendar/calendar
-# interval=1
-# LABEL= 
-# DATEFMT=+%H:%M:%S
-# # SHORTFMT=+%H:%M:%S
-# HEIGHT=180
-# WIDTH=220
+[volume]
+command=~/.config/i3blocks/scripts/volume
+interval=once
+signal=10
 
 [time]
 command=date '+%d.%m %a %H:%M:%S'

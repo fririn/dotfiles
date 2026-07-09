@@ -96,13 +96,27 @@ for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fa
 done
 
 # ---------------------------------------------------------------------------
-# 7. Claude Code CLI
+# 7. TLP battery care config (overwrites the package default)
+# ---------------------------------------------------------------------------
+log "Installing TLP battery care config"
+sudo install -m 0644 -o root -g root "$DOTFILES_DIR/setup/tlp.conf" /etc/tlp.conf
+
+log "Installing passwordless sudo rule for TLP profile switching (i3blocks)"
+sudo visudo -cf "$DOTFILES_DIR/setup/tlp-sudoers"
+# "zz-" prefix: /etc/sudoers.d/wheel grants a blanket ALL=(ALL) ALL that
+# requires a password. Sudoers files are read in lexical order and the last
+# match wins, so this file must sort after "wheel" or its NOPASSWD rule
+# gets overridden.
+sudo install -m 0440 -o root -g root "$DOTFILES_DIR/setup/tlp-sudoers" /etc/sudoers.d/zz-tlp-i3blocks
+
+# ---------------------------------------------------------------------------
+# 8. Claude Code CLI
 # ---------------------------------------------------------------------------
 log "Installing Claude Code"
 curl -fsSL https://claude.ai/install.sh | bash
 
 # ---------------------------------------------------------------------------
-# 8. Tailscale (interactive: prints a URL to authenticate)
+# 9. Tailscale (interactive: prints a URL to authenticate)
 # ---------------------------------------------------------------------------
 log "Bringing up tailscale (follow the printed link to authenticate)"
 sudo tailscale up

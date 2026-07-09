@@ -1,21 +1,25 @@
 #!/bin/sh
 
+get_profile() {
+    tlp-stat -s | awk -F'= ' '/TLP profile/ {print $2}' | cut -d/ -f1
+}
+
 # Cycle on left click
 if [ "$BLOCK_BUTTON" = "1" ]; then
-    current=$(powerprofilesctl get)
+    current=$(get_profile)
     case "$current" in
-        power-saver)  powerprofilesctl set balanced ;;
-        balanced)     powerprofilesctl set performance ;;
-        performance)  powerprofilesctl set power-saver ;;
-        *)            powerprofilesctl set balanced ;;
+        power-saver)  sudo tlp balanced >/dev/null ;;
+        balanced)     sudo tlp performance >/dev/null ;;
+        performance)  sudo tlp power-saver >/dev/null ;;
+        *)            sudo tlp balanced >/dev/null ;;
     esac
 fi
 
-profile=$(powerprofilesctl get)
+profile=$(get_profile)
 
 case "$profile" in
     power-saver)  color="#00FF00"; label="eco" ;;
-    balanced)     color="#FFFF00"; label="balanced" ;;
+    balanced)     color="#FFFF00"; label="bal" ;;
     performance)  color="#FF0000"; label="perf" ;;
     *)            color="#FFFFFF"; label="$profile" ;;
 esac

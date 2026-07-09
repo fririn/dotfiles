@@ -30,6 +30,10 @@ export PATH="$PATH:$HOME/.local/bin"
 alias y="yazi"
 alias ra="yazi"
 
+# default LS_COLORS uses ow=34;42 (blue-on-green) for 777 dirs, unreadable in
+# foot - override to match tw's black-on-green (30;42) for contrast
+export LS_COLORS="${LS_COLORS}:ow=30;42:"
+
 # sway has no session D-Bus unless something starts one first (no display
 # manager / session wrapper in this setup) - without it, swaybar's tray and
 # other D-Bus-dependent apps (flameshot, etc.) silently fail to register.

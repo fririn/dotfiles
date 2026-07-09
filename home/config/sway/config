@@ -25,11 +25,12 @@ set $menu pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,windo
 default_border pixel 2
 default_floating_border pixel 2
 
+seat seat0 xcursor_theme Adwaita 48
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg /home/paul/Pictures/Wallpapers/a_plant_in_front_of_a_window.png fill
 output eDP-1 mode 1920x1200 pos 0 0 
 output DP-1 mode 2560x1440 pos -2560 -1000 
 
@@ -60,17 +61,23 @@ exec fcitx5
 exec wl-paste --type text --watch cliphist -max-items 99999999 store
 exec wl-paste --type image --watch cliphist -max-items 99999999 store
 # Notification daemon
+exec mako
 #exec swaync
 
 exec flameshot
 
 # Startup apps, launched on their target workspace.
-exec sh -c 'swaymsg workspace terminal; exec $term -e tmux'
-exec sh -c 'swaymsg workspace number 1; exec zen-browser --no-remote -P "work"'
-exec sh -c 'swaymsg workspace number 2; exec slack'
-exec sh -c 'swaymsg workspace number 4; exec zen-browser --no-remote -P "Default (release)"'
-exec sh -c 'swaymsg workspace number 5; exec telegram-desktop'
+# exec sh -c 'swaymsg workspace terminal; exec $term -e tmux'
+# exec sh -c 'swaymsg workspace number 1; exec zen-browser --no-remote -P "work"'
+# exec sh -c 'swaymsg workspace number 2; exec slack'
+# exec sh -c 'swaymsg workspace number 4; exec zen-browser --no-remote -P "Default (release)"'
+# exec sh -c 'swaymsg workspace number 5; exec telegram-desktop'
 #exec sh -c 'swaymsg workspace number 7; exec anki'
+exec sh -c '\
+  swaymsg workspace terminal;      foot -e tmux & sleep 0.6; \
+  swaymsg workspace number 1;      zen-browser --no-remote -P "work" & sleep 1.5; \
+  swaymsg workspace number 4;      firefox & sleep 1.5; \
+  swaymsg workspace number 5;      telegram-desktop & sleep 1'
 
 ### Idle configuration
 #
@@ -285,7 +292,7 @@ bindsym --to-code $mod+r mode "resize"
 
     # Screenshot: select an area, save it timestamped, and copy to clipboard
     bindsym Shift+Print exec mkdir -p ~/Pictures/Screenshots/Clipboard && grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/Clipboard/$(date +%Y%m%d-%H%M%S).png | wl-copy
-    bindsym Print exec falmeshot gui
+    bindsym Print exec flameshot gui
 
 #
 # Status Bar:

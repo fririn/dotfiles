@@ -33,9 +33,6 @@ default_floating_border pixel 2
 output eDP-1 mode 1920x1200 pos 0 0 
 output DP-1 mode 2560x1440 pos -2560 -1000 
 
-# Listing multiple outputs makes sway fall back automatically -- and
-# reassign live on hotplug -- to the next available one. No script needed
-# for this part; DP-1 is preferred, eDP-1 (laptop panel) is the fallback.
 workspace 1 output HDMI-A-1 DP-1 eDP-1
 workspace 2 output HDMI-A-1 DP-1 eDP-1
 workspace 3 output HDMI-A-1 DP-1 eDP-1
@@ -68,9 +65,6 @@ exec wl-paste --type image --watch cliphist -max-items 99999999 store
 exec flameshot
 
 # Startup apps, launched on their target workspace.
-# Sway has no true "silent" spawn-to-workspace like Hyprland's exec-once
-# rule, so this switches workspace right before each launch -- expect a
-# brief flicker through these workspaces at login.
 exec sh -c 'swaymsg workspace terminal; exec $term -e tmux'
 exec sh -c 'swaymsg workspace number 1; exec zen-browser --no-remote -P "work"'
 exec sh -c 'swaymsg workspace number 2; exec slack'
@@ -143,7 +137,7 @@ exec sh -c 'swaymsg workspace number 5; exec telegram-desktop'
     bindsym --to-code $mod+Shift+r reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+Escape exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    bindsym Ctrl+Alt+Delete exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #

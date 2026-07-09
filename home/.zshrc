@@ -30,6 +30,17 @@ export PATH="$PATH:$HOME/.local/bin"
 alias y="yazi"
 alias ra="yazi"
 
+# sway has no session D-Bus unless something starts one first (no display
+# manager / session wrapper in this setup) - without it, swaybar's tray and
+# other D-Bus-dependent apps (flameshot, etc.) silently fail to register.
+sway() {
+  if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    dbus-run-session -- sway "$@"
+  else
+    command sway "$@"
+  fi
+}
+
 # fzf with preview (same as Linux)
 alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
 

@@ -1,7 +1,4 @@
 #!/bin/bash
-# Bootstraps a fresh Void Linux install into this machine's current sway/foot
-# setup. Reconstructed from ~/.bash_history and ~/.zsh_history.
-#
 # Run as the regular user (not root); sudo is invoked where root is needed.
 
 set -euo pipefail
@@ -31,16 +28,46 @@ sudo xbps-reconfigure -f glibc-locales
 # ---------------------------------------------------------------------------
 log "Installing packages"
 sudo xbps-install -Sy \
-    intel-ucode linux-firmware-intel mesa mesa-dri mesa-vulkan-intel \
+    mesa mesa-dri \
     dejavu-fonts-ttf xorg-fonts nerd-fonts \
-    elogind dbus wayland polkit xdg-desktop-portal xdg-desktop-portal-wlr \
+    elogind dbus wayland polkit \
+    xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk \
+    qt5-wayland qt6-wayland \
     sway foot foot-terminfo ncurses-term fuzzel rofi dmenu \
-    brightnessctl grim slurp wl-clipboard jq \
+    brightnessctl grim slurp wl-clipboard cliphist flameshot mako libnotify jq \
     tlp iwd \
     zsh tmux yazi fastfetch neovim git rsync curl unzip gcc psmisc \
-    kitty i3blocks i3blocks-blocklets acpi iw ethtool \
+    kitty i3blocks i3blocks-blocklets acpi lm_sensors playerctl perl iw ethtool \
+    alsa-utils bc \
+    htop ncdu xtools kubectl k9s postgresql-client \
     firefox qutebrowser telegram-desktop steam \
-    nodejs tailscale
+    nodejs tailscale ripgrep fzf
+
+# Intel-specific microcode/firmware/GPU packages -- detected and installed
+# only on hosts that actually have Intel silicon, so this stays portable to
+# AMD/other CPUs and GPUs.
+is_intel_cpu() {
+    grep -q '^vendor_id[[:space:]]*:[[:space:]]*GenuineIntel' /proc/cpuinfo
+}
+is_intel_gpu() {
+    local class vendor
+    for dev in /sys/bus/pci/devices/*/; do
+        class=$(cat "${dev}class" 2>/dev/null)
+        vendor=$(cat "${dev}vendor" 2>/dev/null)
+        [ "${class#0x03}" != "$class" ] && [ "$vendor" = "0x8086" ] && return 0
+    done
+    return 1
+}
+
+if is_intel_cpu; then
+    log "Intel CPU detected, installing intel-ucode"
+    sudo xbps-install -Sy intel-ucode
+fi
+
+if is_intel_gpu; then
+    log "Intel GPU detected, installing mesa-vulkan-intel, linux-firmware-intel, intel-video-accel"
+    sudo xbps-install -Sy mesa-vulkan-intel linux-firmware-intel intel-video-accel
+fi
 
 # ---------------------------------------------------------------------------
 # 4. Services (runit)
@@ -59,6 +86,10 @@ enable_service elogind
 enable_service tlp
 enable_service iwd
 enable_service tailscaled
+# Usually already on by default from the Void installer, but enabled
+# explicitly here in case this is a minimal/manual base install.
+enable_service dhcpcd
+enable_service sshd
 
 # acpid conflicts with elogind's power/lid handling; iwd replaces
 # wpa_supplicant entirely -- both get disabled the same way they were here.
@@ -91,7 +122,7 @@ for f in .zshrc .zshenv .shell_aliases .tmux.conf .vimrc .gitconfig; do
 done
 
 mkdir -p "$HOME/.config"
-for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser; do
+for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser mako; do
     link "$DOTFILES_DIR/home/config/$app" "$HOME/.config/$app"
 done
 
@@ -110,34 +141,50 @@ sudo visudo -cf "$DOTFILES_DIR/setup/tlp-sudoers"
 sudo install -m 0440 -o root -g root "$DOTFILES_DIR/setup/tlp-sudoers" /etc/sudoers.d/zz-tlp-i3blocks
 
 # ---------------------------------------------------------------------------
-# 8. Claude Code CLI
+# 8. zen-browser (not in the Void repos; built locally via xbps-src, using
+#    https://github.com/salastro/zen-browser as the srcpkg template)
+# ---------------------------------------------------------------------------
+log "Building and installing zen-browser via xbps-src"
+VOID_PACKAGES_DIR="$HOME/.void_packages"
+if [ ! -d "$VOID_PACKAGES_DIR" ]; then
+    git clone https://github.com/void-linux/void-packages.git "$VOID_PACKAGES_DIR"
+fi
+if [ ! -d "$VOID_PACKAGES_DIR/srcpkgs/zen-browser" ]; then
+    git clone https://github.com/salastro/zen-browser.git \
+        "$VOID_PACKAGES_DIR/srcpkgs/zen-browser"
+fi
+(
+    cd "$VOID_PACKAGES_DIR"
+    ./xbps-src binary-bootstrap
+    ./xbps-src pkg zen-browser
+    sudo xbps-install --repository="$VOID_PACKAGES_DIR/hostdir/binpkgs" -y zen-browser
+)
+
+# ---------------------------------------------------------------------------
+# 9. Claude Code CLI
 # ---------------------------------------------------------------------------
 log "Installing Claude Code"
 curl -fsSL https://claude.ai/install.sh | bash
 
 # ---------------------------------------------------------------------------
-# 9. Tailscale (interactive: prints a URL to authenticate)
+# 10. Tailscale (interactive: prints a URL to authenticate)
 # ---------------------------------------------------------------------------
 log "Bringing up tailscale (follow the printed link to authenticate)"
 sudo tailscale up
+sudo tailscale set --operator="$USER"
 
 log "Done. Log out/in (or reboot) for the shell and service changes to take effect."
 
 # ---------------------------------------------------------------------------
 # Not automated -- do these by hand if you need them:
 #
-# - Copying ~/.ssh, ~/.oh-my-zsh, or ~/work from another machine via rsync.
-#   These depend on a specific reachable host and existing SSH access, so
-#   they aren't reproducible from a fresh install.
+# - Copying ~/.ssh, ~/.oh-my-zsh, ~/.kube, ~/work, ~/development, ~/Pictures,
+#   or ~/Documents from another machine via rsync. These depend on a specific
+#   reachable host and existing SSH access, so they aren't reproducible from
+#   a fresh install.
 #
-# - zen-browser: not in the Void repos. It was previously built locally via
-#   void-packages/xbps-src using https://github.com/salastro/zen-browser as
-#   the srcpkg template:
-#     git clone https://github.com/void-linux/void-packages.git
-#     mkdir -p void-packages/srcpkgs
-#     git clone https://github.com/salastro/zen-browser.git \
-#         void-packages/srcpkgs/zen-browser
-#     cd void-packages && ./xbps-src pkg zen-browser
-#   This wasn't confirmed working (not currently installed on this machine),
-#   so it's left as a manual step rather than baked into this script.
+# - pinniped CLI: download the linux-amd64 binary from the pinniped GitHub
+#   releases page, chmod +x, and move it to /usr/local/bin/pinniped. Not
+#   packaged in the Void repos and the release URL is version-specific, so
+#   it's left as a manual step.
 # ---------------------------------------------------------------------------

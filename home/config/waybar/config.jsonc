@@ -1,243 +1,106 @@
 {
-  "include": [
-    "$HOME/.config/waybar/Modules",
-    //   "$HOME/.config/waybar/ModulesWorkspaces",
-    "$HOME/.config/waybar/ModulesCustom",
-    "$HOME/.config/waybar/ModulesGroups",
-    "$HOME/.config/waybar/UserModules",
-  ],
-  "layer": "bottom",
-  //"output": "HDMI-A-1",
-  "output": "DP-2",
-  //"output": "eDP-1",
+  "layer": "top",
+  "position": "top",
+  "height": 20,
+  "spacing": 0,
   "modules-left": [
-    "hyprland/workspaces",
+    "sway/workspaces",
+    "custom/kubernetes",
+    "sway/window"
   ],
   "modules-center": [
-    "clock",
-    //"hyprland/window"],
-    "hyprland/language",
+    "clock"
   ],
   "modules-right": [
-    "group/mobo_drawer",
-    //"memory",
-    //"power-profiles-daemon",
-    //"custom/backlight",
-    //"pulseaudio",
-    "group/audio",
-    //"backlight",
-    //"custom/updater",
-    "tray",
-    //"battery",
-    //"custom/swaync",
+    "custom/wireless",
+    "custom/ethernet",
+    "custom/tailscale",
+    "custom/load_average",
+    "custom/memory",
+    "custom/volume",
+    "custom/powerprofile",
+    "custom/battery",
+    "tray"
   ],
-  "hidden-state": "hide",
-  "show-on-hover": true,
-  "exclusive": true,
-  "passthrough": false,
-  "signal": {
-    "usr1": "toggleVisibility" // THIS MUST BE PRESENT
+  "sway/workspaces": {
+    "all-outputs": true
   },
-  "hyprland/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
-    "all-outputs": true,
-    "persistent_workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": [],
-      "6": [],
-      "7": [],
-      "8": [],
-      "9": [],
-      "10": []
-    }
+  // Mirrors [sway-focusedwindow] (/usr/libexec/i3blocks/sway-focusedwindow),
+  // called with no args in i3blocks so title length is unlimited.
+  "sway/window": {
+    "format": "{title}"
   },
-  "backlight/slider": {
-    "min": 0,
-    "max": 100,
-    "orientation": "horizontal",
-    "device": "intel_backlight"
-  },
-  "custom/backlight": {
-    "exec": "echo '✨'",
-    "interval": 1,
-    "format": "{}"
-  },
-  "hyprland/window": {
-    "format": "{class} -> {title}",
-    "max-length": "30",
-    "rewrite": {
-      "(.*) — Mozilla Firefox": "🌎 $1"
-    },
-    "separate-outputs": false
-  },
+  // Mirrors [time]: command=date '+%d.%m %a %H:%M:%S', color=#008800
   "clock": {
     "interval": 1,
-    "format": "<span foreground='#dbabdb'>  </span><span>{:L%d.%m %A %H:%M:%S}</span>",
-    "locale": "ja_JP.UTF-8",
-    "format-alt": "<span color='#dbabdb'>  </span>{:L%H:%M}",
-    "tooltip-format": "<big>{:L%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    "format": "<span color='#008800'>{:%d.%m %a %H:%M:%S}</span>"
   },
-  "load": {
-    "interval": 1,
-    "format": "{load1}",
-    "on-click": "kitty -e htop"
-  },
-  "systemd-failed-units": {
-    "hide-on-ok": true, // Do not hide if there is zero failed units.
-    "format": "✗ {nr_failed}",
-    "format-ok": "✓",
-    "system": true, // Monitor failed systemwide units.
-    "user": true // Ignore failed user units.
-  },
-  "hyprland/language": {
-    "format": "{}",
-    "format-en": "EN",
-    "format-ru": "RU"
-    //"format-en": "AMERICA, HELL YEAH!",
-    //"format-ru": "Я РУССКИЙ!"
-  },
-  "backlight": {
-    "device": "amdgpu_b10",
-    "format": "<span color='#94beec'>{icon}</span> {percent}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
-  },
-  "mpd": {
-    "format": "{stateIcon} {artist} - {title}", //({elapsedTime:%M:%S}/{totalTime:%M:%S})  ",
-    "format-disconnected": "",
-    "format-stopped": "",
-    "interval": 10,
-    "consume-icons": {
-      "on": " " // Icon shows only when "consume" is on
-    },
-    "random-icons": {
-      "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
-      "on": " "
-    },
-    "repeat-icons": {
-      "on": " "
-    },
-    "single-icons": {
-      "on": "1 "
-    },
-    "state-icons": {
-      "paused": "",
-      "playing": ""
-    },
-    "tooltip-format": "MPD (connected)",
-    "tooltip-format-disconnected": "MPD (disconnected)"
-  },
-  "network": {
-    "interface": "wlan0",
-    "format": "{ifname}",
-    "format-wifi": "<span color='#8a8af8'> </span>{essid}({signalStrength}%)",
-    "format-ethernet": "{ipaddr}/{cidr} ",
-    "format-disconnected": "<span color='#e80064'>󰖪 </span>No Network",
-    "on-click": "kitty nmtui"
-  },
-  "battery": {
-    "format": "<span color='#81dc98'>{icon}</span> {capacity}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ],
-    "format-charging": "<span color='#81dc98'></span> {capacity}%"
-  },
-  "pulseaudio": {
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "format": "<span color='#6dd9d9'> </span> {volume}%",
-    "format-muted": "<span color='#ff0000'> </span>",
-    "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "default": [
-        " ",
-        " "
-      ]
-    },
-    "on-click-right": "",
-    "on-click-middle": "pavucontrol"
-  },
-  "memory": {
-    "format": "{}%",
-    "on-click": "kitty htop"
-  },
-  "tray": {
-    "icon-size": 16,
-    "reverse-direction": false,
-    "spacing": 6
-  },
-  "cpu": {
-    "format": "<span foreground='#7bc0b3'></span> {usage}%"
-  },
-  "temperature": {
-    "critical-threshold": 80,
-    "format": "<span foreground='#5d73ca'></span> {temperatureC}°C"
-  },
-  "custom/playerctl": {
-    "format": "{icon}<span>{}</span>",
+  // Mirrors [wireless]
+  "custom/wireless": {
+    "exec": "$HOME/.config/waybar/scripts/wireless.sh",
     "return-type": "json",
-    "max-length": 55,
-    "exec": "playerctl -a metadata --format '{\"text\": \"  {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
-    "on-click-middle": "playerctl previous",
-    "on-click": "playerctl play-pause",
-    "on-click-right": "playerctl next",
-    "format-icons": {
-      "Paused": "<span foreground='#6dd9d9'></span>",
-      "Playing": "<span foreground='#82db97'></span>"
-    }
+    "interval": 5
   },
-  "cava": {
-    "cava_config": "$XDG_CONFIG_HOME/cava/config",
-    "framerate": 30,
-    "autosens": 1,
-    "sensitivity": 100,
-    "bars": 7,
-    "lower_cutoff_freq": 50,
-    "higher_cutoff_freq": 10000,
-    "method": "pipewire",
-    "source": "auto",
-    "stereo": true,
-    "reverse": false,
-    "bar_delimiter": 0,
-    "monstercat": false,
-    "waves": false,
-    "noise_reduction": 0.77,
-    "input_delay": 2,
-    "format-icons": [
-      "▁",
-      "▂",
-      "▃",
-      "▄",
-      "▅",
-      "▆",
-      "▇",
-      "█"
-    ],
-    "actions": {
-      "on-click-right": "mode"
-    }
+  // Mirrors [ethernet]
+  "custom/ethernet": {
+    "exec": "$HOME/.config/waybar/scripts/ethernet.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [tailscale]
+  "custom/tailscale": {
+    "exec": "$HOME/.config/waybar/scripts/tailscale.sh",
+    "return-type": "json",
+    "interval": 10
+  },
+  // Mirrors [load_average] (~/.config/i3blocks/scripts/la)
+  "custom/load_average": {
+    "exec": "$HOME/.config/waybar/scripts/load_average.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [memory] (/usr/libexec/i3blocks/memory)
+  "custom/memory": {
+    "exec": "$HOME/.config/waybar/scripts/memory.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [kubernetes] (/usr/libexec/i3blocks/kubernetes)
+  "custom/kubernetes": {
+    "exec": "$HOME/.config/waybar/scripts/kubernetes.sh",
+    "return-type": "json",
+    "interval": 10
+  },
+  // Mirrors [volume]: interval=once, signal=10, left/middle/right click + scroll.
+  "custom/volume": {
+    "exec": "$HOME/.config/waybar/scripts/volume.sh",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 10,
+    "on-click": "$HOME/.config/waybar/scripts/volume.sh mute",
+    "on-click-middle": "pavucontrol",
+    "on-click-right": "$HOME/.config/waybar/scripts/volume.sh cycle-sink",
+    "on-scroll-up": "$HOME/.config/waybar/scripts/volume.sh up",
+    "on-scroll-down": "$HOME/.config/waybar/scripts/volume.sh down"
+  },
+  // Mirrors [powerprofile]: interval=once, left click cycles profile.
+  // i3blocks re-runs a block automatically after every click; waybar does
+  // not, so "signal": 11 is used to force that same refresh from the script.
+  "custom/powerprofile": {
+    "exec": "$HOME/.config/waybar/scripts/powerprofile.sh",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 11,
+    "on-click": "$HOME/.config/waybar/scripts/powerprofile.sh cycle"
+  },
+  // Mirrors [battery]: /usr/libexec/i3blocks/battery, BAT_NUMBER=0
+  "custom/battery": {
+    "exec": "BAT_NUMBER=0 $HOME/.config/waybar/scripts/battery.sh",
+    "return-type": "json",
+    "interval": 30
+  },
+  // Mirrors tray_output * / tray_padding 4
+  "tray": {
+    "spacing": 4
   }
 }

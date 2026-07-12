@@ -1,1 +1,143 @@
-style/minimal_bubbles.css
+/* Flat, plain i3bar-style look (the sway `bar {}` colors block is commented
+   out in ~/.config/sway/config, so these are sway/i3bar's own built-in
+   defaults) instead of the rounded floating-pill theme in .archive/. */
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+#workspaces button {
+  padding: 0 1px;
+  background-color: #222222;
+  color: #888888;
+  border: 1px solid #333333;
+  border-radius: 0;
+}
+
+#workspaces button.focused {
+  background-color: #285577;
+  color: #ffffff;
+  border: 1px solid #4c7899;
+}
+
+#workspaces button.active {
+  background-color: #5f676a;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+#workspaces button.urgent {
+  background-color: #900000;
+  color: #ffffff;
+  border: 1px solid #2f343a;
+}
+
+#clock {
+  padding: 0 10px;
+}
+
+/* One shared style for every block on the right, each separated by a thin
+   vertical line — mirrors i3blocks' separator=true, separator_block_width=20 */
+#window,
+#custom-wireless,
+#custom-ethernet,
+#custom-tailscale,
+#custom-load_average,
+#custom-memory,
+#custom-kubernetes,
+#custom-volume,
+#custom-powerprofile,
+#custom-battery,
+#tray {
+  color: #ffffff;
+  padding: 0 10px;
+  border-left: 1px solid #666666;
+}
+
+/* [sway-focusedwindow] had a static color=#555555 */
+#window {
+  color: #555555;
+}
+
+#tray {
+  border-left: 1px solid #666666;
+}
+
+#tray menu {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Dynamic colors below mirror each i3blocks script's own color output */
+
+#custom-tailscale.down {
+  color: #ff0000;
+}
+
+#custom-tailscale.exit {
+  color: #008800;
+}
+
+#custom-load_average.warning {
+  color: #ffff00;
+}
+
+#custom-load_average.critical {
+  color: #ff0000;
+}
+
+#custom-memory.warning {
+  color: #fff600;
+}
+
+#custom-memory.high {
+  color: #ffae00;
+}
+
+#custom-memory.critical {
+  color: #ff0000;
+}
+
+#custom-kubernetes.k8s {
+  color: #4040ff;
+}
+
+#custom-powerprofile.eco {
+  color: #00ff00;
+}
+
+#custom-powerprofile.bal {
+  color: #ffff00;
+}
+
+#custom-powerprofile.perf {
+  color: #ff0000;
+}
+
+#custom-battery.good {
+  color: #a8ff00;
+}
+
+#custom-battery.medium {
+  color: #fff600;
+}
+
+#custom-battery.low {
+  color: #ffae00;
+}
+
+#custom-battery.urgent,
+#custom-battery.critical {
+  color: #ff0000;
+}
+
+#custom-battery.charging {
+  color: #81dc98;
+}

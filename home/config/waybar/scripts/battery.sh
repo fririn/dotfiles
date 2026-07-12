@@ -6,10 +6,11 @@
 
 bat_number="${BAT_NUMBER:-0}"
 
-# mdi-battery-charging (Nerd Font)
-charging_icon=$(printf '\357\226\203')
-# mdi-battery-10 .. mdi-battery-100 (Nerd Font), lowest to highest charge
-icons=$(printf '\357\225\270 \357\225\271 \357\225\272 \357\225\273 \357\225\274 \357\225\275 \357\225\276 \357\225\277 \357\226\200 \357\226\201')
+# fa-bolt (Nerd Font, Font Awesome 4 PUA range — confirmed present in the
+# installed JetBrainsMono Nerd Font; the mdi range used previously was not)
+charging_icon=$(printf '\357\203\247')
+# fa-battery-empty .. fa-battery-full, lowest to highest charge
+icons=$(printf '\357\211\204 \357\211\203 \357\211\202 \357\211\201 \357\211\200')
 
 line=$(acpi -b 2>/dev/null | grep "Battery $bat_number")
 [ -z "$line" ] && exit 0
@@ -30,9 +31,13 @@ esac
 if [ "$charging" = true ]; then
     icon="$charging_icon"
 else
-    idx=$((percent / 10))
-    [ "$idx" -gt 9 ] && idx=9
-    icon=$(printf '%s' "$icons" | tr ' ' '\n' | sed -n "$((idx + 1))p")
+    if   [ "$percent" -lt 20 ]; then idx=1
+    elif [ "$percent" -lt 40 ]; then idx=2
+    elif [ "$percent" -lt 60 ]; then idx=3
+    elif [ "$percent" -lt 85 ]; then idx=4
+    else idx=5
+    fi
+    icon=$(printf '%s' "$icons" | tr ' ' '\n' | sed -n "${idx}p")
 fi
 
 text="$icon $percent%"

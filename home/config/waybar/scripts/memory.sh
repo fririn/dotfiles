@@ -1,6 +1,4 @@
 #!/bin/sh
-# waybar custom/memory
-# Native rewrite of /usr/libexec/i3blocks/memory for waybar.
 
 awk '
 /^MemTotal:/ { total=$2 }
@@ -18,6 +16,6 @@ END {
     else if (pct > 80) class = "high"
     else if (pct > 70) class = "warning"
 
-    printf("{\"text\":\"%.1fG/%.1fG (%.f%%)\",\"class\":\"%s\"}\n", used, tot, pct, class)
+    printf("{\"text\":\"%.1fG\",\"class\":\"%s\"}\n", used, tot, pct, class)
 }
 ' /proc/meminfo

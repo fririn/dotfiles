@@ -1,10 +1,15 @@
 #!/bin/sh
 # waybar custom/battery
-# Native rewrite of /usr/libexec/i3blocks/battery (acpi-based) for waybar.
+# Native rewrite of /usr/libexec/i3blocks/battery for waybar.
+# Reads /sys/class/power_supply directly (the previous acpi-based version
+# silently printed nothing when the acpi tool wasn't installed).
 # Icon-only text (charge-level or charging glyph, no "DIS"/"CHR" wording);
 # the time-remaining/time-to-full estimate lives in the tooltip instead.
 
 bat_number="${BAT_NUMBER:-0}"
+bat="/sys/class/power_supply/BAT$bat_number"
+
+[ -d "$bat" ] || exit 0
 
 # fa-bolt (Nerd Font, Font Awesome 4 PUA range — confirmed present in the
 # installed JetBrainsMono Nerd Font; the mdi range used previously was not)
@@ -12,19 +17,20 @@ charging_icon=$(printf '\357\203\247')
 # fa-battery-empty .. fa-battery-full, lowest to highest charge
 icons=$(printf '\357\211\204 \357\211\203 \357\211\202 \357\211\201 \357\211\200')
 
-line=$(acpi -b 2>/dev/null | grep "Battery $bat_number")
-[ -z "$line" ] && exit 0
-
-status=$(printf '%s' "$line" | sed -n 's/.*: \([A-Za-z ]*\), \([0-9]*\)%.*/\1/p')
-percent=$(printf '%s' "$line" | sed -n 's/.*: \([A-Za-z ]*\), \([0-9]*\)%.*/\2/p')
+status=$(cat "$bat/status" 2>/dev/null)
+percent=$(cat "$bat/capacity" 2>/dev/null)
 [ -z "$percent" ] && exit 0
 
 charging=false
 case "$status" in
     Charging) charging=true ;;
     Unknown)
-        ac=$(acpi -a 2>/dev/null | sed -n 's/.*: \([a-z-]*\)/\1/p')
-        [ "$ac" = "on-line" ] && charging=true
+        # AC adapter name varies by machine (AC, ACAD, ADP1, ...), so find it
+        # by type instead of by name.
+        for psu in /sys/class/power_supply/*/; do
+            [ "$(cat "$psu/type" 2>/dev/null)" = "Mains" ] || continue
+            [ "$(cat "$psu/online" 2>/dev/null)" = "1" ] && charging=true && break
+        done
         ;;
 esac
 
@@ -42,15 +48,25 @@ fi
 
 text="$icon $percent%"
 
-time=$(printf '%s' "$line" | sed -n 's/.*, \([0-9][0-9]:[0-9][0-9]\):.*/\1/p')
-if [ -n "$time" ]; then
-    if [ "$charging" = true ]; then
-        tooltip="Time to full: $time"
-    else
-        tooltip="Time remaining: $time"
+# Time estimate from energy/power counters (µWh / µW). Batteries that expose
+# charge_now/current_now instead work the same way since the units cancel.
+now=$(cat "$bat/energy_now" 2>/dev/null || cat "$bat/charge_now" 2>/dev/null)
+full=$(cat "$bat/energy_full" 2>/dev/null || cat "$bat/charge_full" 2>/dev/null)
+rate=$(cat "$bat/power_now" 2>/dev/null || cat "$bat/current_now" 2>/dev/null)
+
+tooltip="$status"
+if [ -n "$now" ] && [ -n "$rate" ] && [ "$rate" -gt 0 ] 2>/dev/null; then
+    mins=""
+    if [ "$charging" = true ] && [ -n "$full" ]; then
+        mins=$(( (full - now) * 60 / rate ))
+        label="Time to full"
+    elif [ "$status" = "Discharging" ]; then
+        mins=$(( now * 60 / rate ))
+        label="Time remaining"
     fi
-else
-    tooltip="$status"
+    if [ -n "$mins" ] && [ "$mins" -ge 0 ]; then
+        tooltip=$(printf '%s: %02d:%02d' "$label" $((mins / 60)) $((mins % 60)))
+    fi
 fi
 
 if [ "$charging" = true ]; then

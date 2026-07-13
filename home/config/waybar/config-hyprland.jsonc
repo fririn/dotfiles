@@ -1,0 +1,113 @@
+// Hyprland/Arch variant of config.jsonc.
+//
+// Everything here is identical to config.jsonc except the workspace/window
+// modules: "sway/workspaces" and "sway/window" only work under Sway's IPC,
+// so on Hyprland they're swapped for "hyprland/workspaces" and
+// "hyprland/window". Every custom/* module shells out to plain system
+// tools (ip, acpi, wpctl, kubectl, tlp-stat, tailscale) and has no
+// compositor dependency, so they're unchanged. style.css is shared as-is —
+// both workspace/window module families render to the same #workspaces
+// and #window CSS ids.
+//
+// waybar does not auto-detect the compositor, so this file has to be
+// selected explicitly, e.g. from hyprland.conf:
+//   exec-once = waybar -c ~/.config/waybar/config-hyprland.jsonc -s ~/.config/waybar/style.css
+{
+  "layer": "top",
+  "position": "top",
+  "height": 20,
+  "spacing": 0,
+  "modules-left": [
+    "hyprland/workspaces",
+    "custom/kubernetes",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "custom/network",
+    "custom/tailscale",
+    "custom/load_average",
+    "custom/memory",
+    "custom/volume",
+    "custom/powerprofile",
+    "custom/battery",
+    "tray"
+  ],
+  "hyprland/workspaces": {
+    "all-outputs": true
+  },
+  "hyprland/window": {
+    "format": "{title}"
+  },
+  // Mirrors [time]: command=date '+%d.%m %a %H:%M:%S', color=#008800
+  "clock": {
+    "interval": 1,
+    "format": "<span color='#008800'>{:%d.%m %a %H:%M:%S}</span>"
+  },
+  // Combines [wireless] and [ethernet]: shows whichever is connected
+  // (wired preferred over Wi-Fi when both are up).
+  "custom/network": {
+    "exec": "$HOME/.config/waybar/scripts/network.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [tailscale]
+  "custom/tailscale": {
+    "exec": "$HOME/.config/waybar/scripts/tailscale.sh",
+    "return-type": "json",
+    "interval": 10
+  },
+  // Mirrors [load_average] (~/.config/i3blocks/scripts/la)
+  "custom/load_average": {
+    "exec": "$HOME/.config/waybar/scripts/load_average.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [memory] (/usr/libexec/i3blocks/memory)
+  "custom/memory": {
+    "exec": "$HOME/.config/waybar/scripts/memory.sh",
+    "return-type": "json",
+    "interval": 5
+  },
+  // Mirrors [kubernetes] (/usr/libexec/i3blocks/kubernetes)
+  "custom/kubernetes": {
+    "exec": "$HOME/.config/waybar/scripts/kubernetes.sh",
+    "return-type": "json",
+    "interval": 10
+  },
+  // Mirrors [volume]: interval=once, signal=10, left/middle/right click + scroll.
+  "custom/volume": {
+    "exec": "$HOME/.config/waybar/scripts/volume.sh",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 10,
+    "on-click": "$HOME/.config/waybar/scripts/volume.sh mute",
+    "on-click-middle": "pavucontrol",
+    "on-click-right": "$HOME/.config/waybar/scripts/volume.sh cycle-sink",
+    "on-scroll-up": "$HOME/.config/waybar/scripts/volume.sh up",
+    "on-scroll-down": "$HOME/.config/waybar/scripts/volume.sh down"
+  },
+  // Mirrors [powerprofile]: interval=once, left click cycles profile.
+  // i3blocks re-runs a block automatically after every click; waybar does
+  // not, so "signal": 11 is used to force that same refresh from the script.
+  "custom/powerprofile": {
+    "exec": "$HOME/.config/waybar/scripts/powerprofile.sh",
+    "return-type": "json",
+    "interval": "once",
+    "signal": 11,
+    "on-click": "$HOME/.config/waybar/scripts/powerprofile.sh cycle"
+  },
+  // Mirrors [battery]: /usr/libexec/i3blocks/battery, BAT_NUMBER=0
+  // (check BAT_NUMBER is still correct for this machine's battery)
+  "custom/battery": {
+    "exec": "BAT_NUMBER=0 $HOME/.config/waybar/scripts/battery.sh",
+    "return-type": "json",
+    "interval": 30
+  },
+  // Mirrors tray_output * / tray_padding 4
+  "tray": {
+    "spacing": 4
+  }
+}

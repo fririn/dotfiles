@@ -79,10 +79,10 @@ exec flameshot
 # exec sh -c 'swaymsg workspace number 5; exec telegram-desktop'
 #exec sh -c 'swaymsg workspace number 7; exec anki'
 exec sh -c '\
-  swaymsg workspace terminal;      foot -e tmux & sleep 0.6; \
-  swaymsg workspace number 1;      zen-browser --no-remote -P "work" & sleep 1.5; \
-  swaymsg workspace number 4;      firefox & sleep 1.5; \
-  swaymsg workspace number 5;      telegram-desktop & sleep 1'
+  foot -e tmux;\
+  firefox; \
+  telegram-desktop;
+  #zen-browser --no-remote -P "work" & sleep 1.5; \
 
 ### Idle configuration
 #

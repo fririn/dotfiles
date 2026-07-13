@@ -1,24 +1,31 @@
-
 sort=+time
+max-history=10
+max-visible=10
 layer=overlay
+
 background-color=#000000
-border-size=1
-border-color=#555555
-border-radius=5
-default-timeout=10000
+border-size=2
+border-color=#4c7899
+border-radius=0
+
+width=600
+
+icons=0
+
+default-timeout=0
 ignore-timeout=1
-progress-color=#555555
+progress-color=#4c7899
 anchor=top-right
-font=JetBrainsMono Nerd Font Bold 16
+font=JetBrainsMono Nerd Font 11
 
 #[urgency=low]
-#border-color=#cccccc
+border-color=#4c7899
 
 #[urgency=normal]
-#border-color=#d08770
+#background-color=#d08770
 
 [urgency=high]
-border-color=#bf616a
+background-color=#bf616a
 default-timeout=0
 
 [category=mpd]

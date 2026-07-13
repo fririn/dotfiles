@@ -19,7 +19,8 @@
     "custom/volume",
     "custom/powerprofile",
     "custom/battery",
-    "tray"
+    "tray",
+    "custom/notification"
   ],
   "sway/workspaces": {
     "all-outputs": true
@@ -96,5 +97,29 @@
   // Mirrors tray_output * / tray_padding 4
   "tray": {
     "spacing": 4
+  },
+  // Notification count + history via swaync. "swaync-client -swb" streams
+  // waybar-formatted JSON on every notification event, so no polling script
+  // is needed. Left click toggles the control center (the history panel),
+  // right click toggles do-not-disturb. The {icon} is picked by the "alt"
+  // field swaync emits: notification/none, with dnd- and inhibited- variants.
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "exec-if": "which swaync-client",
+    "return-type": "json",
+    "format": "{icon} {text}",
+    "format-icons": {
+      "notification": "",
+      "none": "",
+      "dnd-notification": "",
+      "dnd-none": "",
+      "inhibited-notification": "",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "",
+      "dnd-inhibited-none": ""
+    },
+    "escape": true,
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw"
   }
 }

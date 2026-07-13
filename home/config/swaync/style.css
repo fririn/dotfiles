@@ -40,6 +40,34 @@
     border-radius: 10px;
 }
 
+/* Countdown bar under live popups: a 3px strip pinned to the bubble's bottom
+   edge, width animated from full to zero over the popup's lifetime. CSS can't
+   read the real timer, so the durations below must be kept in sync with
+   "timeout" (15) and "timeout-low" (10) in config.json. Critical popups never
+   expire, so they get no bar. Scoped to .floating-notifications so history
+   entries in the control center are unaffected. */
+@keyframes notification-timeout {
+    from { background-size: 100% 3px; }
+    to   { background-size: 0% 3px; }
+}
+
+.floating-notifications .notification {
+    background-image: linear-gradient(to right, @noti-border-color, @noti-border-color);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: 100% 3px;
+    animation: notification-timeout 15s linear forwards;
+}
+
+.floating-notifications .notification.low {
+    animation-duration: 10s;
+}
+
+.floating-notifications .notification.critical {
+    animation: none;
+    background-image: none;
+}
+
 .close-button {
     background: #f7768e;
     color: @noti-bg;

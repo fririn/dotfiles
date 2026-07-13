@@ -51,6 +51,7 @@ window#waybar {
 #custom-volume,
 #custom-powerprofile,
 #custom-battery,
+#custom-notification,
 #tray {
   color: #ffffff;
   padding: 0 10px;
@@ -136,4 +137,18 @@ window#waybar {
 
 #custom-battery.charging {
   color: #81dc98;
+}
+
+/* swaync sets the class from its state: pending notifications glow amber,
+   do-not-disturb variants dim to gray */
+#custom-notification.notification,
+#custom-notification.inhibited-notification {
+  color: #ffae00;
+}
+
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification,
+#custom-notification.dnd-inhibited-none,
+#custom-notification.dnd-inhibited-notification {
+  color: #888888;
 }

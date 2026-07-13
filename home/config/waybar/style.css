@@ -1,11 +1,8 @@
-/* Flat, plain i3bar-style look (the sway `bar {}` colors block is commented
-   out in ~/.config/sway/config, so these are sway/i3bar's own built-in
-   defaults) instead of the rounded floating-pill theme in .archive/. */
-
 * {
   font-family: "JetBrainsMono Nerd Font";
   font-size: 13px;
   min-height: 0;
+  padding-bottom: 1px;
 }
 
 window#waybar {
@@ -46,8 +43,7 @@ window#waybar {
 /* One shared style for every block on the right, each separated by a thin
    vertical line — mirrors i3blocks' separator=true, separator_block_width=20 */
 #window,
-#custom-wireless,
-#custom-ethernet,
+#custom-network,
 #custom-tailscale,
 #custom-load_average,
 #custom-memory,
@@ -58,7 +54,7 @@ window#waybar {
 #tray {
   color: #ffffff;
   padding: 0 10px;
-  border-left: 1px solid #666666;
+  border-left: 1px solid #333333;
 }
 
 /* [sway-focusedwindow] had a static color=#555555 */

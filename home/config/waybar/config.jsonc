@@ -12,8 +12,7 @@
     "clock"
   ],
   "modules-right": [
-    "custom/wireless",
-    "custom/ethernet",
+    "custom/network",
     "custom/tailscale",
     "custom/load_average",
     "custom/memory",
@@ -35,15 +34,10 @@
     "interval": 1,
     "format": "<span color='#008800'>{:%d.%m %a %H:%M:%S}</span>"
   },
-  // Mirrors [wireless]
-  "custom/wireless": {
-    "exec": "$HOME/.config/waybar/scripts/wireless.sh",
-    "return-type": "json",
-    "interval": 5
-  },
-  // Mirrors [ethernet]
-  "custom/ethernet": {
-    "exec": "$HOME/.config/waybar/scripts/ethernet.sh",
+  // Combines [wireless] and [ethernet]: shows whichever is connected
+  // (wired preferred over Wi-Fi when both are up).
+  "custom/network": {
+    "exec": "$HOME/.config/waybar/scripts/network.sh",
     "return-type": "json",
     "interval": 5
   },

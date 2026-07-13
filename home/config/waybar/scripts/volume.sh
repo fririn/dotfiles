@@ -59,10 +59,19 @@ if [ -z "$label" ]; then
     fi
 fi
 
+# fa-headphones / fa-volume-up (Nerd Font, Font Awesome 4 PUA range)
+headphones_icon=$(printf '\357\200\245')
+speaker_icon=$(printf '\357\200\250')
+
+case "$label" in
+    *[Hh]eadphone*|*[Hh]eadset*) label="$headphones_icon" ;;
+    *[Ss]peaker*)                label="$speaker_icon" ;;
+esac
+
 pct=$(echo "$vol * 100" | bc | cut -d. -f1)
 
 if echo "$mute" | grep -q MUTED; then
-    printf '{"text":"婢 muted (%s)","class":"muted"}\n' "$label"
+    printf '{"text":"muted %s ","class":"muted"}\n' "$label"
 else
-    printf '{"text":" %s%% (%s)","class":"unmuted"}\n' "$pct" "$label"
+    printf '{"text":"%s%% %s ","class":"unmuted"}\n' "$pct" "$label"
 fi

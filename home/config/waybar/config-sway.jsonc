@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 20,
+  "height": 25,
   "spacing": 0,
   "modules-left": [
     "sway/workspaces",
@@ -23,7 +23,7 @@
     "custom/notification"
   ],
   "sway/workspaces": {
-    "all-outputs": true
+    "all-outputs": false
   },
   // Mirrors [sway-focusedwindow] (/usr/libexec/i3blocks/sway-focusedwindow),
   // called with no args in i3blocks so title length is unlimited.

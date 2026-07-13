@@ -36,6 +36,7 @@ sudo xbps-install -Sy \
     sway foot foot-terminfo ncurses-term fuzzel rofi dmenu \
     brightnessctl grim slurp wl-clipboard cliphist flameshot mako libnotify jq \
     tlp iwd \
+    pipewire wireplumber wireplumber-elogind sof-firmware \
     zsh tmux yazi fastfetch neovim git rsync curl unzip gcc psmisc \
     kitty i3blocks i3blocks-blocklets acpi lm_sensors playerctl perl iw ethtool \
     alsa-utils bc \
@@ -122,7 +123,7 @@ for f in .zshrc .zshenv .shell_aliases .tmux.conf .vimrc .gitconfig; do
 done
 
 mkdir -p "$HOME/.config"
-for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser mako; do
+for app in sway i3blocks foot kitty rofi yazi nvim mpv k9s cliphist flameshot fastfetch qutebrowser mako wireplumber; do
     link "$DOTFILES_DIR/home/config/$app" "$HOME/.config/$app"
 done
 

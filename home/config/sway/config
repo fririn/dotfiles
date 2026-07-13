@@ -31,20 +31,22 @@ seat seat0 xcursor_theme Adwaita 48
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 output * bg /home/paul/Pictures/Wallpapers/a_plant_in_front_of_a_window.png fill
-output eDP-1 mode 1920x1200 pos 0 0 
-output DP-1 mode 2560x1440 pos -2560 -1000 
+output eDP-1 mode 1920x1200 pos 2560 700
+output DP-1 mode 2560x1440 pos 0 0 
+output HDMI-A-1 mode 1920x1080 pos 2560 -700
 
-workspace 1 output HDMI-A-1 DP-1 eDP-1
-workspace 2 output HDMI-A-1 DP-1 eDP-1
-workspace 3 output HDMI-A-1 DP-1 eDP-1
-workspace 4 output HDMI-A-1 DP-1 eDP-1
-workspace 5 output HDMI-A-1 DP-1 eDP-1
-workspace 6 output HDMI-A-1 DP-1 eDP-1
-workspace 7 output HDMI-A-1 DP-1 eDP-1
-workspace 8 output HDMI-A-1 DP-1 eDP-1
+workspace 1 output DP-1 HDMI-A-1 eDP-1
+workspace 2 output DP-1 HDMI-A-1 eDP-1
+workspace 3 output DP-1 HDMI-A-1 eDP-1
+workspace 4 output DP-1 HDMI-A-1 eDP-1
+workspace 5 output DP-1 HDMI-A-1 eDP-1
+workspace 6 output DP-1 HDMI-A-1 eDP-1
+workspace 7 output DP-1 HDMI-A-1 eDP-1
+workspace 8 output DP-1 HDMI-A-1 eDP-1
 workspace 9 output eDP-1 DP-1
 workspace 10 output eDP-1 DP-1 
-workspace terminal output HDMI-A-1 DP-1 eDP-1
+workspace 11 output eDP-1 HDMI-A-1 DP-1
+workspace terminal output DP-1 HDMI-A-1 eDP-1
 
 ### Autostart
 #
@@ -53,6 +55,9 @@ exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec ~/.config/sway/scripts/Polkit.sh
 exec pipewire
 exec pipewire-pulse
+
+
+exec waybar -c /home/paul/.config/waybar/config-sway.jsonc
 
 # for japanese input
 exec fcitx5
@@ -142,6 +147,9 @@ exec sh -c '\
 
     # Reload the configuration file
     bindsym --to-code $mod+Shift+r reload
+
+    bindsym --to-code $mod+Shift+b exec pkill -SIGUSR2 waybar
+    bindsym --to-code $mod+i exec pkill -SIGUSR1 waybar
 
     # Exit sway (logs you out of your Wayland session)
     bindsym Ctrl+Alt+Delete exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
@@ -313,7 +321,7 @@ bar {
     # status_command i3blocks
     # tray_output *
     # tray_padding 4
-    swaybar_command waybar -c ~/.config/waybar/config-sway.jsonc
+    # swaybar_command "waybar -c /home/paul/.config/waybar/config-sway.jsonc"
 }
 
 include /etc/sway/config.d/*

@@ -38,6 +38,10 @@ window#waybar {
 
 #clock {
   padding: 0 10px;
+  background-color: #285577;
+  border: 1px solid #4c7899;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 /* One shared style for every block on the right, each separated by a thin

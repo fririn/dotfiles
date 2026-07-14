@@ -16,7 +16,7 @@ $HOME/work/nomad-cluster"
 # 1. Pipe the list into rofi -dmenu
 # -i makes the search case-insensitive
 # -p sets a prompt
-selected=$(echo -e "$options" | rofi -dmenu -i -p "Open in $EDITOR" -theme "$RofiDir"/themes/launcher.rasi)
+selected=$(echo -e "$options" | rofi -dmenu -i -p "Open in $EDITOR" -theme "$RofiDir"/themes/launcher-i3.rasi)
 
 # 2. Check if a selection was made (user didn't press Esc)
 if [ -n "$selected" ]; then

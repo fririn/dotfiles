@@ -37,7 +37,7 @@ sudo xbps-install -Sy \
     brightnessctl grim slurp wl-clipboard cliphist flameshot mako libnotify jq \
     tlp iwd \
     pipewire wireplumber wireplumber-elogind sof-firmware \
-    zsh tmux yazi fastfetch neovim git rsync curl unzip gcc psmisc \
+    zsh tmux yazi fastfetch neovim git rsync curl unzip gcc psmisc zstd \
     kitty i3blocks i3blocks-blocklets acpi lm_sensors playerctl perl iw ethtool \
     alsa-utils bc \
     htop ncdu xtools kubectl k9s postgresql-client \
@@ -162,13 +162,33 @@ fi
 )
 
 # ---------------------------------------------------------------------------
-# 9. Claude Code CLI
+# 9. Anki (upstream release, not the xbps package -- Void's anki package is
+#    orphaned and stuck on 2.1.15, which predates the gui_hooks module most
+#    add-ons require. Installed from ankitects' own Linux build instead,
+#    which bundles its own Qt/Python and stays current independent of the
+#    distro repo.)
+# ---------------------------------------------------------------------------
+log "Installing Anki from upstream release (replacing xbps package)"
+if xbps-query anki >/dev/null 2>&1; then
+    sudo xbps-remove -y anki
+fi
+
+ANKI_TMPDIR=$(mktemp -d)
+ANKI_VERSION=$(curl -fsSL https://api.github.com/repos/ankitects/anki/releases/latest | jq -r .tag_name)
+curl -fsSL -o "$ANKI_TMPDIR/anki.tar.zst" \
+    "https://github.com/ankitects/anki/releases/download/${ANKI_VERSION}/anki-${ANKI_VERSION}-linux-x86_64.tar.zst"
+tar --use-compress-program=unzstd -xf "$ANKI_TMPDIR/anki.tar.zst" -C "$ANKI_TMPDIR"
+(cd "$ANKI_TMPDIR"/anki-linux && sudo ./install.sh)
+rm -rf "$ANKI_TMPDIR"
+
+# ---------------------------------------------------------------------------
+# 10. Claude Code CLI
 # ---------------------------------------------------------------------------
 log "Installing Claude Code"
 curl -fsSL https://claude.ai/install.sh | bash
 
 # ---------------------------------------------------------------------------
-# 10. Tailscale (interactive: prints a URL to authenticate)
+# 11. Tailscale (interactive: prints a URL to authenticate)
 # ---------------------------------------------------------------------------
 log "Bringing up tailscale (follow the printed link to authenticate)"
 sudo tailscale up

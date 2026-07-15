@@ -18,7 +18,8 @@ default_floating_border pixel 2
 seat seat0 xcursor_theme Adwaita 48
 
 
-output * bg /home/paul/Pictures/Wallpapers/a_plant_in_front_of_a_window.png fill
+#output * bg /home/paul/Pictures/Wallpapers/a_plant_in_front_of_a_window.png fill
+output * bg /home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png fill
 output eDP-1 mode 1920x1200 pos 2560 700
 output DP-1 mode 2560x1440 pos 0 0 
 output HDMI-A-1 mode 1920x1080 pos 2560 -700

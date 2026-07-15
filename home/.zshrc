@@ -17,6 +17,7 @@ if [[ ! $(ps -p $(ps -p $$ -o ppid=) -o args= | grep -i ranger) ]]; then fastfet
 # ── History ───────────────────────────────────────────────────────────────────
 HISTSIZE=500000
 SAVEHIST=500000
+HIST_STAMPS="%d/%m/%y %T"
 setopt appendhistory
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY

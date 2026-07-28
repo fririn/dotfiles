@@ -45,7 +45,7 @@
   // Mirrors [time]: command=date '+%d.%m %a %H:%M:%S', color=#008800
   "clock": {
     "interval": 1,
-    "format": "<span color='#008800'>{:%d.%m %a %H:%M:%S}</span>"
+    "format": "{:%d.%m %a %H:%M:%S}"
   },
   // Combines [wireless] and [ethernet]: shows whichever is connected
   // (wired preferred over Wi-Fi when both are up).

@@ -4,7 +4,6 @@ config_version = 2
 enable_overdrive = true
 
 [bar.default]
-background_opacity = 0.29999999329447746
 end = [ "tray", "clipboard", "network", "bluetooth", "volume", "battery", "notifications" ]
 font_weight = 700
 margin_edge = 1
@@ -12,8 +11,11 @@ margin_ends = 0
 margin_opposite_edge = 1
 padding = 10
 radius = 1
+reserve_space = false
 scale = 0.90000000596046448
 shadow = false
+show_on_workspace_switch = false
+smart_auto_hide = true
 start = [ "workspaces", "cpu", "sysmon" ]
 thickness = 26
 widget_spacing = 8
@@ -129,19 +131,19 @@ directory = "/home/paul/Pictures/Wallpapers"
 transition_duration = 800
 
     [wallpaper.default]
-    path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.last]
-    path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.monitors.DP-1]
-    path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
     path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Ayu"

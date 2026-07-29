@@ -6,9 +6,7 @@ enable_overdrive = true
 [bar.default]
 end = [ "tray", "clipboard", "network", "bluetooth", "volume", "battery", "notifications" ]
 font_weight = 700
-margin_edge = 1
 margin_ends = 0
-margin_opposite_edge = 1
 padding = 10
 radius = 1
 reserve_space = false
@@ -131,19 +129,19 @@ directory = "/home/paul/Pictures/Wallpapers"
 transition_duration = 800
 
     [wallpaper.default]
-    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.last]
-    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.monitors.DP-1]
-    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
     path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Ayu"

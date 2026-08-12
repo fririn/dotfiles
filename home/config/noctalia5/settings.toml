@@ -4,6 +4,7 @@ config_version = 2
 enable_overdrive = true
 
 [bar.default]
+auto_hide = true
 end = [ "tray", "clipboard", "network", "bluetooth", "volume", "battery", "notifications" ]
 font_weight = 700
 margin_ends = 0
@@ -13,7 +14,6 @@ reserve_space = false
 scale = 0.90000000596046448
 shadow = false
 show_on_workspace_switch = false
-smart_auto_hide = true
 start = [ "workspaces", "cpu", "sysmon" ]
 thickness = 26
 widget_spacing = 8
@@ -126,6 +126,7 @@ mode = "dark"
 
 [wallpaper]
 directory = "/home/paul/Pictures/Wallpapers"
+transition = [ "fade" ]
 transition_duration = 800
 
     [wallpaper.default]
@@ -138,7 +139,7 @@ transition_duration = 800
     path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/paul/Pictures/Wallpapers/a_sunset_over_a_body_of_water_with_Marfa_lights_in_the_background.png"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.monitors.eDP-1]
     path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
@@ -187,6 +188,12 @@ transition_duration = 800
     builtin_palette = "Ayu"
     palette_source = "builtin"
     path = "/home/paul/Pictures/Wallpapers/nms_black2.jpg"
+    theme_mode = "dark"
+
+    [[wallpaper.favorite]]
+    builtin_palette = "Ayu"
+    palette_source = "builtin"
+    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
     theme_mode = "dark"
 
 [widget.cat]

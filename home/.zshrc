@@ -42,6 +42,28 @@ sway() {
   fi
 }
 
+# Same story for niri. There is no niri-session script on Void: the package is
+# built with the systemd/dinit features off, so "--session" is the supported
+# way to start from a TTY. It sets XDG_CURRENT_DESKTOP=niri and
+# XDG_SESSION_TYPE=wayland and pushes them into the activation environment,
+# which is what the gnome/gtk portals and gnome-keyring key off.
+#
+# Only a bare launch on a TTY gets wrapped. Everything else passes straight
+# through to the binary: "niri msg ..." and "niri validate" (also run over SSH,
+# where there is no session bus and starting one would be wrong), and a bare
+# "niri" inside an existing session, which is upstream's nested dev window.
+niri() {
+  case "${1-}" in
+    ''|--session)
+      if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        dbus-run-session -- niri --session
+        return
+      fi
+      ;;
+  esac
+  command niri "$@"
+}
+
 # fzf with preview (same as Linux)
 alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
 

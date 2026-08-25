@@ -476,9 +476,11 @@ binds {
     XF86MonBrightnessUp   allow-when-locked=true { spawn "noctalia" "msg" "brightness-up"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia" "msg" "brightness-down"; }
 
-    XF86AudioPlay      allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
-    XF86AudioPause     allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
-    XF86AudioPlayPause allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
+    // No XF86AudioPlayPause bind: despite Hyprland accepting it, that is not a
+    // real XKB keysym, and niri rejects it at parse time. Play and Pause below
+    // are the actual keysyms and both toggle.
+    XF86AudioPlay  allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
+    XF86AudioPause allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
     XF86AudioNext      allow-when-locked=true { spawn "noctalia" "msg" "media" "next"; }
     XF86AudioPrev      allow-when-locked=true { spawn "noctalia" "msg" "media" "previous"; }
     XF86AudioStop      allow-when-locked=true { spawn "noctalia" "msg" "media" "stop"; }

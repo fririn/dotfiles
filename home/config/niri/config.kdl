@@ -1,0 +1,507 @@
+// niri config, translated from ../hypr/hyprland.conf.
+//
+// niri is a scrolling tiler, not a dwindle tiler, so a few Hyprland concepts
+// have no exact counterpart. Those are called out in comments below, and the
+// gaps are listed at the bottom of this file.
+//
+// Validate after editing:  niri validate
+// List output names:       niri msg outputs
+
+///////////////////////////////////////////////////////////////////////////////
+// INPUT
+///////////////////////////////////////////////////////////////////////////////
+
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            model "pc105"
+            options "grp:win_space_toggle"
+        }
+        repeat-delay 250
+        repeat-rate 50
+        numlock
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        scroll-factor 0.4
+        // The Hyprland config set sensitivity +0.25 / accel_profile adaptive
+        // for one specific device (syna8017:00-06cb:ceb2-touchpad). niri has
+        // no per-device overrides, so it is applied to all touchpads.
+        accel-speed 0.25
+        accel-profile "adaptive"
+        // Hyprland had disable_while_typing = false, so dwt stays off here.
+    }
+
+    // follow_mouse = 1
+    focus-follows-mouse
+
+    // Hyprland's cursor:no_warps = true -- so warp-mouse-to-focus stays off.
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// OUTPUTS
+//
+// Run `niri msg outputs` on this machine and fill these in. The values below
+// are carried over from the Hyprland config of the *old* machine and are
+// commented out, since the connector names and the panel resolution differ.
+///////////////////////////////////////////////////////////////////////////////
+
+/-output "eDP-1" {
+    mode "1920x1200@60"
+    scale 1
+    position x=2560 y=700
+}
+
+/-output "DP-1" {
+    mode "2560x1440@165"
+    position x=0 y=0
+}
+
+/-output "HDMI-A-1" {
+    mode "1920x1080@60"
+    position x=2560 y=-1000
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// WORKSPACES
+//
+// Named workspaces are niri's equivalent of Hyprland's persistent:true -- they
+// always exist even when empty. Names are strings, so binds below say
+// focus-workspace "1", not focus-workspace 1 (which would mean "index 1").
+//
+// Uncomment the open-on-output lines once the connector names are confirmed,
+// to reproduce "1-8 on the desktop monitor, 9-10 on the laptop panel".
+///////////////////////////////////////////////////////////////////////////////
+
+workspace "1" {
+    // open-on-output "DP-1"
+}
+workspace "2" {
+    // open-on-output "DP-1"
+}
+workspace "3" {
+    // open-on-output "DP-1"
+}
+workspace "4" {
+    // open-on-output "DP-1"
+}
+workspace "5" {
+    // open-on-output "DP-1"
+}
+workspace "6" {
+    // open-on-output "DP-1"
+}
+workspace "7" {
+    // open-on-output "DP-1"
+}
+workspace "8" {
+    // open-on-output "DP-1"
+}
+workspace "9" {
+    // open-on-output "eDP-1"
+}
+workspace "10" {
+    // open-on-output "eDP-1"
+}
+
+// Stand-ins for Hyprland's special:terminal and special:stuff scratchpads.
+// niri has no scratchpad, so these are ordinary named workspaces -- see the
+// note at the bottom.
+workspace "terminal"
+workspace "stuff"
+
+///////////////////////////////////////////////////////////////////////////////
+// LAYOUT / APPEARANCE
+//
+// From Hyprland: gaps_in 3, gaps_out 0, border_size 1,
+// col.active_border rgba(CCCCCC55), col.inactive_border rgba(00000000),
+// rounding 0, blur off, shadow off, dim_inactive false.
+///////////////////////////////////////////////////////////////////////////////
+
+layout {
+    gaps 3
+    center-focused-column "never"
+
+    // Hyprland drew a border, not a focus ring, so the ring is off and the
+    // border carries the colors.
+    focus-ring {
+        off
+    }
+
+    border {
+        width 1
+        active-color "#ccccccdd"
+        inactive-color "#00000000"
+    }
+
+    shadow {
+        // off by default; Hyprland had shadow disabled
+    }
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.5; }
+}
+
+// animations { enabled = false } in Hyprland.
+animations {
+    off
+}
+
+cursor {
+    // Hyprland ran `hyprctl setcursor pop 36`.
+    xcursor-theme "Pop"
+    xcursor-size 36
+}
+
+// misc { disable_hyprland_logo / focus_on_activate = false } has no analog.
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/%Y%m%d-%H:%M:%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// niri starts and supervises xwayland-satellite itself, so X11 apps
+// (rofi, dmenu, flameshot, steam) work without a manual spawn.
+xwayland-satellite {
+    path "/usr/bin/xwayland-satellite"
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// ENVIRONMENT (from ../hypr/env.conf)
+//
+// XDG_CURRENT_DESKTOP / XDG_SESSION_TYPE are dropped: `niri --session` sets
+// those itself. QT_QUICK_CONTROLS_STYLE=org.hyprland.style is dropped as
+// Hyprland-specific.
+///////////////////////////////////////////////////////////////////////////////
+
+environment {
+    GDK_BACKEND "wayland,x11,*"
+    QT_QPA_PLATFORM "wayland;xcb"
+    CLUTTER_BACKEND "wayland"
+    QT_IM_MODULE "fcitx"
+    XMODIFIERS "@im=fcitx"
+    QT_AUTO_SCREEN_SCALE_FACTOR "1"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+    QT_QPA_PLATFORMTHEME "qt6ct"
+    GDK_SCALE "1"
+    QT_SCALE_FACTOR "1"
+    MOZ_ENABLE_WAYLAND "1"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+    EDITOR "nvim"
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// AUTOSTART
+//
+// No Polkit.sh here: Noctalia v5 ships its own polkit agent (it has a "polkit"
+// panel), so a separate agent would just fight with it.
+///////////////////////////////////////////////////////////////////////////////
+
+spawn-at-startup "noctalia" "-d"
+spawn-at-startup "fcitx5"
+spawn-at-startup "flameshot"
+
+spawn-sh-at-startup "wl-paste --type text --watch cliphist -max-items 99999999 store"
+spawn-sh-at-startup "wl-paste --type image --watch cliphist -max-items 99999999 store"
+
+spawn-sh-at-startup "kitty -e tmux"
+spawn-sh-at-startup "zen-browser --no-remote -P work"
+spawn-sh-at-startup "slack"
+spawn-sh-at-startup "zen-browser --no-remote -P 'Default (release)'"
+spawn-sh-at-startup "telegram-desktop"
+
+///////////////////////////////////////////////////////////////////////////////
+// SWITCH EVENTS
+//
+// niri already turns the internal panel off/on with the lid by itself, so this
+// only adds the suspend that the (commented-out) Hyprland bindl did.
+///////////////////////////////////////////////////////////////////////////////
+
+/-switch-events {
+    lid-close { spawn "noctalia" "msg" "session" "lock-and-suspend"; }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// WINDOW RULES
+//
+// Hyprland's tag system has no niri equivalent, so the tags are flattened into
+// direct app-id/title matches. Only the rules that actually did something are
+// carried over -- the tag-only lines (tag browser, tag email, ...) had no
+// effect on their own and are dropped.
+///////////////////////////////////////////////////////////////////////////////
+
+// Startup placement -- the niri equivalent of Hyprland's
+// `exec-once = [workspace N silent] ...`
+window-rule {
+    match at-startup=true app-id=r#"^kitty$"#
+    open-on-workspace "terminal"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^Slack$"#
+    open-on-workspace "2"
+}
+
+window-rule {
+    match at-startup=true app-id=r#"^(org\.telegram\.desktop|io\.github\.tdesktop_x64\.TDesktop)$"#
+    open-on-workspace "5"
+}
+
+// Both zen-browser instances share an app-id, so they cannot be told apart by
+// rule the way Hyprland's per-exec workspace tag did. This puts both on "1";
+// move the personal one with Mod+Shift+A once it opens.
+window-rule {
+    match at-startup=true app-id=r#"^(zen|zen-alpha)$"#
+    open-on-workspace "1"
+}
+
+// Float rules
+window-rule {
+    match app-id=r#"^(mpv|com\.github\.rafostar\.Clapper)$"#
+    match app-id=r#"^([Qq]alculate-gtk)$"#
+    match app-id=r#"^(org\.gnome\.Calculator)$"#
+    match app-id=r#"^([Zz]oom|onedriver|onedriver-launcher)$"#
+    match app-id=r#"^(pavucontrol|org\.pulseaudio\.pavucontrol|com\.saivert\.pwvucontrol)$"#
+    match app-id=r#"^(qt5ct|qt6ct|[Yy]ad)$"#
+    match app-id=r#"^(nm-connection-editor|blueman-manager)$"#
+    match app-id=r#"^(xdg-desktop-portal-gtk)$"#
+    match app-id=r#"^(evince|eog|org\.gnome\.Loupe)$"#
+    match app-id=r#"^(gnome-system-monitor|org\.gnome\.SystemMonitor|io\.missioncenter\.MissionCenter)$"#
+    match app-id=r#"^([Rr]ofi)$"#
+    open-floating true
+}
+
+window-rule {
+    match title="^(Authentication Required)$"
+    match title="^(Save As)$"
+    match title="^(Add Folder to Workspace)$"
+    match title="^(floating)$"
+    open-floating true
+}
+
+// Picture-in-Picture: floating. Hyprland also pinned it and kept the aspect
+// ratio; niri has neither, so this is float-only.
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"^(zen|zen-alpha)$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Steam: the main window tiles, every other Steam window floats.
+window-rule {
+    match app-id=r#"^([Ss]team)$"#
+    exclude title=r#"^Steam$"#
+    open-floating true
+}
+
+// A slightly thicker border on the terminal scratchpad workspace, matching
+// `windowrule = border_size 2, match:workspace special:terminal`.
+window-rule {
+    match app-id=r#"^kitty$"#
+    border {
+        width 2
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// KEY BINDINGS
+//
+// "Mod" is Super on a TTY. Most binds are 1:1 with the Hyprland config;
+// directional ones become niri's column/window actions.
+///////////////////////////////////////////////////////////////////////////////
+
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // ── General ─────────────────────────────────────────────────────────────
+    Ctrl+Alt+Delete { quit; }
+    Mod+C           { close-window; }
+    Mod+Escape      { spawn "noctalia" "msg" "session" "lock"; }
+
+    // ── Tiling ──────────────────────────────────────────────────────────────
+    Mod+F       { toggle-window-floating; }
+    Mod+Shift+F { switch-focus-between-floating-and-tiling; }
+    Mod+M       { fullscreen-window; }
+    Mod+Shift+M { toggle-windowed-fullscreen; }
+
+    // Hyprland's `cyclenext` + `bringactivetotop`.
+    Alt+Tab { focus-window-previous; }
+
+    // niri's overview -- no Hyprland equivalent, but too useful to leave out.
+    Mod+Tab repeat=false { toggle-overview; }
+
+    // ── Focus (Hyprland movefocus l/r/u/d) ──────────────────────────────────
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+K { focus-window-up; }
+    Mod+J { focus-window-down; }
+
+    Mod+Left  { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-window-down; }
+
+    // ── Move (Hyprland movewindow l/r/u/d) ──────────────────────────────────
+    Mod+Ctrl+H { move-column-left; }
+    Mod+Ctrl+L { move-column-right; }
+    Mod+Ctrl+K { move-window-up; }
+    Mod+Ctrl+J { move-window-down; }
+
+    // ── Monitors ────────────────────────────────────────────────────────────
+    Mod+Shift+Left  { focus-monitor-left; }
+    Mod+Shift+Right { focus-monitor-right; }
+    Mod+Shift+Up    { focus-monitor-up; }
+    Mod+Shift+Down  { focus-monitor-down; }
+
+    // ── Column management (niri-specific, no Hyprland analog) ───────────────
+    Mod+R            { switch-preset-column-width; }
+    Mod+Shift+R      { switch-preset-column-width-back; }
+    Mod+Ctrl+F       { maximize-column; }
+    Mod+Ctrl+C       { center-column; }
+    Mod+Minus        { set-column-width "-10%"; }
+    Mod+Equal        { set-column-width "+10%"; }
+
+    // ── Scratchpad stand-ins (Hyprland special workspaces) ──────────────────
+    F12       { focus-workspace "terminal"; }
+    Alt+X     { focus-workspace "terminal"; }
+    Shift+F12 { move-window-to-workspace "terminal"; }
+    Alt+Shift+X { move-window-to-workspace "terminal"; }
+
+    F11       { focus-workspace "stuff"; }
+    Alt+Z     { focus-workspace "stuff"; }
+    Shift+F11 { move-window-to-workspace "stuff"; }
+    Alt+Shift+Z { move-window-to-workspace "stuff"; }
+
+    // Press to come back where you were -- the closest thing to Hyprland's
+    // "press the same key again to toggle the special workspace away".
+    Mod+Grave { focus-workspace-previous; }
+
+    // ── Workspaces by number ────────────────────────────────────────────────
+    Mod+1 { focus-workspace "1"; }
+    Mod+2 { focus-workspace "2"; }
+    Mod+3 { focus-workspace "3"; }
+    Mod+4 { focus-workspace "4"; }
+    Mod+5 { focus-workspace "5"; }
+    Mod+6 { focus-workspace "6"; }
+    Mod+7 { focus-workspace "7"; }
+    Mod+8 { focus-workspace "8"; }
+    Mod+9 { focus-workspace "9"; }
+    Mod+0 { focus-workspace "10"; }
+
+    Mod+Shift+1 { move-window-to-workspace "1"; }
+    Mod+Shift+2 { move-window-to-workspace "2"; }
+    Mod+Shift+3 { move-window-to-workspace "3"; }
+    Mod+Shift+4 { move-window-to-workspace "4"; }
+    Mod+Shift+5 { move-window-to-workspace "5"; }
+    Mod+Shift+6 { move-window-to-workspace "6"; }
+    Mod+Shift+7 { move-window-to-workspace "7"; }
+    Mod+Shift+8 { move-window-to-workspace "8"; }
+    Mod+Shift+9 { move-window-to-workspace "9"; }
+    Mod+Shift+0 { move-window-to-workspace "10"; }
+
+    // Hyprland's movetoworkspacesilent -- focus=false keeps you put.
+    Mod+Ctrl+1 { move-window-to-workspace "1" focus=false; }
+    Mod+Ctrl+2 { move-window-to-workspace "2" focus=false; }
+    Mod+Ctrl+3 { move-window-to-workspace "3" focus=false; }
+    Mod+Ctrl+4 { move-window-to-workspace "4" focus=false; }
+    Mod+Ctrl+5 { move-window-to-workspace "5" focus=false; }
+    Mod+Ctrl+6 { move-window-to-workspace "6" focus=false; }
+    Mod+Ctrl+7 { move-window-to-workspace "7" focus=false; }
+    Mod+Ctrl+8 { move-window-to-workspace "8" focus=false; }
+
+    // ── Workspaces by homerow (qweasdzx = the 3x3 grid) ─────────────────────
+    Mod+Q { focus-workspace "1"; }
+    Mod+W { focus-workspace "2"; }
+    Mod+E { focus-workspace "3"; }
+    Mod+A { focus-workspace "4"; }
+    Mod+S { focus-workspace "5"; }
+    Mod+D { focus-workspace "6"; }
+    Mod+Z { focus-workspace "7"; }
+    Mod+X { focus-workspace "8"; }
+
+    Mod+Shift+Q { move-window-to-workspace "1"; }
+    Mod+Shift+W { move-window-to-workspace "2"; }
+    Mod+Shift+E { move-window-to-workspace "3"; }
+    Mod+Shift+A { move-window-to-workspace "4"; }
+    Mod+Shift+S { move-window-to-workspace "5"; }
+    Mod+Shift+D { move-window-to-workspace "6"; }
+    Mod+Shift+Z { move-window-to-workspace "7"; }
+    Mod+Shift+X { move-window-to-workspace "8"; }
+
+    // ── Workspace cycling ───────────────────────────────────────────────────
+    Mod+Period { focus-workspace-down; }
+    Mod+Comma  { focus-workspace-up; }
+    Mod+Shift+BracketLeft  { move-column-to-workspace-up; }
+    Mod+Shift+BracketRight { move-column-to-workspace-down; }
+
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+
+    // ── Launchers ───────────────────────────────────────────────────────────
+    Alt+Space  { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+    Mod+Return { spawn "kitty"; }
+    Mod+V      { spawn-sh "~/work/custom/ssh-menu/ssh_menu.sh"; }
+
+    // Noctalia panels, replacing the Hyprland rofi scripts.
+    Mod+Alt+D { spawn "noctalia" "msg" "panel-open" "launcher" "/emo"; }   // RofiEmoji.sh
+    Mod+Alt+V { spawn "noctalia" "msg" "panel-toggle" "clipboard"; }       // ClipManager.sh
+    Mod+O     { spawn "noctalia" "msg" "panel-toggle" "wallpaper"; }       // WallpaperSelect.sh
+    Mod+I     { spawn "noctalia" "msg" "bar-toggle"; }                     // was: pkill -SIGUSR1 waybar
+    Mod+N     { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
+    Mod+Shift+Escape { spawn "noctalia" "msg" "panel-toggle" "session"; }
+
+    // ── Screenshots ─────────────────────────────────────────────────────────
+    // niri's built-in interactive screenshot UI replaces grimblast + swappy.
+    // flameshot still runs via xwayland-satellite if you prefer it.
+    Print       { screenshot; }
+    Shift+Print { screenshot-screen; }
+    Mod+Print   { screenshot-window; }
+
+    // ── Media / hardware keys (routed through Noctalia so its OSD shows) ────
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "noctalia" "msg" "volume-up" "2"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "noctalia" "msg" "volume-down" "2"; }
+    XF86AudioMute        allow-when-locked=true { spawn "noctalia" "msg" "volume-mute"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "noctalia" "msg" "mic-mute"; }
+
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "noctalia" "msg" "brightness-up"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "noctalia" "msg" "brightness-down"; }
+
+    XF86AudioPlay      allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
+    XF86AudioPause     allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
+    XF86AudioPlayPause allow-when-locked=true { spawn "noctalia" "msg" "media" "toggle"; }
+    XF86AudioNext      allow-when-locked=true { spawn "noctalia" "msg" "media" "next"; }
+    XF86AudioPrev      allow-when-locked=true { spawn "noctalia" "msg" "media" "previous"; }
+    XF86AudioStop      allow-when-locked=true { spawn "noctalia" "msg" "media" "stop"; }
+
+    XF86Sleep { spawn "noctalia" "msg" "session" "suspend"; }
+
+    // Hyprland's hypridle turned the screens off; Noctalia's caffeine toggle
+    // is the manual counterpart.
+    Mod+Shift+I { spawn "noctalia" "msg" "caffeine-toggle"; }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// NOT TRANSLATED -- no niri equivalent exists
+//
+// - Mod+Shift+P (pin): niri has no always-on-top for floating windows.
+// - Mod+Alt+scroll / Mod+KP_Add zoom: niri has no cursor zoom/magnifier.
+//   The overview (Mod+Tab) is the nearest thing.
+// - bindm Mod+LMB/RMB move+resize by drag: niri moves floating windows with
+//   Mod+left-drag natively, but there is no configurable mouse-drag bind.
+// - Special workspaces: F12/F11 focus a named workspace but do not toggle
+//   back on a second press. Mod+Grave (focus-workspace-previous) is the
+//   manual way back.
+// - Layer rules (blur on rofi/waybar/noctalia namespaces): niri has no blur
+//   for layer surfaces, and Hyprland's blur was disabled anyway.
+// - dwindle preserve_split / master mfact: niri's columns replace both.
+///////////////////////////////////////////////////////////////////////////////

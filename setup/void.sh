@@ -252,10 +252,20 @@ log "Installing Claude Code"
 curl -fsSL https://claude.ai/install.sh | bash
 
 # ---------------------------------------------------------------------------
-# 9. Tailscale (interactive: prints a URL to authenticate)
+# 9. Tailscale -- interactive, and the only blocking step in the script.
 # ---------------------------------------------------------------------------
-log "Bringing up tailscale (follow the printed link to authenticate)"
-sudo tailscale up
+log "Bringing up tailscale"
+cat <<EOF
+Authenticate by scanning the QR code below, or by opening the printed URL on
+another device. Nothing else depends on this step, so Ctrl-C is safe -- finish
+it later with:
+
+    sudo tailscale up --qr
+    sudo tailscale set --operator=$TARGET_USER
+
+EOF
+# --qr so a headless TTY isn't stuck retyping a login URL by hand.
+sudo tailscale up --qr
 sudo tailscale set --operator="$TARGET_USER"
 
 log "Done. Log out/in (or reboot) for the shell and service changes to take effect."

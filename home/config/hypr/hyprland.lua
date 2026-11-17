@@ -17,41 +17,30 @@ local run = "systemd-run --user --scope --slice=app.slice --collect --quiet --"
 local one = "HDMI-A-1"
 local two = "eDP-1"
 
--- From wallust-hyprland.conf (only the two colors the config used)
-local color0 = "rgb(4F4F4F)"
-local color15 = "rgb(D6D6D6)"
-
 ----------------------------------------------------------------------------------
 -- ENVIRONMENT
+-- (Hyprland itself sets XDG_CURRENT_DESKTOP / XDG_SESSION_TYPE and exports
+--  WAYLAND_DISPLAY etc. to systemd + dbus, so those are not repeated here.)
 ----------------------------------------------------------------------------------
 hl.env("EDITOR", "nvim")
 
 -- Toolkit backends
 hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("CLUTTER_BACKEND", "wayland")
 
 -- Input method
 hl.env("QT_IM_MODULE", "fcitx")
 hl.env("XMODIFIERS", "@im,fcitx")
 
 -- XDG
-hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
-hl.env("XDG_SESSION_TYPE", "wayland")
 
 -- Qt
-hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("QT_QUICK_CONTROLS_STYLE", "org.hyprland.style")
 
--- Scaling (keep in sync with the monitor scale)
-hl.env("GDK_SCALE", "1")
-hl.env("QT_SCALE_FACTOR", "1")
-
--- Firefox / Electron
-hl.env("MOZ_ENABLE_WAYLAND", "1")
+-- Electron
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 -- Cursor
@@ -62,20 +51,15 @@ hl.env("XCURSOR_SIZE", "48")
 -- AUTOSTART
 ----------------------------------------------------------------------------------
 hl.on("hyprland.start", function()
-	hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-	hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-
-	hl.exec_cmd(scriptsDir .. "/Polkit.sh")
-
 	hl.exec_cmd("fcitx5") -- japanese input
-	hl.exec_cmd("flameshot")
+	-- hl.exec_cmd("flameshot") -- replaced by noctalia screenshots (testing)
 	hl.exec_cmd("hyprctl setcursor Adwaita 48")
 
 	-- clipboard manager
 	hl.exec_cmd("wl-paste --type text --watch cliphist -max-items 99999999 store")
 	hl.exec_cmd("wl-paste --type image --watch cliphist -max-items 99999999 store")
 
-	-- hypridle is superseded by noctalia's built-in idle manager ([idle] in noctalia/settings.toml)
+	-- noctalia also provides the polkit agent and idle manager ([idle] in noctalia/settings.toml)
 	hl.exec_cmd("noctalia")
 
 	hl.exec_cmd(run .. " " .. term .. " -e tmux", { workspace = "special:terminal silent" })
@@ -117,14 +101,11 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "default
 hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 4, bezier = "default", style = "slidevert" })
 
 hl.config({
-	animations = { enabled = true },
-
 	general = {
 		layout = "dwindle",
 		border_size = 1,
 		gaps_in = 3,
 		gaps_out = 0,
-		resize_on_border = false,
 		col = {
 			active_border = "rgba(CCCCCC55)",
 			inactive_border = "rgba(00000000)",
@@ -133,18 +114,8 @@ hl.config({
 
 	decoration = {
 		rounding = 0,
-		active_opacity = 1,
-		inactive_opacity = 1,
-		fullscreen_opacity = 1,
-		dim_inactive = false,
-		dim_strength = 0.4,
 
-		shadow = {
-			enabled = false,
-			range = 8,
-			render_power = 1, -- was 0, below the allowed 1-4 (shadows are off anyway)
-			color = "rgba(00000055)",
-		},
+		shadow = { enabled = false },
 
 		blur = {
 			enabled = true,
@@ -155,20 +126,9 @@ hl.config({
 		},
 	},
 
-	group = {
-		col = { border_active = color15 },
-		groupbar = { col = { active = color0 } },
-	},
-
 	dwindle = {
 		preserve_split = true,
 		special_scale_factor = 0.97,
-	},
-
-	master = {
-		new_status = "master",
-		new_on_top = true,
-		mfact = 0.5,
 	},
 
 	input = {
@@ -195,8 +155,6 @@ hl.config({
 		disable_hyprland_logo = true,
 		disable_splash_rendering = true,
 		mouse_move_enables_dpms = true,
-		enable_swallow = false,
-		swallow_regex = "^(kitty)$",
 		focus_on_activate = false,
 		initial_workspace_tracking = 0,
 		middle_click_paste = true,
@@ -205,19 +163,13 @@ hl.config({
 	},
 
 	binds = {
-		workspace_back_and_forth = false,
 		allow_workspace_cycles = true,
 		pass_mouse_when_bound = false,
 		workspace_center_on = 1,
 	},
 
 	xwayland = {
-		enabled = true,
 		force_zero_scaling = true,
-	},
-
-	render = {
-		direct_scanout = 0,
 	},
 
 	cursor = {
@@ -278,14 +230,17 @@ hl.bind("XF86AudioNext", exec("playerctl next"), LOCKED)
 hl.bind("XF86AudioPrev", exec("playerctl previous"), LOCKED)
 hl.bind("XF86AudioStop", exec("playerctl stop"), LOCKED)
 
--- Screenshots
-hl.bind("SHIFT + Print", exec("flameshot gui"))
-hl.bind(
-	"Print",
-	exec(
-		"grimblast --freeze save area - | tee ~/Pictures/Screenshots/Clipboard/$(date +%Y%m%d-%H:%M:%S).png | swappy -f -;"
-	)
-)
+-- Screenshots (old flameshot / grimblast+swappy setup, kept while testing noctalia)
+-- hl.bind("SHIFT + Print", exec("flameshot gui"))
+-- hl.bind(
+-- 	"Print",
+-- 	exec(
+-- 		"grimblast --freeze save area - | tee ~/Pictures/Screenshots/Clipboard/$(date +%Y%m%d-%H:%M:%S).png | swappy -f -;"
+-- 	)
+-- )
+hl.bind("Print", exec("noctalia msg screenshot-region"))
+hl.bind("SHIFT + Print", exec("noctalia msg screenshot-annotate"))
+hl.bind("CTRL + Print", exec("noctalia msg screenshot-window"))
 
 -- Move windows / focus (hjkl)
 for key, direction in pairs({ h = "left", l = "right", k = "up", j = "down" }) do
@@ -349,9 +304,11 @@ hl.bind(mod("Return"), exec(scriptsDir .. "/RandomTerminal.sh " .. term)) -- flo
 
 -- Features / extras
 hl.bind(mod("V"), exec("~/work/custom/ssh-menu/ssh_menu.sh"))
-hl.bind(mod("ALT", "D"), exec(scriptsDir .. "/RofiEmoji.sh"))
+-- hl.bind(mod("ALT", "D"), exec(scriptsDir .. "/RofiEmoji.sh"))
+hl.bind(mod("ALT", "D"), exec("noctalia msg panel-open launcher /emo"))
 hl.bind(mod("ALT", "V"), exec(scriptsDir .. "/ClipManager.sh"))
-hl.bind(mod("O"), exec(scriptsDir .. "/WallpaperSelect.sh"))
+-- hl.bind(mod("O"), exec(scriptsDir .. "/WallpaperSelect.sh")) -- needed awww/wallust (uninstalled)
+hl.bind(mod("O"), exec("noctalia msg panel-toggle wallpaper"))
 hl.bind(mod("R"), exec("noctalia msg config-reload"))
 
 -- Desktop zoom (replaces the hyprctl keyword calls, which don't work with a Lua config)
@@ -377,10 +334,10 @@ end)
 ----------------------------------------------------------------------------------
 -- WINDOW RULES
 ----------------------------------------------------------------------------------
-local function tag(name, match, effects)
-	local spec = effects or {}
-	spec.tag, spec.match = name, match
-	hl.window_rule(spec)
+-- Only tags that a rule below matches on. Note: tag matches like "games*" are
+-- unanchored regexes, so "games*" also matches the "gamestore" tag.
+local function tag(name, match)
+	hl.window_rule({ tag = name, match = match })
 end
 
 local SIZE_70_70 = "(monitor_w*0.7) (monitor_h*0.7)"
@@ -388,70 +345,27 @@ local SIZE_70_60 = "(monitor_w*0.7) (monitor_h*0.6)"
 local SIZE_60_70 = "(monitor_w*0.6) (monitor_h*0.7)"
 local SIZE_40_60 = "(monitor_w*0.4) (monitor_h*0.6)"
 
--- browser
-tag("browser", { class = "^([Ff]irefox|org.mozilla.firefox|[Ff]irefox-esr|[Ff]irefox-bin)$" })
-tag("browser", { class = "^([Gg]oogle-chrome(-beta|-dev|-unstable)?)$" })
-tag("browser", { class = "^(chrome-.+-Default)$" }) -- Chrome PWAs
-tag("browser", { class = "^([Cc]hromium)$" })
-tag("browser", { class = "^([Mm]icrosoft-edge(-stable|-beta|-dev|-unstable))$" })
-tag("browser", { class = "^(Brave-browser(-beta|-dev|-unstable)?)$" })
-tag("browser", { class = "^([Tt]horium-browser|[Cc]achy-browser)$" })
-tag("browser", { class = "^(zen-alpha|zen)$" })
-
--- notif
-tag("notif", { class = "^(swaync-control-center|swaync-notification-window|swaync-client|class)$" })
-
--- terminal
-tag("terminal", { class = "^(Alacritty|kitty|kitty-dropterm)$" })
-
--- email
-tag("email", { class = "^([Tt]hunderbird|org.gnome.Evolution)$" })
-tag("email", { class = "^(eu.betterbird.Betterbird)$" })
-
--- projects
-tag("projects", { class = "^(codium|codium-url-handler|VSCodium)$" })
-tag("projects", { class = "^(VSCode|code-url-handler)$" })
-tag("projects", { class = "^(jetbrains-.+)$" }) -- JetBrains IDEs
-
--- screenshare
-tag("screenshare", { class = "^(com.obsproject.Studio)$" })
-
--- IM
-tag("im", { class = "^([Dd]iscord|[Ww]ebCord|[Vv]esktop)$" })
-tag("im", { class = "^([Ff]erdium)$" }, { size = SIZE_60_70 })
-tag("im", { class = "^([Ww]hatsapp-for-linux)$" })
-tag("im", { class = "^(ZapZap|com.rtosta.zapzap)$" })
-tag("im", { class = "^(org.telegram.desktop|io.github.tdesktop_x64.TDesktop)$" })
-tag("im", { class = "^(teams-for-linux)$" })
-tag("im", { class = "^(im.riot.Riot|Element)$" }) -- Element Matrix client
-
 -- games
 tag("games", { class = "^(gamescope)$" })
 tag("games", { class = [[^(steam_app_\d+)$]] })
 
--- gamestore
+-- gamestore (picked up by the "games*" rule)
 tag("gamestore", { class = "^([Ss]team)$" })
 tag("gamestore", { title = "^([Ll]utris)$" })
 tag("gamestore", { class = "^(com.heroicgameslauncher.hgl)$" })
 
--- file-manager
-tag("file-manager", { class = "^([Tt]hunar|org.gnome.Nautilus|[Pp]cmanfm-qt)$" })
-tag("file-manager", { class = "^(app.drey.Warp)$" })
-
--- wallpaper / multimedia
+-- wallpaper
 tag("wallpaper", { class = "^([Ww]aytrogen)$" })
-tag("multimedia", { class = "^([Aa]udacious)$" })
-tag("multimedia_video", { class = "^([Mm]pv|vlc)$" })
 
 -- settings
 tag("settings", { title = "^(ROG Control)$" })
 tag("settings", { class = "^(wihotspot(-gui)?)$" }) -- wifi hotspot
 tag("settings", { class = "^([Bb]aobab|org.gnome.[Bb]aobab)$" }) -- disk usage analyzer
-tag("settings", { class = "^(gnome-disks|wihotspot(-gui)?)$" })
+tag("settings", { class = "^(gnome-disks)$" })
 tag("settings", { title = "(Kvantum Manager)" })
 tag("settings", { class = "^(file-roller|org.gnome.FileRoller)$" }) -- archive manager
 tag("settings", { class = "^(nm-applet|nm-connection-editor|blueman-manager)$" })
-tag("settings", { class = "^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$" }, { center = true })
+tag("settings", { class = "^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$" })
 tag("settings", { class = "^(qt5ct|qt6ct|[Yy]ad)$" })
 tag("settings", { class = "(xdg-desktop-portal-gtk)" })
 tag("settings", { class = "^(org.kde.polkit-kde-authentication-agent-1)$" })
@@ -463,11 +377,11 @@ tag("viewer", { class = "^(evince)$" }) -- document viewer
 tag("viewer", { class = "^(eog|org.gnome.Loupe)$" }) -- image viewer
 
 -- Position
--- NOTE: Hyprland matches rules with RE2, which has no (?!...) lookahead, so this rule and the
--- three "float dialogs" rules further down never match. Carried over unchanged from
--- hyprland.conf; a working form would be title = "negative:.*[Tt]hunar.*".
-hl.window_rule({ center = true, float = true, match = { class = "([Tt]hunar)", title = "^(?!.*[Tt]hunar).*$" } })
 hl.window_rule({ center = true, match = { title = "^(Keybindings)$" } })
+hl.window_rule({
+	center = true,
+	match = { class = "^(pavucontrol|org.pulseaudio.pavucontrol|com.saivert.pwvucontrol)$" },
+})
 
 -- Don't idle while something is fullscreen
 hl.window_rule({ idle_inhibit = "fullscreen", match = { fullscreen = true } })
@@ -484,18 +398,6 @@ hl.window_rule({ float = true, pin = true, keep_aspect_ratio = true, match = { t
 
 -- Float popups and dialogs
 hl.window_rule({ float = true, center = true, match = { title = "^(Authentication Required)$" } })
-
--- Never match, see the NOTE above
-hl.window_rule({
-	float = true,
-	match = { class = "(codium|codium-url-handler|VSCodium)", title = "^(?!.*codium|.*VSCodium).*$" },
-})
-hl.window_rule({
-	float = true,
-	match = { class = "^(com.heroicgameslauncher.hgl)$", title = "^(?!Heroic Games Launcher).*$" },
-})
-hl.window_rule({ float = true, match = { class = "^([Ss]team)$", title = "^(?!^([Ss]team)$).*$" } })
-
 hl.window_rule({ float = true, size = SIZE_70_60, center = true, match = { title = "^(Add Folder to Workspace)$" } })
 hl.window_rule({ float = true, size = SIZE_70_60, center = true, match = { title = "^(Save As)$" } })
 hl.window_rule({ float = true, size = SIZE_40_60, center = true, match = { title = "^(floating)$" } })
@@ -503,6 +405,7 @@ hl.window_rule({ float = true, size = SIZE_40_60, center = true, match = { title
 hl.window_rule({ float = true, size = SIZE_70_60, match = { initial_title = "(Open Files)" } })
 
 -- Size
+hl.window_rule({ size = SIZE_60_70, match = { class = "^([Ff]erdium)$" } })
 hl.window_rule({ size = SIZE_60_70, match = { class = "^([Ww]hatsapp-for-linux|ZapZap|com.rtosta.zapzap)$" } })
 
 -- Blur & borders
@@ -513,9 +416,6 @@ hl.window_rule({ border_size = 2, match = { workspace = "special:terminal" } })
 -- LAYER RULES
 ----------------------------------------------------------------------------------
 hl.layer_rule({ blur = true, ignore_alpha = 0, match = { namespace = "rofi" } })
-hl.layer_rule({ blur = true, ignore_alpha = 0, match = { namespace = "waybar" } })
-hl.layer_rule({ blur = true, ignore_alpha = 0, match = { namespace = "notifications" } })
-hl.layer_rule({ blur = true, ignore_alpha = 0, match = { namespace = "swaync-notification-window" } })
 hl.layer_rule({
 	name = "noctalia",
 	match = { namespace = "noctalia.*$" },

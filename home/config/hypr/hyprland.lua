@@ -151,6 +151,7 @@ hl.config({
 			size = 5,
 			passes = 3,
 			new_optimizations = true,
+			xray = true, -- blurred windows show only wallpaper/layers, not windows behind (like mango blur_optimized)
 		},
 	},
 

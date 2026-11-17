@@ -1,19 +1,24 @@
-config_version = 2
+config_version = 16
+
+[accessibility]
+high_contrast = false
+ui_scale = 2.0000000223517418
 
 [audio]
 enable_overdrive = true
+enable_sounds = false
 
 [bar.default]
+auto_hide = true
 end = [ "tray", "clipboard", "network", "bluetooth", "volume", "battery", "notifications" ]
 font_weight = 700
 margin_ends = 0
 padding = 10
 radius = 1
 reserve_space = false
-scale = 0.90000000596046448
+scale = 1.4500000141561031
 shadow = false
 show_on_workspace_switch = false
-smart_auto_hide = true
 start = [ "workspaces", "cpu", "sysmon" ]
 thickness = 26
 widget_spacing = 8
@@ -30,6 +35,25 @@ refresh_minutes = 5
 [desktop_widgets]
 enabled = false
 
+[idle]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+pre_action_fade_seconds = 10
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 3000.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 720.0
+
 [location]
 address = "Batumi, Georgia"
 
@@ -39,7 +63,14 @@ blurred_desktop = true
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
-widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-1", "lockscreen-login-box@eDP-1" ]
+widget_order = [
+    "lockscreen-login-box@FALLBACK",
+    "lockscreen-login-box@DP-7",
+    "lockscreen-login-box@DP-6",
+    "lockscreen-login-box@HDMI-A-1",
+    "lockscreen-login-box@DP-1",
+    "lockscreen-login-box@eDP-1"
+]
 
     [lockscreen_widgets.grid]
     cell_size = 16
@@ -47,55 +78,172 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@DP-1", "
     visible = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@DP-1"]
-    box_height = 0.0
-    box_width = 0.0
+    box_height = 196.0
+    box_width = 810.0
     cx = 1280.0
     cy = 1317.0
     output = "DP-1"
+    placement_height = 1440.0
+    placement_width = 2560.0
     rotation = 0.0
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@DP-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
+        center_password_text = false
         input_opacity = 1.0
         input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
         show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-6"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 1280.0
+    cy = 1258.0
+    output = "DP-6"
+    placement_height = 1440.0
+    placement_width = 2560.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-6".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-7"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 1280.0
+    cy = 1258.0
+    output = "DP-7"
+    placement_height = 1440.0
+    placement_width = 2560.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-7".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@FALLBACK"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "FALLBACK"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@FALLBACK".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
-    box_height = 0.0
-    box_width = 0.0
-    cx = 960.0
-    cy = 957.0
+    box_height = 196.0
+    box_width = 810.0
+    cx = 1920.0
+    cy = 1914.0
     output = "HDMI-A-1"
+    placement_height = 2160.0
+    placement_width = 3840.0
     rotation = 0.0
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
+        center_password_text = false
         input_opacity = 1.0
         input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
         show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-    box_height = 0.0
-    box_width = 0.0
-    cx = 960.0
-    cy = 1077.0
+    box_height = 196.0
+    box_width = 810.0
+    cx = 720.0
+    cy = 807.75
     output = "eDP-1"
+    placement_height = 900.0
+    placement_width = 1440.0
     rotation = 0.0
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
+        center_password_text = false
         input_opacity = 1.0
         input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
         show_login_button = true
+        show_media = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
 [notification]
 background_opacity = 1
@@ -106,6 +254,7 @@ scale = 1.1000000089406967
 enabled = [ "gustav0ar/drive-health" ]
 
 [shell]
+avatar_path = "/home/paul/Pictures/hacker.jpg"
 password_style = "random"
 screen_time_enabled = true
 settings_show_advanced = true
@@ -130,19 +279,19 @@ transition = [ "fade" ]
 transition_duration = 800
 
     [wallpaper.default]
-    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.last]
-    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.monitors.DP-1]
     path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
 
     [wallpaper.monitors.HDMI-A-1]
-    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/paul/Pictures/Wallpapers/black_nms.jpg"
+    path = "/home/paul/Pictures/Wallpapers/localhost.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Ayu"

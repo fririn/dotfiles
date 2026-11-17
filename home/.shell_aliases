@@ -53,11 +53,11 @@ alias xb="sudo xbps-install"
 alias xbu="sudo xbps-install -Su"
 
 # ── Navigation ────────────────────────────────────────────────────────────────
-alias packs="cd ~/work/nomad_packs"
-alias cluster="cd ~/work/nomad-cluster"
-alias src="cd ~/work/nodes_src"
-alias proxy="cd ~/work/nodes-proxy/routes"
-alias iproxy="cd ~/work/internal-node-proxy"
+alias packs="cd ~/work/packs/"
+alias cluster="cd ~/work/k8s-cluster/"
+alias src="cd ~/work/src"
+alias proxy="cd ~/work/proxy-ext/routes/"
+alias proxy-internal="cd ~/work/proxy-int/k8s/values/providers/"
 
 # ── git ───────────────────────────────────────────────────────────────────────
 alias gt="git tag"

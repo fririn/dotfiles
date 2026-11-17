@@ -106,10 +106,12 @@ hl.config({
 		border_size = 1,
 		gaps_in = 3,
 		gaps_out = 0,
+		allow_tearing = true, -- only for windows with the `immediate` rule (games, see WINDOW RULES)
 		col = {
 			active_border = "rgba(CCCCCC55)",
 			inactive_border = "rgba(00000000)",
 		},
+		snap = { enabled = true }, -- floating windows snap to screen edges and each other
 	},
 
 	decoration = {
@@ -122,7 +124,7 @@ hl.config({
 			size = 5,
 			passes = 3,
 			new_optimizations = true,
-			xray = true, -- blurred windows show only wallpaper/layers, not windows behind (like mango blur_optimized)
+			xray = false,
 		},
 	},
 
@@ -160,9 +162,17 @@ hl.config({
 		middle_click_paste = true,
 		enable_anr_dialog = true, -- Application not Responding
 		anr_missed_pings = 15, -- default 1 is too low
+		vrr = 2, -- adaptive sync, fullscreen windows only
+		close_special_on_empty = true, -- hide a special workspace when its last window closes
+	},
+
+	ecosystem = {
+		no_update_news = true,
+		no_donation_nag = true,
 	},
 
 	binds = {
+		hide_special_on_workspace_change = true, -- switching workspace hides an open special one
 		allow_workspace_cycles = true,
 		pass_mouse_when_bound = false,
 		workspace_center_on = 1,
@@ -289,6 +299,28 @@ hl.bind(mod("mouse:273"), hl.dsp.window.resize(), { mouse = true })
 
 hl.bind(mod("I"), exec("noctalia msg bar-toggle"))
 
+-- Dwindle split controls
+hl.bind(mod("T"), hl.dsp.layout("togglesplit")) -- flip the split of the focused pair (side by side <-> stacked)
+hl.bind(mod("minus"), hl.dsp.layout("splitratio -0.1"), REPEAT)
+hl.bind(mod("equal"), hl.dsp.layout("splitratio +0.1"), REPEAT)
+
+-- Resize submap: SUPER+ALT+R, then hjkl (SHIFT = bigger steps), Escape/Return to leave
+hl.define_submap("resize", function()
+	local resize_steps = {
+		h = { -40, 0 },
+		l = { 40, 0 },
+		k = { 0, -40 },
+		j = { 0, 40 },
+	}
+	for key, d in pairs(resize_steps) do
+		hl.bind(key, hl.dsp.window.resize({ x = d[1], y = d[2], relative = true }), REPEAT)
+		hl.bind("SHIFT + " .. key, hl.dsp.window.resize({ x = d[1] * 4, y = d[2] * 4, relative = true }), REPEAT)
+	end
+	hl.bind("escape", hl.dsp.submap("reset"))
+	hl.bind("Return", hl.dsp.submap("reset"))
+end)
+hl.bind(mod("ALT", "R"), hl.dsp.submap("resize"))
+
 -- Apps
 hl.bind(
 	"ALT + space",
@@ -300,7 +332,8 @@ hl.bind(
 			.. ' {cmd}"'
 	)
 )
-hl.bind(mod("Return"), exec(scriptsDir .. "/RandomTerminal.sh " .. term)) -- floating terminal at random position
+hl.bind(mod("SHIFT", "Return"), exec(scriptsDir .. "/RandomTerminal.sh " .. term)) -- floating terminal at random position
+hl.bind(mod("Return"), exec(term))
 
 -- Features / extras
 hl.bind(mod("V"), exec("~/work/custom/ssh-menu/ssh_menu.sh"))
@@ -407,6 +440,17 @@ hl.window_rule({ float = true, size = SIZE_70_60, match = { initial_title = "(Op
 -- Size
 hl.window_rule({ size = SIZE_60_70, match = { class = "^([Ff]erdium)$" } })
 hl.window_rule({ size = SIZE_60_70, match = { class = "^([Ww]hatsapp-for-linux|ZapZap|com.rtosta.zapzap)$" } })
+
+-- Games: tearing allowed (general.allow_tearing) for lower input latency
+hl.window_rule({ immediate = true, match = { tag = "games" } })
+
+-- Don't focus the empty, class-less floating XWayland windows some apps create
+-- (Steam/JetBrains dropdowns, drag-and-drop helpers) — from Hyprland's default config
+hl.window_rule({
+	name = "fix-xwayland-drags",
+	match = { class = "^$", title = "^$", xwayland = true, float = true, fullscreen = false, pin = false },
+	no_focus = true,
+})
 
 -- Blur & borders
 hl.window_rule({ no_blur = true, float = true, match = { tag = "games*" } })
